@@ -1,8 +1,8 @@
 module.exports = {
-  HOST: '34.28.148.208',
+  HOST: '127.0.0.1',
   USER: 'root',
-  PASSWORD: 'promulgate',
-  DB: 'promulgate',
+  PASSWORD: 'devAB143!',
+  DB: 'promulgateVersion2',
   dialect: 'mysql',
   pool: {
     max: 5,
