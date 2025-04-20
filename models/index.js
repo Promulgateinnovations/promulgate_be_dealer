@@ -89,6 +89,56 @@ db.youtubeAnalytics= require("./youtubeAnalytics.model")(sequelize, Sequelize)
 db.socialInbox= require("./socialInbox.model")(sequelize, Sequelize)
 db.socialAnalytics= require("./socialAnalytics.model")(sequelize, Sequelize)
 
+const OEM = require('./oem.model.js')(sequelize, Sequelize);
+db.oem = OEM;
+
+const Zone = require('./zone.model.js')(sequelize, Sequelize);
+db.zone = Zone;
+
+// Association: One OEM has many Zones
+db.oem.hasMany(db.zone, { foreignKey: 'oem_id' });
+db.zone.belongsTo(db.oem, { foreignKey: 'oem_id' });
+
+const Region = require('./region.model.js')(sequelize, Sequelize);
+db.region = Region;
+
+// Association: One Zone has many Regions
+db.zone.hasMany(db.region, { foreignKey: 'zone_id' });
+db.region.belongsTo(db.zone, { foreignKey: 'zone_id' });
+
+const Budget = require('./budget.model.js')(sequelize, Sequelize);
+db.budget = Budget;
+
+// Association: One OEM has many Budgets
+db.oem.hasMany(db.budget, { foreignKey: 'oem_id' });
+db.budget.belongsTo(db.oem, { foreignKey: 'oem_id' });
+
+const BusinessDetails = require('./businessDetails.model.js')(sequelize, Sequelize);
+db.businessDetails = BusinessDetails;
+
+// Relationship
+db.oem.hasOne(db.businessDetails, { foreignKey: 'oem_id' });
+db.businessDetails.belongsTo(db.oem, { foreignKey: 'oem_id' });
+
+const CampaignApprovalWorkflow = require('./campaignApprovalWorkflow.model.js')(sequelize, Sequelize);
+db.campaignApprovalWorkflow = CampaignApprovalWorkflow;
+
+const CampaignStrategyTemplate = require('./campaignStrategyTemplate.model.js')(sequelize, Sequelize);
+db.campaignStrategyTemplate = CampaignStrategyTemplate;
+
+// Optional: if linking to OEM later
+db.oem.belongsTo(db.campaignStrategyTemplate, {
+  foreignKey: 'campaign_strategy_template_id',
+  as: 'campaignStrategyTemplate'
+});
+
+const InvoiceDetails = require('./invoiceDetails.model.js')(sequelize, Sequelize);
+db.invoiceDetails = InvoiceDetails;
+
+// Relationship
+db.budget.hasOne(db.invoiceDetails, { foreignKey: 'budget_id' });
+db.invoiceDetails.belongsTo(db.budget, { foreignKey: 'budget_id' });
+
 
 // db.whatsappLeadFollowup.hasMany(db.whatsappLeads, { 
 //   foreignKey: { allowNull: true },

@@ -12,6 +12,21 @@ const AnalyticsRouter = require('./routes/analyticsRoutes')
 const PostRouter = require('./routes/postRoutes')
 const cronJobController = require("./controllers/cron")
 const LeadsRouter = require("./routes/leadsRoutes");
+const oemRoutes = require('./routes/oemRoutes');
+const zoneRoutes = require('./routes/zoneRoutes');
+const regionRoutes = require('./routes/regionRoutes');
+const budgetRoutes = require('./routes/budgetRoutes');
+const businessDetailsRoutes = require('./routes/businessDetailsRoutes');
+const workflowRoutes = require('./routes/campaignApprovalWorkflowRoutes');
+const strategyRoutes = require('./routes/campaignStrategyTemplateRoutes');
+const invoiceRoutes = require('./routes/invoiceDetailsRoutes');
+
+
+
+
+
+
+
 swaggerJsdoc = require("swagger-jsdoc"),
 swaggerUi = require("swagger-ui-express");
 
@@ -63,6 +78,14 @@ app.use(BusinessRouter);
 app.use(PostRouter);
 app.use(AnalyticsRouter)
 app.use(LeadsRouter);
+app.use(oemRoutes);
+app.use(zoneRoutes);
+app.use(regionRoutes);
+app.use(budgetRoutes);
+app.use(businessDetailsRoutes);
+app.use(workflowRoutes);
+app.use(strategyRoutes);
+app.use(invoiceRoutes);
 
 const options = {
   definition: {
