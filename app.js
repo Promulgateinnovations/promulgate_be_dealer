@@ -20,7 +20,7 @@ const businessDetailsRoutes = require('./routes/businessDetailsRoutes');
 const workflowRoutes = require('./routes/campaignApprovalWorkflowRoutes');
 const strategyRoutes = require('./routes/campaignStrategyTemplateRoutes');
 const invoiceRoutes = require('./routes/invoiceDetailsRoutes');
-const dealersRoutes = require('./routes/dealersRoutes');
+const dealersRoutes = require('./routes/dealerDetailsRoutes');
 
 
 
