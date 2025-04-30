@@ -95,6 +95,9 @@ db.oem = OEM;
 const Zone = require('./zone.model.js')(sequelize, Sequelize);
 db.zone = Zone;
 
+db.oem.hasMany(db.dealerDetails, { foreignKey: 'oem_id' });
+db.dealerDetails.belongsTo(db.oem, { foreignKey: 'oem_id' });
+
 const DealerDetails = require('./dealerDetails.model.js')(sequelize, Sequelize);
 db.dealerDetails = DealerDetails;
 
