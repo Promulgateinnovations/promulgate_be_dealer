@@ -86,6 +86,7 @@ app.use(businessDetailsRoutes);
 app.use(workflowRoutes);
 app.use(strategyRoutes);
 app.use(invoiceRoutes);
+app.use(dealerDetailsRoutes);
 
 const options = {
   definition: {
