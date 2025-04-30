@@ -1,8 +1,9 @@
 const db = require('../models');
 const DealerDetails = db.dealerDetails;
+const OEM = db.oem;
 const AppError = require('../utils/appError');
 
-// CREATE
+// CREATE dealer
 exports.createDealer = async (req, res, next) => {
   try {
     const dealer = await DealerDetails.create(req.body);
@@ -12,31 +13,44 @@ exports.createDealer = async (req, res, next) => {
   }
 };
 
-// READ ALL
+// GET all dealers (optionally filtered by oem_id)
 exports.getAllDealers = async (req, res, next) => {
   try {
-    const dealers = await db.dealerDetails.findAll({
-      where: req.query.oem_id ? { oem_id: req.query.oem_id } : {},
-      include: [{ model: db.oem }]
+    const { oem_id } = req.query;
+    const condition = oem_id ? { oem_id } : {};
+
+    const dealers = await DealerDetails.findAll({
+      where: condition,
+      include: [
+        {
+          model: OEM,
+          attributes: ['oem_id', 'oem_name', 'oem_code']
+        }
+      ]
     });
+
     res.status(200).json({ status: 'success', data: dealers });
   } catch (err) {
     next(new AppError(err.message, 500));
   }
 };
 
-// READ ONE
+// GET a dealer by dealer ID
 exports.getDealerById = async (req, res, next) => {
   try {
-    const dealer = await DealerDetails.findByPk(req.params.id);
+    const dealer = await DealerDetails.findByPk(req.params.id, {
+      include: [{ model: OEM, attributes: ['oem_id', 'oem_name'] }]
+    });
+
     if (!dealer) return next(new AppError('Dealer not found', 404));
+
     res.status(200).json({ status: 'success', data: dealer });
   } catch (err) {
     next(new AppError(err.message, 500));
   }
 };
 
-// UPDATE
+// UPDATE a dealer
 exports.updateDealer = async (req, res, next) => {
   try {
     const dealer = await DealerDetails.findByPk(req.params.id);
@@ -49,11 +63,12 @@ exports.updateDealer = async (req, res, next) => {
   }
 };
 
-// DELETE
+// DELETE a dealer
 exports.deleteDealer = async (req, res, next) => {
   try {
-    const result = await DealerDetails.destroy({ where: { id: req.params.id } });
-    if (!result) return next(new AppError('Dealer not found', 404));
+    const deleted = await DealerDetails.destroy({ where: { id: req.params.id } });
+    if (!deleted) return next(new AppError('Dealer not found', 404));
+
     res.status(200).json({ status: 'success', message: 'Dealer deleted successfully' });
   } catch (err) {
     next(new AppError(err.message, 500));
