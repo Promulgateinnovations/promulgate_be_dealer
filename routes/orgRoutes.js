@@ -17,7 +17,7 @@ const router = express.Router();
  * /api/v1/getOrgDetails:
  *   post:
  *     summary: Checks the request body for required fields.
- *     description: This endpoint checks if the request body contains at least one of the following fields: `name`, `aliasName`, `orgUrl`, or `orgId`. If none are present, it returns an error message.
+ *     description: "This endpoint checks if the request body contains at least one of the following fields: `name`, `aliasName`, `orgUrl`, or `orgId`. If none are present, it returns an error message."
  *     requestBody:
  *       required: true
  *       content:
@@ -77,7 +77,7 @@ const router = express.Router();
  * /api/v1/getOrgDetails:
  *   post:
  *     summary: Retrieves an organization based on `orgId`, `name`, `aliasName`, or `orgUrl`.
- *     description: This endpoint allows you to search for an organization by providing one of the following parameters in the request body: `orgId`, `name`, `aliasName`, or `orgUrl`.
+ *     description: "This endpoint allows you to search for an organization by providing one of the following parameters in the request body: `orgId`, `name`, `aliasName`, or `orgUrl`".
  *     requestBody:
  *       required: true
  *       content:

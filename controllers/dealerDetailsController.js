@@ -15,7 +15,10 @@ exports.createDealer = async (req, res, next) => {
 // READ ALL
 exports.getAllDealers = async (req, res, next) => {
   try {
-    const dealers = await DealerDetails.findAll();
+    const dealers = await db.dealerDetails.findAll({
+      where: req.query.oem_id ? { oem_id: req.query.oem_id } : {},
+      include: [{ model: db.oem }]
+    });
     res.status(200).json({ status: 'success', data: dealers });
   } catch (err) {
     next(new AppError(err.message, 500));

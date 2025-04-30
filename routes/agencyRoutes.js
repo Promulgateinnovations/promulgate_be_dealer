@@ -74,7 +74,7 @@ router
  * /api/v1/agency/getAgencyDetails:
  *   post:
  *     summary: Retrieve an agency by a specific column
- *     description: Fetches a single agency based on one of the provided fields: `agencyId`, `email`, `name`, or `orgUrl`.
+ *     description: "Fetches a single agency based on one of the provided fields: `agencyId`, `email`, `name`, or `orgUrl`."
  *     tags:
  *       - Agency
  *     requestBody:
