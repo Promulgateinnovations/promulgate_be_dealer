@@ -20,7 +20,7 @@ const businessDetailsRoutes = require('./routes/businessDetailsRoutes');
 const workflowRoutes = require('./routes/campaignApprovalWorkflowRoutes');
 const strategyRoutes = require('./routes/campaignStrategyTemplateRoutes');
 const invoiceRoutes = require('./routes/invoiceDetailsRoutes');
-const dealersRoutes = require('./routes/dealerDetailsRoutes');
+const dealerRoutes = require('./routes/dealerDetailsRoutes');
 
 
 
@@ -86,7 +86,7 @@ app.use(businessDetailsRoutes);
 app.use(workflowRoutes);
 app.use(strategyRoutes);
 app.use(invoiceRoutes);
-app.use(dealerDetailsRoutes);
+app.use(dealerRoutes);
 
 const options = {
   definition: {
