@@ -13,7 +13,7 @@ exports.createDealer = async (req, res, next) => {
   }
 };
 
-// GET all dealers (optionally filtered by oem_id)
+// GET all dealers (optionally filtered by oem_id) with Zone and Region details
 exports.getAllDealers = async (req, res, next) => {
   try {
     const { oem_id } = req.query;
@@ -27,7 +27,19 @@ exports.getAllDealers = async (req, res, next) => {
       include: [
         {
           model: OEM,
-          attributes: ['oem_id', 'oem_name', 'oem_code']
+          attributes: ['oem_id', 'oem_name', 'oem_code'],
+          include: [
+            {
+              model: db.zone,
+              attributes: ['zone_id', 'zone_name', 'zone_code', 'admin_email'],
+              include: [
+                {
+                  model: db.region,
+                  attributes: ['region_id', 'region_name', 'region_code', 'admin_email']
+                }
+              ]
+            }
+          ]
         }
       ]
     });
@@ -42,6 +54,7 @@ exports.getAllDealers = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
 
 // GET a dealer by dealer ID
 exports.getDealerById = async (req, res, next) => {
