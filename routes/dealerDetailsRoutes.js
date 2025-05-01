@@ -31,6 +31,7 @@ const controller = require('../controllers/dealerDetailsController');
  *               channeltype: { type: string }
  *               channeltypestatus: { type: string }
  *               channelList: { type: string }
+ *               oem_id: { type: integer }
  *     responses:
  *       201:
  *         description: Dealer created
@@ -43,6 +44,11 @@ router.post('/api/v1/dealers', controller.createDealer);
  *   get:
  *     summary: Get all dealers
  *     tags: [DealerDetails]
+ *     parameters:
+ *       - in: query
+ *         name: oem_id
+ *         schema: { type: integer }
+ *         description: Filter dealers by OEM ID
  *     responses:
  *       200:
  *         description: List of dealers

@@ -99,12 +99,6 @@ db.zone = Zone;
 db.oem.hasMany(db.zone, { foreignKey: 'oem_id' });
 db.zone.belongsTo(db.oem, { foreignKey: 'oem_id' });
 
-const DealerDetails = require('./dealerDetails.model.js')(sequelize, Sequelize);
-db.dealerDetails = DealerDetails;
-
-db.oem.hasMany(db.dealerDetails, { foreignKey: 'oem_id' });
-db.dealerDetails.belongsTo(db.oem, { foreignKey: 'oem_id' });
-
 
 const Region = require('./region.model.js')(sequelize, Sequelize);
 db.region = Region;
@@ -151,6 +145,15 @@ db.invoiceDetails.belongsTo(db.budget, { foreignKey: 'budget_id' });
 //   foreignKey: { allowNull: true },
 //   constraints: false
 // });
+
+
+// Import models
+db.dealerDetails = require("./dealerDetails.model.js")(sequelize, Sequelize);
+db.oem = require("./oem.model.js")(sequelize, Sequelize);
+
+// Define associations
+db.dealerDetails.belongsTo(db.oem, { foreignKey: 'oem_id' });
+db.oem.hasMany(db.dealerDetails, { foreignKey: 'oem_id' });
 
 db.organization.hasMany(db.team, {
   foreignKey: { allowNull: true },

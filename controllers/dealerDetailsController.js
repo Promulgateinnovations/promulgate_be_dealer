@@ -17,8 +17,11 @@ exports.createDealer = async (req, res, next) => {
 exports.getAllDealers = async (req, res, next) => {
   try {
     const { oem_id } = req.query;
+    
+    // Build where condition if oem_id is provided
     const condition = oem_id ? { oem_id } : {};
-
+    
+    // Perform query with proper error handling
     const dealers = await DealerDetails.findAll({
       where: condition,
       include: [
@@ -29,8 +32,13 @@ exports.getAllDealers = async (req, res, next) => {
       ]
     });
 
-    res.status(200).json({ status: 'success', data: dealers });
+    res.status(200).json({ 
+      status: 'success', 
+      results: dealers.length,
+      data: dealers 
+    });
   } catch (err) {
+    console.error('Error in getAllDealers:', err);
     next(new AppError(err.message, 500));
   }
 };
@@ -39,7 +47,10 @@ exports.getAllDealers = async (req, res, next) => {
 exports.getDealerById = async (req, res, next) => {
   try {
     const dealer = await DealerDetails.findByPk(req.params.id, {
-      include: [{ model: OEM, attributes: ['oem_id', 'oem_name'] }]
+      include: [{ 
+        model: OEM,
+        attributes: ['oem_id', 'oem_name', 'oem_code'] 
+      }]
     });
 
     if (!dealer) return next(new AppError('Dealer not found', 404));
