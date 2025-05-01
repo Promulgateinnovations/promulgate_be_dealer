@@ -40,28 +40,15 @@ router.post('/api/v1/business-details', businessDetailsController.createBusiness
 
 /**
  * @swagger
- * tags:
- *   name: DealerDetails
- *   description: Dealer management APIs
- */
-
-/**
- * @swagger
- * /api/v1/dealers:
+ * /api/v1/business-details:
  *   get:
- *     summary: Get all dealers (optionally filtered by oem_id)
- *     tags: [DealerDetails]
- *     parameters:
- *       - in: query
- *         name: oem_id
- *         schema:
- *           type: integer
- *         description: OEM ID to filter dealers
+ *     summary: Get all business details
+ *     tags: [BusinessDetails]
  *     responses:
  *       200:
- *         description: List of dealers
+ *         description: List of business details
  */
-router.get('/api/v1/dealers', businessDetailsController.getAllDealers);
+router.get('/api/v1/business-details', businessDetailsController.getAllBusinessDetails);
 
 /**
  * @swagger
