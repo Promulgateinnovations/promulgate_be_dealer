@@ -2,9 +2,10 @@
 module.exports = (sequelize, Sequelize) => {
     const Region = sequelize.define('region', {
       region_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        unique: true,
         primaryKey: true,
-        autoIncrement: true,
       },
       zone_id: {
         type: Sequelize.INTEGER,

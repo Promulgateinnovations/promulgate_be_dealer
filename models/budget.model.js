@@ -2,9 +2,10 @@
 module.exports = (sequelize, Sequelize) => {
     const Budget = sequelize.define('budget', {
       budget_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        unique: true,
         primaryKey: true,
-        autoIncrement: true,
       },
       oem_id: {
         type: Sequelize.INTEGER,
