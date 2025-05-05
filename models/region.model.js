@@ -16,6 +16,15 @@ module.exports = (sequelize, Sequelize) => {
         },
         onDelete: 'CASCADE',
       },
+      oem_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'oems',
+          key: 'oem_id',
+        },
+        onDelete: 'CASCADE',
+      },
       region_name: {
         type: Sequelize.STRING(100),
         allowNull: false,
