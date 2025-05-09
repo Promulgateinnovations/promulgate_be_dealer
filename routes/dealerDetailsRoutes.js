@@ -53,7 +53,7 @@ router.post('/api/v1/dealers', controller.createDealer);
  *       200:
  *         description: List of dealers
  */
-router.get('/api/v1/dealers/:id', controller.getAllDealers);
+router.get('/api/v1/dealers', controller.getAllDealers);
 
 /**
  * @swagger
