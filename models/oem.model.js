@@ -53,13 +53,13 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
       },
       campaign_approval_workflow_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(100),
       },
       campaign_strategy_template_id: {
         type: Sequelize.INTEGER,
       },
       content_approval_role_id: {
-        type: Sequelize.INTEGER,
+         type: Sequelize.STRING(100),
       },
       channel_access: {
         type: Sequelize.ENUM('Paid', 'Organic', 'Both'),
