@@ -104,6 +104,11 @@ const Region = require('./region.model.js')(sequelize, Sequelize);
 db.region = Region;
 
 // Association: One Zone has many Regions
+// OEM to Region
+db.oem.hasMany(db.region, { foreignKey: 'oem_id' });
+db.region.belongsTo(db.oem, { foreignKey: 'oem_id' });
+
+// Zone to Region
 db.zone.hasMany(db.region, { foreignKey: 'zone_id' });
 db.region.belongsTo(db.zone, { foreignKey: 'zone_id' });
 

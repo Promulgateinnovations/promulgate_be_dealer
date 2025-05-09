@@ -17,25 +17,22 @@ exports.createDealer = async (req, res, next) => {
 exports.getAllDealers = async (req, res, next) => {
   try {
     const { oem_id } = req.query;
-    
-    // Build where condition if oem_id is provided
     const condition = oem_id ? { oem_id } : {};
-    
-    // Perform query with proper error handling
-    const dealers = await DealerDetails.findAll({
+
+    const dealers = await db.dealerDetails.findAll({
       where: condition,
       include: [
         {
-          model: OEM,
+          model: db.oem,
           attributes: ['oem_id', 'oem_name', 'oem_code'],
           include: [
             {
               model: db.zone,
-              attributes: ['zone_id', 'zone_name', 'zone_code', 'admin_email'],
+              attributes: ['zone_id', 'zone_name'],
               include: [
                 {
                   model: db.region,
-                  attributes: ['region_id', 'region_name', 'region_code', 'admin_email']
+                  attributes: ['region_id', 'region_name']
                 }
               ]
             }
@@ -44,16 +41,12 @@ exports.getAllDealers = async (req, res, next) => {
       ]
     });
 
-    res.status(200).json({ 
-      status: 'success', 
-      results: dealers.length,
-      data: dealers 
-    });
+    res.status(200).json({ status: 'success', data: dealers });
   } catch (err) {
-    console.error('Error in getAllDealers:', err);
     next(new AppError(err.message, 500));
   }
 };
+
 
 
 // GET a dealer by dealer ID
