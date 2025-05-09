@@ -19,11 +19,6 @@ module.exports = (sequelize, Sequelize) => {
       oem_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        references: {
-          model: 'oems',
-          key: 'oem_id',
-        },
-        onDelete: 'CASCADE',
       },
       region_name: {
         type: Sequelize.STRING(100),
