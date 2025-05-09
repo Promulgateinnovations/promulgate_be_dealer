@@ -8,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
       primaryKey: true,
     },
     oem_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'oems',
