@@ -1,5 +1,5 @@
 const db = require('../models');
-const DealerDetails = db.dealerDetails;
+//const DealerDetails = db.dealerDetails;
 //const OEM = db.oem;
 const AppError = require('../utils/appError');
 const { OEM, Zone, Region, DealerDetails } = require('../models');
