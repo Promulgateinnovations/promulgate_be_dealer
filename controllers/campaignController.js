@@ -1,6 +1,6 @@
 const db = require('../models');
 const AppError = require('../utils/appError');
-const Op = db.Sequelize.Op;
+
 const Sequelize = require('sequelize');
 
 const Organization = db.organization;

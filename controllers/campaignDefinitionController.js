@@ -16,7 +16,7 @@
  const CampaignContent = db.campaignContent;
  const CampaignContentPost = db.campaignContentPost;
  const Sequelize = require('sequelize');
- const Op = db.Sequelize.Op;
+const { Op } = require('sequelize');
  
  const postController = require("../controllers/postController")
  const businessController = require("../controllers/businessController")

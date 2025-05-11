@@ -12,7 +12,7 @@
  const AppError = require('../utils/appError');
  const moment = require("moment")
  const Sequelize = require('sequelize');
- const Op = db.Sequelize.Op;
+const { Op } = require('sequelize');
  const axios = require("axios")
  const FormData = require('form-data');
  const { campaignContentPost, asset } = require('../models');

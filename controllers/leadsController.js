@@ -19,7 +19,7 @@ const Business = db.business;
 const SocialInbox = db.socialInbox;
 const Asset = db.asset;
 const moment = require('moment');
-const Op = db.Sequelize.Op;
+const { Op } = require('sequelize');
 
 exports.broadcastMessage = async (
   number,

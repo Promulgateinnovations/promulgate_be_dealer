@@ -16,9 +16,6 @@ const User = db.user;
 const Team = db.team
 const Agency = db.agency;
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/team.json`)
-);
 
 exports.checkPostBody = (req, res, next) => {
   if (

@@ -1,6 +1,6 @@
 const db = require('../models');
 const AppError = require('../utils/appError');
-const Op = db.Sequelize.Op;
+const { Op } = require('sequelize');
 const axios = require('axios');
 
 const campaignController = require('../controllers/campaignDefinitionController');
