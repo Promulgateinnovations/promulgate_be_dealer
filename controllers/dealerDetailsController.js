@@ -25,15 +25,15 @@ exports.getAllDealers = async (req, res, next) => {
       where: condition,
       include: [
         {
-          model: db.oems,
+          model: db.oem,
           attributes: ['oem_id', 'oem_name', 'oem_code'],
           include: [
             {
-              model: db.zones,
+              model: db.zone,
               attributes: ['zone_id', 'zone_name'],
               include: [
                 {
-                  model: db.regions,
+                  model: db.region,
                   attributes: ['region_id', 'region_name']
                 }
               ]
