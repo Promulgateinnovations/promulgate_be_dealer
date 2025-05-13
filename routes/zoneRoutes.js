@@ -129,6 +129,6 @@ router.delete('/api/v1/zones/:id', zoneController.deleteZone);
  *       200:
  *         description: List of zones
  */
-router.get('/api/v1/zones/:oem_id', controller.getZonesByOEM);
+router.get('/api/v1/zones/:oem_id',  zoneController.getZonesByOEM);
 
 module.exports = router;

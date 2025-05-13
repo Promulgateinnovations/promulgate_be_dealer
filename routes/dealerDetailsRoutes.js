@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/dealerDetailsController');
+const dealerDetailcontroller = require('../controllers/dealerDetailsController');
 
 /**
  * @swagger
@@ -36,7 +36,7 @@ const controller = require('../controllers/dealerDetailsController');
  *       201:
  *         description: Dealer created
  */
-router.post('/api/v1/dealers', controller.createDealer);
+router.post('/api/v1/dealers', dealerDetailcontroller.createDealer);
 
 /**
  * @swagger
@@ -53,7 +53,7 @@ router.post('/api/v1/dealers', controller.createDealer);
  *       200:
  *         description: List of dealers
  */
-router.get('/api/v1/dealers', controller.getAllDealers);
+router.get('/api/v1/dealers', dealerDetailcontroller.getAllDealers);
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ router.get('/api/v1/dealers', controller.getAllDealers);
  *       404:
  *         description: Not found
  */
-router.get('/api/v1/dealers/:id', controller.getDealerById);
+router.get('/api/v1/dealers/:id', dealerDetailcontroller.getDealerById);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.get('/api/v1/dealers/:id', controller.getDealerById);
  *       404:
  *         description: Not found
  */
-router.put('/api/v1/dealers/:id', controller.updateDealer);
+router.put('/api/v1/dealers/:id', dealerDetailcontroller.updateDealer);
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ router.put('/api/v1/dealers/:id', controller.updateDealer);
  *       404:
  *         description: Not found
  */
-router.delete('/api/v1/dealers/:id', controller.deleteDealer);
+router.delete('/api/v1/dealers/:id', dealerDetailcontroller.deleteDealer);
 
 /**
  * @swagger
@@ -142,6 +142,6 @@ router.delete('/api/v1/dealers/:id', controller.deleteDealer);
  *       200:
  *         description: List of dealers
  */
-router.get('/api/v1/dealers/:oem_id/:zone_id/:region_id', controller.getDealersByOEMZoneRegion);
+router.get('/api/v1/dealers/:oem_id/:zone_id/:region_id', dealerDetailcontroller.getDealersByOEMZoneRegion);
 
 module.exports = router;

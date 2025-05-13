@@ -134,7 +134,7 @@ router.delete('/api/v1/regions/:id', regionController.deleteRegion);
  *       200:
  *         description: List of regions
  */
-router.get('/api/v1/regions/:oem_id/:zone_id', controller.getRegionsByOEMAndZone);
+router.get('/api/v1/regions/:oem_id/:zone_id', regionController.getRegionsByOEMAndZone);
 
 
 /**
@@ -153,6 +153,6 @@ router.get('/api/v1/regions/:oem_id/:zone_id', controller.getRegionsByOEMAndZone
  *       200:
  *         description: List of regions
  */
-router.get('/api/v1/regions/:oem_id', controller.getRegionsByOEM);
+router.get('/api/v1/regions/:oem_id', regionController.getRegionsByOEM);
 
 module.exports = router;
