@@ -1,5 +1,6 @@
 const db = require('../models');
 const Region = db.region;
+const Zone = db.zone;
 const AppError = require('../utils/appError');
 
 // CREATE
@@ -54,5 +55,59 @@ exports.deleteRegion = async (req, res, next) => {
     res.status(200).json({ status: 'success', message: 'Region deleted successfully' });
   } catch (err) {
     next(new AppError(err.message, 500));
+  }
+};
+
+
+exports.getRegionsByOEMAndZone = async (req, res, next) => {
+  try {
+    const { oem_id, zone_id } = req.params;
+
+    // Fetch regions by both oem_id and zone_id
+    const regions = await Region.findAll({
+      where: {
+        oem_id,
+        zone_id
+      },
+      include: [
+        {
+          model: OEM,
+          attributes: ['oem_id', 'oem_name', 'oem_code']
+        },
+        {
+          model: Zone,
+          attributes: ['zone_id', 'zone_name', 'zone_code']
+        }
+      ]
+    });
+
+    if (!regions || regions.length === 0) {
+      return res.status(404).json({ status: 'error', message: 'No regions found for this OEM and Zone' });
+    }
+
+    res.status(200).json({ status: 'success', data: regions });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+exports.getRegionsByOEM = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    // Fetch all regions for the given OEM
+    const regions = await Region.findAll({
+      where: { oem_id },
+      attributes: ['region_id', 'region_name', 'region_code', 'oem_id', 'zone_id']
+    });
+
+    if (!regions || regions.length === 0) {
+      return res.status(404).json({ status: 'error', message: 'No regions found for the specified OEM' });
+    }
+
+    res.status(200).json({ status: 'success', data: regions });
+  } catch (err) {
+    next(err);
   }
 };

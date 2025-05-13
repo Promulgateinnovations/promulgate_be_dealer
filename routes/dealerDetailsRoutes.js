@@ -116,4 +116,32 @@ router.put('/api/v1/dealers/:id', controller.updateDealer);
  */
 router.delete('/api/v1/dealers/:id', controller.deleteDealer);
 
+/**
+ * @swagger
+ * /api/v1/dealers/{oem_id}/{zone_id}/{region_id}:
+ *   get:
+ *     summary: Get all dealers by OEM ID, Zone ID, and Region ID
+ *     tags: [DealerDetails]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: zone_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: region_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of dealers
+ */
+router.get('/api/v1/dealers/:oem_id/:zone_id/:region_id', controller.getDealersByOEMZoneRegion);
+
 module.exports = router;

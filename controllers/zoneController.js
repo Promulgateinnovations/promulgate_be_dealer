@@ -56,3 +56,27 @@ exports.deleteZone = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+
+// GET all dealers by OEM ID, Zone ID, and Region ID
+
+exports.getZonesByOEM = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    // Fetch all zones for the given OEM
+    const zones = await Zone.findAll({
+      where: { oem_id },
+      attributes: ['zone_id', 'zone_name', 'zone_code', 'oem_id']
+    });
+
+    if (!zones || zones.length === 0) {
+      return res.status(404).json({ status: 'error', message: 'No zones found for the specified OEM' });
+    }
+
+    res.status(200).json({ status: 'success', data: zones });
+  } catch (err) {
+    next(err);
+  }
+};
+

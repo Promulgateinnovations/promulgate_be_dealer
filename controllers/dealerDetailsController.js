@@ -95,3 +95,46 @@ exports.deleteDealer = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+
+// GET dealers by OEM ID, Zone ID, and Region ID
+// This endpoint retrieves dealers based on the OEM ID, Zone ID, and Region ID.
+exports.getDealersByOEMZoneRegion = async (req, res, next) => {
+  try {
+    const { oem_id, zone_id, region_id } = req.params;
+
+    // Fetch dealers by OEM, Zone, and Region
+    const dealers = await DealerDetails.findAll({
+      where: { oem_id },
+      include: [
+        {
+          model: Region,
+          where: { region_id, zone_id },
+          attributes: ['region_id', 'region_name', 'zone_id'],
+          include: [
+            {
+              model: Zone,
+              where: { zone_id, oem_id },
+              attributes: ['zone_id', 'zone_name', 'oem_id'],
+              include: [
+                {
+                  model: OEM,
+                  where: { oem_id },
+                  attributes: ['oem_id', 'oem_name', 'oem_code']
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    if (!dealers || dealers.length === 0) {
+      return res.status(404).json({ status: 'error', message: 'No dealers found for the specified OEM, Zone, and Region' });
+    }
+
+    res.status(200).json({ status: 'success', data: dealers });
+  } catch (err) {
+    next(err);
+  }
+};

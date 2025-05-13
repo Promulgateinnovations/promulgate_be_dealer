@@ -113,4 +113,46 @@ router.put('/api/v1/regions/:id', regionController.updateRegion);
  */
 router.delete('/api/v1/regions/:id', regionController.deleteRegion);
 
+/**
+ * @swagger
+ * /api/v1/regions/{oem_id}/{zone_id}:
+ *   get:
+ *     summary: Get all regions by OEM ID and Zone ID
+ *     tags: [Regions]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: zone_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of regions
+ */
+router.get('/api/v1/regions/:oem_id/:zone_id', controller.getRegionsByOEMAndZone);
+
+
+/**
+ * @swagger
+ * /api/v1/regions/{oem_id}:
+ *   get:
+ *     summary: Get all regions by OEM ID
+ *     tags: [Regions]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of regions
+ */
+router.get('/api/v1/regions/:oem_id', controller.getRegionsByOEM);
+
 module.exports = router;

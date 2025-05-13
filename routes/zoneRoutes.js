@@ -113,4 +113,22 @@ router.put('/api/v1/zones/:id', zoneController.updateZone);
  */
 router.delete('/api/v1/zones/:id', zoneController.deleteZone);
 
+/**
+ * @swagger
+ * /api/v1/zones/{oem_id}:
+ *   get:
+ *     summary: Get all zones by OEM ID
+ *     tags: [Zones]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of zones
+ */
+router.get('/api/v1/zones/:oem_id', controller.getZonesByOEM);
+
 module.exports = router;
