@@ -6,9 +6,9 @@
  * @desc [Routing for Organaization]
  */
 
-const express = require('express');
-const organizationController = require('../controllers/organizationController');
-const agencyController = require('../controllers/agencyController');
+const express = require("express");
+const organizationController = require("../controllers/organizationController");
+const agencyController = require("../controllers/agencyController");
 
 const router = express.Router();
 
@@ -169,7 +169,7 @@ const router = express.Router();
  *                   example: 'Error retrieving Organization'
  */
 router
-  .route('/api/v1/getOrgDetails')
+  .route("/api/v1/getOrgDetails")
   .post(
     organizationController.checkGetBody,
     organizationController.findOneByAnyColumn
@@ -251,7 +251,7 @@ router
  *                   example: 'Error retrieving connection details'
  */
 router
-  .route('/api/v1/getNewConnectionDetails')
+  .route("/api/v1/getNewConnectionDetails")
   .post(organizationController.getNewConnectionDetails);
 
 /**
@@ -321,7 +321,7 @@ router
  *                   example: 'Error updating WhatsApp connection'
  */
 router
-  .route('/api/v1/updateWhatsappDetails')
+  .route("/api/v1/updateWhatsappDetails")
   .post(organizationController.updateWhatsappDetails);
 
 /**
@@ -466,7 +466,7 @@ router
  *                   example: 'Some error occurred while creating the organization or assigning the user.'
  */
 router
-  .route('/api/v1/saveOrgDetails')
+  .route("/api/v1/saveOrgDetails")
   .post(
     organizationController.checkPostBody,
     organizationController.createOrgDetails
@@ -551,7 +551,7 @@ router
  *                   example: 'Error updating Organization'
  */
 router
-  .route('/api/v1/updateOrgDetails')
+  .route("/api/v1/updateOrgDetails")
   .post(organizationController.updateOrgDetails);
 
 /**
@@ -621,7 +621,7 @@ router
  *                   example: 'Some error occurred while creating the WhatsApp connection.'
  */
 router
-  .route('/api/v1/saveWhatsappDetails')
+  .route("/api/v1/saveWhatsappDetails")
   .post(organizationController.createWhatsappDetails);
 
 /**
@@ -695,7 +695,7 @@ router
  *                   example: 'Some error occurred while creating the Google Review Connection.'
  */
 router
-  .route('/api/v1/createNewConnectionDetails')
+  .route("/api/v1/createNewConnectionDetails")
   .post(organizationController.createNewConnectionDetails);
 
 /**
@@ -782,9 +782,8 @@ router
  *                   example: 'Some error occurred while updating the Google Reviews Connection.'
  */
 router
-  .route('/api/v1/updateNewConnectionDetails')
+  .route("/api/v1/updateNewConnectionDetails")
   .post(organizationController.updateNewConnectionDetails);
-
 
 /**
  * @swagger
@@ -843,9 +842,10 @@ router
  *                   type: string
  *                   example: 'Internal server error'
  */
-router.route('/api/v1/login').post(organizationController.login);
+router.route("/api/v1/login").post(organizationController.login);
 
-
-router.route('/api/v1/getOrgListbyAgencyID').post(organizationController.getOrganizationListsbyAgyID);
+router
+  .route("/api/v1/getOrgListbyAgencyID")
+  .post(organizationController.getOrganizationListsbyAgyID);
 
 module.exports = router;

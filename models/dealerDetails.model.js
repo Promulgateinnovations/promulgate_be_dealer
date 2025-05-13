@@ -16,6 +16,24 @@ module.exports = (sequelize, Sequelize) => {
       },
       onDelete: 'CASCADE',
     },
+    zone_id: {
+      type: Sequelize.UUID,
+      allowNull: false,
+      references: {
+        model: 'zones',
+        key: 'zone_id',
+      },  
+      onDelete: 'CASCADE',
+    },
+    region_id: {
+      type: Sequelize.UUID,
+      allowNull: false,
+      references: {
+        model: 'regions',
+        key: 'region_id',
+      },
+      onDelete: 'CASCADE',
+    },
     dealerName: Sequelize.STRING,
     dealerCode: Sequelize.STRING,
     dealerDescription: Sequelize.STRING,

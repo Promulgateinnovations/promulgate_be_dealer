@@ -16,11 +16,9 @@
  *         description: A successful response
  */
 
-const express = require('express');
-const teamController = require('../controllers/teamController');
+const express = require("express");
+const teamController = require("../controllers/teamController");
 const router = express.Router();
-
-
 
 /**
  * @swagger
@@ -114,7 +112,7 @@ const router = express.Router();
  *                   example: "Error retrieving Organization"
  */
 router
-  .route('/api/v1/getTeamDetails')
+  .route("/api/v1/getTeamDetails")
   .post(teamController.checkGetBody, teamController.getTeamDetails);
 
 /**
@@ -182,9 +180,7 @@ router
  *                   type: string
  *                   example: "Some error occurred while creating the User."
  */
-router
-  .route('/api/v1/saveTeamDetails')
-  .post(teamController.createTeamDetails);
+router.route("/api/v1/saveTeamDetails").post(teamController.createTeamDetails);
 
 /**
  * @swagger
@@ -261,7 +257,7 @@ router
  *                   example: "Error occurred while updating the user details."
  */
 router
-  .route('/api/v1/updateTeamDetails')
+  .route("/api/v1/updateTeamDetails")
   .post(teamController.updateTeamDetails);
 
 /**
@@ -320,10 +316,7 @@ router
  *                   type: string
  *                   example: "Error occurred while deleting the user."
  */
-router
-  .route('/api/v1/deleteTeamMember')
-  .post(teamController.deleteTeamMember);
-
+router.route("/api/v1/deleteTeamMember").post(teamController.deleteTeamMember);
 
 /**
  * @swagger
@@ -396,7 +389,7 @@ router
  *                   example: Internal server error
  */
 router
-  .route('/api/v1/getEmpDetailbyEmpID')
+  .route("/api/v1/getEmpDetailbyEmpID")
   .post(teamController.getEmpDetailbyEmpID);
 
 module.exports = router;

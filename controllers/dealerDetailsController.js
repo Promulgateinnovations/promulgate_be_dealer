@@ -1,8 +1,10 @@
 const db = require('../models');
 const DealerDetails = db.dealerDetails;
-//const OEM = db.oem;
+const OEM = db.oem;
+const Zone = db.zone;
+const Region = db.region;
 const AppError = require('../utils/appError');
-const { OEM, Zone, Region} = require('../models');
+
 
 
 // CREATE dealer
@@ -21,7 +23,7 @@ exports.getAllDealers = async (req, res, next) => {
     const { oem_id } = req.query;
     const condition = oem_id ? { oem_id } : {};
 
-    const dealers = await db.DealerDetails.findAll({
+    const dealers = await DealerDetails.findAll({
       where: condition,
       include: [
         {

@@ -6,15 +6,15 @@
  * @desc [Routing for Agency]
  */
 
-const express = require('express');
-const organizationController = require('../controllers/organizationController');
-const agencyController = require('../controllers/agencyController');
+const express = require("express");
+const organizationController = require("../controllers/organizationController");
+const agencyController = require("../controllers/agencyController");
 
 const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/agency/saveAgencyDetails:
+ *  /api/v1/agency/saveAgencyDetails:
  *   post:
  *     summary: Create an agency and update user and team data
  *     description: This endpoint allows a user to create an agency, update their role, and add them to a team.
@@ -66,7 +66,7 @@ const router = express.Router();
  *         description: Internal server error
  */
 router
-  .route('/api/v1/agency/saveAgencyDetails')
+  .route("/api/v1/agency/saveAgencyDetails")
   .post(agencyController.createAgencyDetails);
 
 /**
@@ -134,7 +134,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/agency/getAgencyDetails')
+  .route("/api/v1/agency/getAgencyDetails")
   .post(agencyController.findOneByAnyColumn);
 
 /**
@@ -199,7 +199,7 @@ router
  *       500:
  *         description: Internal server error
  */
-router.route('/api/v1/agency/login').post(agencyController.login);
+router.route("/api/v1/agency/login").post(agencyController.login);
 
 /**
  * @swagger
@@ -272,7 +272,7 @@ router.route('/api/v1/agency/login').post(agencyController.login);
  *         description: Internal server error
  */
 router
-  .route('/api/v1/agency/saveAgencyTeamDetails')
+  .route("/api/v1/agency/saveAgencyTeamDetails")
   .post(agencyController.createTeamDetails);
 
 /**
@@ -343,7 +343,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/agency/getTeamDetails')
+  .route("/api/v1/agency/getTeamDetails")
   .post(agencyController.getTeamDetails);
 
 /**
@@ -399,7 +399,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/agency/updateAgencyDetails')
+  .route("/api/v1/agency/updateAgencyDetails")
   .post(agencyController.updateAgencyDetails);
 
 /**
@@ -464,7 +464,7 @@ router
  *                   example: 'Error retrieving organizations.'
  */
 router
-  .route('/api/v1/agency/getOrgLists')
+  .route("/api/v1/agency/getOrgLists")
   .post(organizationController.getOrganizationLists);
 
 /**
@@ -532,7 +532,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/agency/updateAgencyEmpDetails')
+  .route("/api/v1/agency/updateAgencyEmpDetails")
   .post(agencyController.updateAgencyEmpDetails);
 
 /**
@@ -580,7 +580,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/deleteAgencyEmployeeDetails')
+  .route("/api/v1/deleteAgencyEmployeeDetails")
   .delete(agencyController.deleteAgencyEmployeeDetails);
 
 /**
@@ -660,7 +660,7 @@ router
  *                   example: Internal server error
  */
 router
-  .route('/api/v1/agency/deleteAgencydetails')
+  .route("/api/v1/agency/deleteAgencydetails")
   .post(agencyController.deleteAgencydetails);
 
 /**
@@ -732,7 +732,7 @@ router
  *                   example: Error retrieving Organization
  */
 router
-  .route('/api/v1/agency/getAgencyList')
+  .route("/api/v1/agency/getAgencyList")
   .get(agencyController.getAgencyList);
 
 module.exports = router;

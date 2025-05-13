@@ -4,19 +4,19 @@
  * @desc [Routing for excel upload for leads]
  */
 
-const express = require('express');
-const leadsController = require('../controllers/leadsController');
+const express = require("express");
+const leadsController = require("../controllers/leadsController");
 const router = express.Router();
-const multer = require('multer');
+const multer = require("multer");
 const app = express();
 
 //const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype ==
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-    file.mimetype == 'application/x-vnd.oasis.opendocument.spreadsheet' ||
-    file.mimetype == 'text/csv'
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    file.mimetype == "application/x-vnd.oasis.opendocument.spreadsheet" ||
+    file.mimetype == "text/csv"
   ) {
     cb(null, true);
   } else {
@@ -33,7 +33,7 @@ const fileFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, req.body.file_name);
@@ -41,7 +41,6 @@ const storage = multer.diskStorage({
 });
 
 const uploadStorage = multer({ storage: storage });
-
 
 /**
  * @swagger
@@ -117,11 +116,10 @@ const uploadStorage = multer({ storage: storage });
  *                   example: "Internal server error"
  */
 router.post(
-  '/api/v1/uploadLeadsData',
-  uploadStorage.single('excel-file'),
+  "/api/v1/uploadLeadsData",
+  uploadStorage.single("excel-file"),
   leadsController.saveLeadsDetails
 );
-
 
 /**
  * @swagger
@@ -208,8 +206,7 @@ router.post(
  *                   type: string
  *                   example: "Internal server error"
  */
-router.route('/api/v1/getLeadDetails').post(leadsController.getLeadDetails);
-
+router.route("/api/v1/getLeadDetails").post(leadsController.getLeadDetails);
 
 /**
  * @swagger
@@ -304,9 +301,8 @@ router.route('/api/v1/getLeadDetails').post(leadsController.getLeadDetails);
  *                   example: "Internal server error"
  */
 router
-  .route('/api/v1/getBroadcastedLeads')
+  .route("/api/v1/getBroadcastedLeads")
   .post(leadsController.getBroadcastedLeads);
-
 
 /**
  * @swagger
@@ -383,7 +379,7 @@ router
  *                   type: string
  *                   example: "Internal server error"
  */
-router.route('/api/v1/getLeadContacts').post(leadsController.getLeadContacts);
+router.route("/api/v1/getLeadContacts").post(leadsController.getLeadContacts);
 
 /**
  * @swagger
@@ -467,7 +463,7 @@ router.route('/api/v1/getLeadContacts').post(leadsController.getLeadContacts);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.route('/api/v1/getLeadLogs').post(leadsController.getLeadLogs);
+router.route("/api/v1/getLeadLogs").post(leadsController.getLeadLogs);
 
 /**
  * @swagger
@@ -532,7 +528,7 @@ router.route('/api/v1/getLeadLogs').post(leadsController.getLeadLogs);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.route('/api/v1/getTemplates').post(leadsController.getTemplates);
+router.route("/api/v1/getTemplates").post(leadsController.getTemplates);
 
 /**
  * @swagger
@@ -634,7 +630,7 @@ router.route('/api/v1/getTemplates').post(leadsController.getTemplates);
  *                   example: Failed to fetch WhatsApp analytics
  */
 router
-  .route('/api/v1/getWhatsAppAnalytics')
+  .route("/api/v1/getWhatsAppAnalytics")
   .post(leadsController.getWhatsAppAnalytics);
 
 /**
@@ -749,7 +745,7 @@ router
  *                   type: string
  *                   example: Failed to fetch social inbox messages.
  */
-router.route('/api/v1/getSocialInbox').post(leadsController.getSocialInbox);
+router.route("/api/v1/getSocialInbox").post(leadsController.getSocialInbox);
 
 /**
  * @swagger
@@ -829,9 +825,8 @@ router.route('/api/v1/getSocialInbox').post(leadsController.getSocialInbox);
  *                   example: 'Whatsapp Leads Not Fetched'
  */
 router
-  .route('/api/v1/getWhatsAppAnalyticsDetails')
+  .route("/api/v1/getWhatsAppAnalyticsDetails")
   .post(leadsController.getWhatsAppAnalyticsDetails);
-
 
 /**
  * @swagger
@@ -875,7 +870,7 @@ router
  *                   type: string
  *                   example: "Connect WhatsApp first..."
  */
-router.route('/api/v1/checkToken').post(leadsController.checkIfTokenExists);
+router.route("/api/v1/checkToken").post(leadsController.checkIfTokenExists);
 
 /**
  * @swagger
@@ -973,7 +968,7 @@ router.route('/api/v1/checkToken').post(leadsController.checkIfTokenExists);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.route('/api/v1/addNewWaTemplate').post(leadsController.addNewWaTemplate);
+router.route("/api/v1/addNewWaTemplate").post(leadsController.addNewWaTemplate);
 
 /**
  * @swagger
@@ -1099,55 +1094,55 @@ router.route('/api/v1/addNewWaTemplate').post(leadsController.addNewWaTemplate);
  *                   example: "Internal server error"
  */
 router
-  .route('/api/v1/broadcastWhatsappMessages')
+  .route("/api/v1/broadcastWhatsappMessages")
   .post(leadsController.broadcastWhatsappMessages);
 
-  /**
-   * @swagger
-   * /api/v1/deleteLead:
-   *   post:
-   *     summary: Deletes a lead based on the provided lead ID.
-   *     description: This endpoint deletes the lead associated with the given `lead_id`. A success message is returned if the lead is deleted successfully. Otherwise, an error is thrown.
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               lead_id:
-   *                 type: integer
-   *                 description: The ID of the lead to be deleted.
-   *                 example: 123
-   *     responses:
-   *       200:
-   *         description: Lead successfully deleted.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: "success"
-   *                 message:
-   *                   type: string
-   *                   example: "Lead Deleted Successfully"
-   *       400:
-   *         description: Error occurred while deleting the lead.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: "error"
-   *                 message:
-   *                   type: string
-   *                   example: "Error message here"
-   */
-router.route('/api/v1/deleteLead').post(leadsController.deleteLead);
+/**
+ * @swagger
+ * /api/v1/deleteLead:
+ *   post:
+ *     summary: Deletes a lead based on the provided lead ID.
+ *     description: This endpoint deletes the lead associated with the given `lead_id`. A success message is returned if the lead is deleted successfully. Otherwise, an error is thrown.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               lead_id:
+ *                 type: integer
+ *                 description: The ID of the lead to be deleted.
+ *                 example: 123
+ *     responses:
+ *       200:
+ *         description: Lead successfully deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 message:
+ *                   type: string
+ *                   example: "Lead Deleted Successfully"
+ *       400:
+ *         description: Error occurred while deleting the lead.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "error"
+ *                 message:
+ *                   type: string
+ *                   example: "Error message here"
+ */
+router.route("/api/v1/deleteLead").post(leadsController.deleteLead);
 
 /**
  * @swagger
@@ -1194,7 +1189,7 @@ router.route('/api/v1/deleteLead').post(leadsController.deleteLead);
  *                   type: string
  *                   example: "Error message here"
  */
-router.route('/api/v1/deleteUser').post(leadsController.deleteUser);
+router.route("/api/v1/deleteUser").post(leadsController.deleteUser);
 
 /**
  * @swagger
@@ -1304,7 +1299,7 @@ router.route('/api/v1/deleteUser').post(leadsController.deleteUser);
  *                   type: string
  *                   example: "Internal server error"
  */
-router.route('/api/v1/webhook').post(leadsController.postWebhookWhatsapp);
+router.route("/api/v1/webhook").post(leadsController.postWebhookWhatsapp);
 
 /**
  * @swagger
@@ -1356,7 +1351,7 @@ router.route('/api/v1/webhook').post(leadsController.postWebhookWhatsapp);
  *                   type: string
  *                   example: "Invalid token"
  */
-router.route('/api/v1/webhook').get(leadsController.getWebhookWhatsapp);
+router.route("/api/v1/webhook").get(leadsController.getWebhookWhatsapp);
 
 /**
  * @swagger
@@ -1407,7 +1402,7 @@ router.route('/api/v1/webhook').get(leadsController.getWebhookWhatsapp);
  *                   type: string
  *                   example: "Error message here"
  */
-router.route('/api/v1/readSocialInbox').post(leadsController.readSocialInbox);
+router.route("/api/v1/readSocialInbox").post(leadsController.readSocialInbox);
 
 /**
  * @swagger
@@ -1472,7 +1467,7 @@ router.route('/api/v1/readSocialInbox').post(leadsController.readSocialInbox);
  *                 # Example message when the record already exists
  *                 message:
  *                   type: string
- *                   example: 'Record Already Added.' 
+ *                   example: 'Record Already Added.'
  *       400:
  *         description: Missing data in the request body.
  *         content:
@@ -1501,112 +1496,112 @@ router.route('/api/v1/readSocialInbox').post(leadsController.readSocialInbox);
  *                   example: 'An error occurred while adding the record.'
  */
 router
-  .route('/api/v1/add-to-social-inbox')
+  .route("/api/v1/add-to-social-inbox")
   .post(leadsController.addToSocialInboxViaApi);
 
-  /**
-   * @swagger
-   * /api/v1/add-to-social-inbox-for-cf-7:
-   *   post:
-   *     summary: Adds a new message to the social inbox for CF7 form submissions.
-   *     description: This endpoint is designed to handle the insertion of messages into the social inbox based on CF7 form submissions. If the message is already in the social inbox, it returns a message indicating that the record is already added.
-   *     parameters:
-   *       - in: query
-   *         name: orgId
-   *         required: true
-   *         description: The organization ID.
-   *         schema:
-   *           type: integer
-   *           example: 1
-   *       - in: query
-   *         name: channelName
-   *         required: true
-   *         description: The name of the channel (e.g., Website).
-   *         schema:
-   *           type: string
-   *           example: "Website"
-   *       - in: query
-   *         name: channelId
-   *         required: true
-   *         description: The unique ID of the channel.
-   *         schema:
-   *           type: string
-   *           example: "website_channel_123"
-   *       - in: body
-   *         name: body
-   *         required: true
-   *         description: Request body for adding a message from CF7.
-   *         schema:
-   *           type: object
-   *           required:
-   *             - postId
-   *             - message
-   *             - name
-   *             - email
-   *           properties:
-   *             postId:
-   *               type: string
-   *               description: The unique ID of the post/message.
-   *               example: "post_12345"
-   *             message:
-   *               type: string
-   *               description: The message sent through the form.
-   *               example: "I need help with the product."
-   *             name:
-   *               type: string
-   *               description: The name of the person submitting the form.
-   *               example: "John Doe"
-   *             email:
-   *               type: string
-   *               description: The email address of the person submitting the form.
-   *               example: "johndoe@example.com"
-   *     responses:
-   *       200:
-   *         description: Successfully added or already exists.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: 'success'
-   *                 message:
-   *                   type: string
-   *                   example: 'Record Added Successfully.'  # If record is added
-   *                 # Example message when the record already exists
-   *                 message:
-   *                   type: string
-   *                   example: 'Record Already Added.'
-   *       400:
-   *         description: Missing data in the request body.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: 'error'
-   *                 message:
-   *                   type: string
-   *                   example: 'Missing Data.'
-   *       500:
-   *         description: Internal server error while adding data.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: 'error'
-   *                 message:
-   *                   type: string
-   *                   example: 'An error occurred while adding the record.'
-   */ 
+/**
+ * @swagger
+ * /api/v1/add-to-social-inbox-for-cf-7:
+ *   post:
+ *     summary: Adds a new message to the social inbox for CF7 form submissions.
+ *     description: This endpoint is designed to handle the insertion of messages into the social inbox based on CF7 form submissions. If the message is already in the social inbox, it returns a message indicating that the record is already added.
+ *     parameters:
+ *       - in: query
+ *         name: orgId
+ *         required: true
+ *         description: The organization ID.
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *       - in: query
+ *         name: channelName
+ *         required: true
+ *         description: The name of the channel (e.g., Website).
+ *         schema:
+ *           type: string
+ *           example: "Website"
+ *       - in: query
+ *         name: channelId
+ *         required: true
+ *         description: The unique ID of the channel.
+ *         schema:
+ *           type: string
+ *           example: "website_channel_123"
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         description: Request body for adding a message from CF7.
+ *         schema:
+ *           type: object
+ *           required:
+ *             - postId
+ *             - message
+ *             - name
+ *             - email
+ *           properties:
+ *             postId:
+ *               type: string
+ *               description: The unique ID of the post/message.
+ *               example: "post_12345"
+ *             message:
+ *               type: string
+ *               description: The message sent through the form.
+ *               example: "I need help with the product."
+ *             name:
+ *               type: string
+ *               description: The name of the person submitting the form.
+ *               example: "John Doe"
+ *             email:
+ *               type: string
+ *               description: The email address of the person submitting the form.
+ *               example: "johndoe@example.com"
+ *     responses:
+ *       200:
+ *         description: Successfully added or already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: 'success'
+ *                 message:
+ *                   type: string
+ *                   example: 'Record Added Successfully.'  # If record is added
+ *                 # Example message when the record already exists
+ *                 message:
+ *                   type: string
+ *                   example: 'Record Already Added.'
+ *       400:
+ *         description: Missing data in the request body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: 'error'
+ *                 message:
+ *                   type: string
+ *                   example: 'Missing Data.'
+ *       500:
+ *         description: Internal server error while adding data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: 'error'
+ *                 message:
+ *                   type: string
+ *                   example: 'An error occurred while adding the record.'
+ */
 router
-  .route('/api/v1/add-to-social-inbox-for-cf-7')
+  .route("/api/v1/add-to-social-inbox-for-cf-7")
   .post(leadsController.addToSocialInboxViaApiForCF7);
 
 module.exports = router;
