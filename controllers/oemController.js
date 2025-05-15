@@ -13,22 +13,7 @@ exports.createOEM = async (req, res, next) => {
 };
 
 
-// CREATE
-exports.createOEM = async (req, res, next) => {
-  try {
-    const newOEM = await OEM.create(req.body);
 
-    // Return only the oem_id
-    res.status(201).json({
-      status: 'success',
-      data: {
-        oem_id: newOEM.oem_id
-      }
-    });
-  } catch (err) {
-    next(new AppError(err.message, 500));
-  }
-};
 
 
 // READ ALL
