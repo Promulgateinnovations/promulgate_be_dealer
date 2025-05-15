@@ -1,6 +1,7 @@
 const db = require('../models');
 const Region = db.region;
 const Zone = db.zone;
+const OEM = db.oem;
 const AppError = require('../utils/appError');
 
 // CREATE
