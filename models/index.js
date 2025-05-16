@@ -157,6 +157,10 @@ db.dealerDetails = require("./dealerDetails.model.js")(sequelize, Sequelize);
 db.dealerDetails.belongsTo(db.oem, { foreignKey: 'oem_id' });
 db.oem.hasMany(db.dealerDetails, { foreignKey: 'oem_id' });
 
+// Region to Dealer
+db.region.hasMany(db.dealerDetails, { foreignKey: 'region_id' });
+db.dealerDetails.belongsTo(db.region, { foreignKey: 'region_id' });
+
 db.organization.hasMany(db.team, {
   foreignKey: { allowNull: true },
   constraints: false
