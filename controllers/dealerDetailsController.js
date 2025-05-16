@@ -109,7 +109,7 @@ exports.getDealersByOEMZoneRegion = async (req, res, next) => {
       include: [
         {
           model: Region,
-          where: { region_id, zone_id },
+          where: { region_id, oem_id },
           attributes: ['region_id', 'region_name', 'zone_id'],
           include: [
             {
