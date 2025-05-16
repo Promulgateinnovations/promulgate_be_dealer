@@ -115,7 +115,7 @@ router.delete('/api/v1/zones/:id', zoneController.deleteZone);
 
 /**
  * @swagger
- * /api/v1/oemzones/{oem_id}:
+ * /api/v1/ZonesByOEM/{oem_id}:
  *   get:
  *     summary: Get all zones by OEM ID
  *     tags: [Zones]

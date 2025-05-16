@@ -142,6 +142,6 @@ router.delete('/api/v1/dealers/:id', dealerDetailcontroller.deleteDealer);
  *       200:
  *         description: List of dealers
  */
-router.get('/api/v1/dealers/:oem_id/:zone_id/:region_id', dealerDetailcontroller.getDealersByOEMZoneRegion);
+router.get('/api/v1/DealersByOEMZoneRegion/:oem_id/:zone_id/:region_id', dealerDetailcontroller.getDealersByOEMZoneRegion);
 
 module.exports = router;
