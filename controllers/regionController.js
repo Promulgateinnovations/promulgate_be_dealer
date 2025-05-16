@@ -100,7 +100,8 @@ exports.getRegionsByOEM = async (req, res, next) => {
     // Fetch all regions for the given OEM
     const regions = await Region.findAll({
       where: { oem_id },
-      attributes: ['region_id', 'region_name', 'region_code', 'oem_id', 'zone_id']
+      attributes: ['region_id', 'region_name', 'region_code', 'oem_id', 'zone_id','zone_name','admin_email'],
+      
     });
 
     if (!regions || regions.length === 0) {
