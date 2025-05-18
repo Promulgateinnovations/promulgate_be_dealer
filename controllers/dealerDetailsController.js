@@ -130,7 +130,7 @@ exports.getDealersByOEMZoneRegion = async (req, res, next) => {
     });
 
     if (!dealers || dealers.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'No dealers found for the specified OEM, Zone, and Region' });
+      return res.status(200).json({ status: 'success', message: 'No dealers found for the specified OEM, Zone, and Region' });
     }
 
     res.status(200).json({ status: 'success', data: dealers });

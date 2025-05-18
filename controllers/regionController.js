@@ -83,7 +83,7 @@ exports.getRegionsByOEMAndZone = async (req, res, next) => {
     });
 
     if (!regions || regions.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'No regions found for this OEM and Zone' });
+      return res.status(200).json({ status: 'success', message: 'No regions found for this OEM and Zone' });
     }
 
     res.status(200).json({ status: 'success', data: regions });
@@ -111,7 +111,7 @@ exports.getRegionsByOEM = async (req, res, next) => {
     });
 
     if (!regions || regions.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'No regions found for the specified OEM' });
+      return res.status(200).json({ status: 'success', message: 'No regions found for the specified OEM' });
     }
 
     res.status(200).json({ status: 'success', data: regions });

@@ -71,7 +71,7 @@ exports.getZonesByOEM = async (req, res, next) => {
     });
 
     if (!zones || zones.length === 0) {
-      return res.status(404).json({ status: 'error', message: 'No zones found for the specified OEM' });
+      return res.status(200).json({ status: 'success', message: 'No zones found for the specified OEM' });
     }
 
     res.status(200).json({ status: 'success', data: zones });
