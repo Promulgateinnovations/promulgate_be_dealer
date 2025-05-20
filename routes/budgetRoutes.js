@@ -113,4 +113,32 @@ router.put('/api/v1/budgets/:id', budgetController.updateBudget);
  */
 router.delete('/api/v1/budgets/:id', budgetController.deleteBudget);
 
+/**
+ * @swagger
+ * tags:
+ *   name: Budget
+ *   description: Budget details management
+ */
+
+/**
+ * @swagger
+ * /api/v1/budgets/{oem_id}:
+ *   get:
+ *     summary: Get budget details by OEM ID
+ *     tags: [Budget]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The OEM UUID
+ *     responses:
+ *       200:
+ *         description: Budget details retrieved
+ *       404:
+ *         description: Budget not found
+ */
+router.get('/api/v1/BudgetDetailsByOEM/:oem_id', controller.getBudgetDetailsByOEM);
+
 module.exports = router;

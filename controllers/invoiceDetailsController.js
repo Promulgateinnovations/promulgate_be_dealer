@@ -56,3 +56,24 @@ exports.deleteInvoice = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+
+exports.getInvoiceDetailsByOEM = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    // First, find the Budget ID using oem_id
+    const budget = await Budget.findOne({ where: { oem_id } });
+    if (!budget) return next(new AppError('Budget not found', 404));
+
+    const invoice = await InvoiceDetails.findOne({
+      where: { budget_id: budget.budget_id },
+    });
+
+    if (!invoice) return next(new AppError('Invoice not found', 404));
+
+    res.status(200).json({ status: 'success', data: invoice });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};

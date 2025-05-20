@@ -56,3 +56,24 @@ exports.deleteBusinessDetails = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+
+
+exports.getBusinessDetailsByOEM = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    const businessDetails = await BusinessDetails.findOne({
+      where: { oem_id },
+    });
+
+    if (!businessDetails) return next(new AppError('Business details not found', 404));
+      
+    res.status(200).json({
+      status: 'success',
+      data: businessDetails,
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};

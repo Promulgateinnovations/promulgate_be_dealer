@@ -115,4 +115,34 @@ router.put('/api/v1/business-details/:id', businessDetailsController.updateBusin
  */
 router.delete('/api/v1/business-details/:id', businessDetailsController.deleteBusinessDetails);
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: BusinessDetails
+ *   description: Business details management
+ */
+
+/**
+ * @swagger
+ * /api/v1/business-details/{oem_id}:
+ *   get:
+ *     summary: Get business details by OEM ID
+ *     tags: [BusinessDetails]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The OEM UUID
+ *     responses:
+ *       200:
+ *         description: Business details found
+ *       404:
+ *         description: Business details not found
+ */
+router.get('/api/v1/BusinessDetailsByOEM/:oem_id', controller.getBusinessDetailsByOEM);
+
+
 module.exports = router;

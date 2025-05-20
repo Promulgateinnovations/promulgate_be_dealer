@@ -56,3 +56,22 @@ exports.deleteBudget = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+exports.getBudgetDetailsByOEM = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    const budget = await Budget.findOne({
+      where: { oem_id },
+    });
+
+    if (!budget) return next(new AppError('Budget not found', 404));
+
+    res.status(200).json({
+      status: 'success',
+      data: budget,
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};

@@ -113,4 +113,25 @@ router.put('/api/v1/invoices/:id', controller.updateInvoice);
  */
 router.delete('/api/v1/invoices/:id', controller.deleteInvoice);
 
+/**
+ * @swagger
+ * /api/v1/invoice-details/{oem_id}:
+ *   get:
+ *     summary: Get invoice details by OEM ID
+ *     tags: [InvoiceDetails]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: OEM UUID
+ *     responses:
+ *       200:
+ *         description: Invoice details retrieved
+ *       404:
+ *         description: Not found
+ */
+router.get('/api/v1/InvoiceDetailsByOEM/:oem_id', controller.getInvoiceDetailsByOEM);
+
 module.exports = router;
