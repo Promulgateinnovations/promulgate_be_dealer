@@ -142,7 +142,7 @@ router.delete('/api/v1/business-details/:id', businessDetailsController.deleteBu
  *       404:
  *         description: Business details not found
  */
-router.get('/api/v1/BusinessDetailsByOEM/:oem_id', controller.getBusinessDetailsByOEM);
+router.get('/api/v1/BusinessDetailsByOEM/:oem_id', businessDetailsController.getBusinessDetailsByOEM);
 
 
 module.exports = router;
