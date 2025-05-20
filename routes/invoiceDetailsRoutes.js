@@ -115,7 +115,7 @@ router.delete('/api/v1/invoices/:id', controller.deleteInvoice);
 
 /**
  * @swagger
- * /api/v1/invoice-details/{oem_id}:
+ * /api/v1/InvoiceDetailsByOEM/{oem_id}:
  *   get:
  *     summary: Get invoice details by OEM ID
  *     tags: [InvoiceDetails]

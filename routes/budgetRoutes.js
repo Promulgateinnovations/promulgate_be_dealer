@@ -122,7 +122,7 @@ router.delete('/api/v1/budgets/:id', budgetController.deleteBudget);
 
 /**
  * @swagger
- * /api/v1/budgets/{oem_id}:
+ * /api/v1/BudgetDetailsByOEM/{oem_id}:
  *   get:
  *     summary: Get budget details by OEM ID
  *     tags: [Budget]

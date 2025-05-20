@@ -125,7 +125,7 @@ router.delete('/api/v1/business-details/:id', businessDetailsController.deleteBu
 
 /**
  * @swagger
- * /api/v1/business-details/{oem_id}:
+ * /api/v1/BusinessDetailsByOEM/{oem_id}:
  *   get:
  *     summary: Get business details by OEM ID
  *     tags: [BusinessDetails]
