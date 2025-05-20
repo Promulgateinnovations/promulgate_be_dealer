@@ -139,6 +139,6 @@ router.delete('/api/v1/budgets/:id', budgetController.deleteBudget);
  *       404:
  *         description: Budget not found
  */
-router.get('/api/v1/BudgetDetailsByOEM/:oem_id', controller.getBudgetDetailsByOEM);
+router.get('/api/v1/BudgetDetailsByOEM/:oem_id', budgetController.getBudgetDetailsByOEM);
 
 module.exports = router;
