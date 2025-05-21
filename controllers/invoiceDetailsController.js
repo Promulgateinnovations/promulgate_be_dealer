@@ -1,6 +1,7 @@
 const db = require('../models');
 const InvoiceDetails = db.invoiceDetails;
 const AppError = require('../utils/appError');
+const Budget = db.budget;
 
 // CREATE
 exports.createInvoice = async (req, res, next) => {
