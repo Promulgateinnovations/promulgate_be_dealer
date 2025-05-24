@@ -182,7 +182,7 @@ router.delete('/api/v1/oems/:id', oemController.deleteOEM);
  *       404:
  *         description: OEM not found
  */
-router.put('/api/v1/updateOEMStatus/:oem_id/status', controller.updateOEMStatus);
+router.put('/api/v1/updateOEMStatus/:oem_id/status', oemController.updateOEMStatus);
 
 
 /**
@@ -204,7 +204,7 @@ router.put('/api/v1/updateOEMStatus/:oem_id/status', controller.updateOEMStatus)
  *       404:
  *         description: OEM not found
  */
-router.get('/api/v1/getOEMStatus/:oem_id/status', controller.getOEMStatus);
+router.get('/api/v1/getOEMStatus/:oem_id/status', oemController.getOEMStatus);
 
 
 module.exports = router;
