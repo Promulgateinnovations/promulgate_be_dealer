@@ -102,9 +102,9 @@ exports.findOneByAnyColumn = (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
   try {
-    const foundItem = await db.user.findOne({ where: { email } });
+    const foundItem = await db.user.findOne({ where: {  email: email, password: password  } });
     if (!foundItem) {
       db.user.create({
         firstName: '',

@@ -153,4 +153,58 @@ router.put('/api/v1/oems/:id', oemController.updateOEM);
  */
 router.delete('/api/v1/oems/:id', oemController.deleteOEM);
 
+/**
+ * @swagger
+ * /api/v1/updateOEMStatus/{oem_id}/status:
+ *   put:
+ *     summary: Update OEM status
+ *     tags: [OEMs]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: OEM UUID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 example: Active
+ *     responses:
+ *       200:
+ *         description: Status updated successfully
+ *       404:
+ *         description: OEM not found
+ */
+router.put('/api/v1/updateOEMStatus/:oem_id/status', controller.updateOEMStatus);
+
+
+/**
+ * @swagger
+ * /api/v1/getOEMStatus/{oem_id}/status:
+ *   get:
+ *     summary: Get the status of an OEM by ID
+ *     tags: [OEMs]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: OEM UUID
+ *     responses:
+ *       200:
+ *         description: OEM status retrieved
+ *       404:
+ *         description: OEM not found
+ */
+router.get('/api/v1/getOEMStatus/:oem_id/status', controller.getOEMStatus);
+
+
 module.exports = router;

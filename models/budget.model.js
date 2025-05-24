@@ -27,7 +27,17 @@ module.exports = (sequelize, Sequelize) => {
       billing_cycle: {
         type: Sequelize.STRING(100),
         allowNull: false,
-      }
+      },
+      status: {
+        type: Sequelize.ENUM,
+        values: ['ACTIVE', 'INACTIVE'],
+        defaultValue: 'ACTIVE',
+      },
+      budgetEntity: {
+         type: Sequelize.ENUM,
+        values: ["OEM", "Agency", "Dealership"]
+      },
+
     });
   
     return Budget;

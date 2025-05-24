@@ -75,6 +75,22 @@ module.exports = (sequelize, Sequelize) => {
       },
       custom_kpis: {
         type: Sequelize.TEXT,
+      },
+      oem_address: {
+        type: Sequelize.TEXT,
+      }, 
+      Operational_purview: {
+        type: Sequelize.STRING(100),  
+      },
+      onboarding: {
+        type: Sequelize.ENUM('OEM', 'Zone', 'Region','DealerShip'),
+      },
+      onboarding_name: {
+        type: Sequelize.STRING(100),
+      },
+      oem_status: {
+        type: Sequelize.ENUM('Active', 'Inactive', 'Pending'),
+        defaultValue: 'Active',
       }
     });
   

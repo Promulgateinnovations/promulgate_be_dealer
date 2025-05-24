@@ -25,7 +25,20 @@ module.exports = (sequelize, Sequelize) => {
     descriptionTags: {
       type: Sequelize.STRING,
       allowNull: false,
-    }
+    },
+    status: {
+      type: Sequelize.ENUM,
+      values: ['ACTIVE', 'INACTIVE'],
+      defaultValue: 'ACTIVE',
+    },
+    descriptionTags: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    standardPageTags: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },  
   });
 
   return Business;

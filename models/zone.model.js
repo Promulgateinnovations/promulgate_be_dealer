@@ -27,6 +27,23 @@ module.exports = (sequelize, Sequelize) => {
       admin_email: {
         type: Sequelize.STRING(255),
         allowNull: false,
+      },
+      zoneDescription:{
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      admin_name: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+      },
+      admin_phone: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
+      zone_status: {
+        type: Sequelize.ENUM,
+        values: ['ACTIVE', 'INACTIVE'],
+        defaultValue: 'ACTIVE',
       }
     });
   

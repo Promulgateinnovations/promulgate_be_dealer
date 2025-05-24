@@ -28,6 +28,19 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(100),
         allowNull: true,
       },
+      status: {
+        type: Sequelize.ENUM,
+        values: ['ACTIVE', 'INACTIVE'],
+        defaultValue: 'ACTIVE',
+      },
+      business_name: {
+        type: Sequelize.STRING(100),
+        allowNull: true,
+      },
+      business_phone: {
+        type: Sequelize.STRING(50),
+        allowNull: true,
+      },
     });
   
     return InvoiceDetails;

@@ -60,3 +60,59 @@ exports.deleteOEM = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+exports.updateOEMStatus = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ status: 'fail', message: 'Status is required in body' });
+    }
+
+    const oem = await OEM.findByPk(oem_id);
+    if (!oem) {
+      return res.status(404).json({ status: 'fail', message: 'OEM not found' });
+    }
+
+    await oem.update({ status });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'OEM status updated successfully',
+      data: {
+        oem_id: oem.oem_id,
+        status: oem.status,
+      },
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
+
+exports.getOEMStatus = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    const oem = await OEM.findByPk(oem_id, {
+      attributes: ['oem_id', 'status']
+    });
+
+    if (!oem) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'OEM not found',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        oem_id: oem.oem_id,
+        status: oem.status
+      }
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
