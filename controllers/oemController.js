@@ -82,7 +82,7 @@ exports.updateOEMStatus = async (req, res, next) => {
     // Update all users linked to this OEM
     const userUpdateCount = await users.update(
       { userStatus: status },
-      { where: { organizationOrgId: oem_id } }
+      { where: { 	organizationOrgId: oem_id } }
     );
 
     res.status(200).json({
@@ -91,7 +91,7 @@ exports.updateOEMStatus = async (req, res, next) => {
       data: {
         oem_id: oem.oem_id,
         new_status: status,
-        users_updated: userUpdateCount[0], // Sequelize returns [affectedCount]
+        
       },
     });
   } catch (err) {
@@ -118,7 +118,7 @@ exports.getOEMStatus = async (req, res, next) => {
       status: 'success',
       data: {
         oem_id: oem.oem_id,
-        status: oem.status
+        status: oem.oem_status
       }
     });
   } catch (err) {
