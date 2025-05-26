@@ -1,6 +1,6 @@
 const db = require('../models');
 const OEM = db.oem;
-const users = db.users;
+const users = db.user;
 const AppError = require('../utils/appError');
 
 // CREATE
