@@ -83,7 +83,7 @@ exports.updateOEMStatus = async (req, res, next) => {
     await oem.update({ status });
 
     // Update all users linked to this OEM
-    const userUpdateCount = await User.update(
+    const userUpdateCount = await users.update(
       { userStatus: status },
       { where: { organizationOrgId: oem_id } }
     );
@@ -107,7 +107,7 @@ exports.getOEMStatus = async (req, res, next) => {
     const { oem_id } = req.params;
 
     const oem = await OEM.findByPk(oem_id, {
-      attributes: ['oem_id', 'status']
+      attributes: ['oem_id', 'oem_status']
     });
 
     if (!oem) {
