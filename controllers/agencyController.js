@@ -144,6 +144,7 @@ exports.login = async (req, res, next) => {
             agencyId: foundItem.agencyAgencyId,
             userId: foundItem.userId,
             orgId: foundItem.organizationOrgId,
+            status: foundItem.userStatus,
             role: roleInfo
             // orgId:roleInfo.map(function(a) {return a.organizationOrgId;}),
             // role: roleInfo.map(function(a) {return a.roleRoleId;})
@@ -156,6 +157,7 @@ exports.login = async (req, res, next) => {
             agencyId: foundItem.agencyAgencyId,
             userId: foundItem.userId,
             orgId: foundItem.organizationOrgId,
+            status: foundItem.userStatus,
             role: []
           }
         })

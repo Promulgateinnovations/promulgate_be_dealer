@@ -1,5 +1,6 @@
 const db = require('../models');
 const OEM = db.oem;
+const users = db.users;
 const AppError = require('../utils/appError');
 
 // CREATE
@@ -67,9 +68,13 @@ exports.updateOEMStatus = async (req, res, next) => {
     const { status } = req.body;
 
     if (!status) {
-      return res.status(400).json({ status: 'fail', message: 'Status is required in body' });
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Status is required in request body',
+      });
     }
 
+    // Update OEM status
     const oem = await OEM.findByPk(oem_id);
     if (!oem) {
       return res.status(404).json({ status: 'fail', message: 'OEM not found' });
@@ -77,12 +82,19 @@ exports.updateOEMStatus = async (req, res, next) => {
 
     await oem.update({ status });
 
+    // Update all users linked to this OEM
+    const userUpdateCount = await User.update(
+      { userStatus: status },
+      { where: { organizationOrgId: oem_id } }
+    );
+
     res.status(200).json({
       status: 'success',
-      message: 'OEM status updated successfully',
+      message: 'OEM and user statuses updated successfully',
       data: {
         oem_id: oem.oem_id,
-        status: oem.status,
+        new_status: status,
+        users_updated: userUpdateCount[0], // Sequelize returns [affectedCount]
       },
     });
   } catch (err) {
