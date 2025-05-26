@@ -14,9 +14,6 @@ exports.createOEM = async (req, res, next) => {
 };
 
 
-
-
-
 // READ ALL
 exports.getAllOEMs = async (req, res, next) => {
   try {
