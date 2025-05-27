@@ -151,7 +151,7 @@ exports.updateDealerStatus = async (req, res, next) => {
       });
     }
 
-    const dealer = await Dealer.findByPk(dealer_id);
+    const dealer = await DealerDetails.findByPk(dealer_id);
     if (!dealer) {
       return res.status(404).json({
         status: 'fail',
