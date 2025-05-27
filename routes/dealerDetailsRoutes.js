@@ -144,4 +144,40 @@ router.delete('/api/v1/dealers/:id', dealerDetailcontroller.deleteDealer);
  */
 router.get('/api/v1/DealersByOEMZoneRegion/:oem_id/:zone_id/:region_id', dealerDetailcontroller.getDealersByOEMZoneRegion);
 
+/**
+ * @swagger
+ * /api/v1/updateDealerStatus/{dealer_id}/status:
+ *   put:
+ *     summary: Update dealer status
+ *     tags: [DealerDetails]
+ *     parameters:
+ *       - in: path
+ *         name: dealer_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Dealer ID (UUID)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - dealer_status
+ *             properties:
+ *               dealer_status:
+ *                 type: string
+ *                 example: Active
+ *     responses:
+ *       200:
+ *         description: Dealer status updated
+ *       400:
+ *         description: Missing status
+ *       404:
+ *         description: Dealer not found
+ */
+router.put('/api/v1/updateDealerStatus/:dealer_id/status', dealerDetailcontroller.updateDealerStatus);
+
+
 module.exports = router;

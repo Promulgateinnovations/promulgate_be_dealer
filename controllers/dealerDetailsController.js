@@ -138,3 +138,38 @@ exports.getDealersByOEMZoneRegion = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.updateDealerStatus = async (req, res, next) => {
+  try {
+    const { dealer_id } = req.params;
+    const { dealer_status } = req.body;
+
+    if (!dealer_status) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'dealer_status is required in the request body',
+      });
+    }
+
+    const dealer = await Dealer.findByPk(dealer_id);
+    if (!dealer) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Dealer not found',
+      });
+    }
+
+    await dealer.update({ dealer_status });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Dealer status updated successfully',
+      data: {
+        dealer_id: dealer.dealer_id,
+        dealer_status: dealer.dealer_status,
+      },
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};

@@ -42,7 +42,12 @@ module.exports = (sequelize, Sequelize) => {
     admin_phone: Sequelize.STRING,
     channeltype: Sequelize.STRING,
     channeltypestatus: Sequelize.STRING,
-    channelList: Sequelize.STRING
+    channelList: Sequelize.STRING,
+    dealer_status: {
+      type: Sequelize.ENUM,
+      values: ['ACTIVE', 'INACTIVE'],
+      defaultValue: 'ACTIVE',
+    },
   });
 
   return DealerDetails;
