@@ -173,3 +173,29 @@ exports.updateDealerStatus = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
+
+
+
+exports.getDealersByOEMID = async (req, res, next) => {
+  try {
+    const { oem_id } = req.params;
+
+    const dealers = await DealerDetails.findAll({
+      where: { oem_id },
+    });
+
+    if (!dealers || dealers.length === 0) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No dealers found for OEM ID: ${oem_id}`,
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: dealers,
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};

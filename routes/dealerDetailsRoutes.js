@@ -179,5 +179,45 @@ router.get('/api/v1/DealersByOEMZoneRegion/:oem_id/:zone_id/:region_id', dealerD
  */
 router.put('/api/v1/updateDealerStatus/:dealer_id/status', dealerDetailcontroller.updateDealerStatus);
 
+/**
+ * @swagger
+ * /api/v1/getDealersByOEMID/{oem_id}:
+ *   get:
+ *     summary: Get all dealers by OEM ID
+ *     tags: [DealerDetails]
+ *     parameters:
+ *       - in: path
+ *         name: oem_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The OEM ID (UUID)
+ *     responses:
+ *       200:
+ *         description: List of dealers for the OEM
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       dealer_id:
+ *                         type: string
+ *                       dealerName:
+ *                         type: string
+ *                       dealerCode:
+ *                         type: string
+ *                       dealer_status:
+ *                         type: string
+ *       404:
+ *         description: No dealers found
+ */
+router.get('/api/v1/getDealersByOEMID/:oem_id', dealerDetailcontroller.getDealersByOEMID);
 
 module.exports = router;
