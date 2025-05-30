@@ -793,7 +793,4 @@ router
   .post(analyticsController.analyticsReport);
 
 
-router
-  .route('/api/v1/delear-analy-report')
-  .post(analyticsController.dealerAnalyReport);
 module.exports = router;
