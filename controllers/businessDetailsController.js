@@ -67,7 +67,7 @@ exports.getBusinessDetailsByOEM = async (req, res, next) => {
       where: { oem_id },
     });
 
-    if (!businessDetails) return next(new AppError('Business details not found', 404));
+    if (!businessDetails) return next(new AppError('Business details not found', 200));
       
     res.status(200).json({
       status: 'success',
