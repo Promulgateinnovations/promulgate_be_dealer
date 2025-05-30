@@ -65,7 +65,7 @@ exports.getBudgetDetailsByOEM = async (req, res, next) => {
       where: { oem_id },
     });
 
-    if (!budget) return next(new AppError('Budget not found', 200));
+    if (!budget) return next(new AppError('Budget not found', 404));
 
     res.status(200).json({
       status: 'success',
