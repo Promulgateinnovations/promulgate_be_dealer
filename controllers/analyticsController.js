@@ -1,13 +1,13 @@
-const db = require('../models');
-const AppError = require('../utils/appError');
-const { Op } = require('sequelize');
-const axios = require('axios');
+const db = require("../models");
+const AppError = require("../utils/appError");
+const { Op } = require("sequelize");
+const axios = require("axios");
 
-const campaignController = require('../controllers/campaignDefinitionController');
-const analyticsController = require('../controllers/analyticsController');
-const postController = require('../controllers/postController');
-const campaignDefinitionController = require('../controllers/campaignDefinitionController');
-const { composer } = require('googleapis/build/src/apis/composer');
+const campaignController = require("../controllers/campaignDefinitionController");
+const analyticsController = require("../controllers/analyticsController");
+const postController = require("../controllers/postController");
+const campaignDefinitionController = require("../controllers/campaignDefinitionController");
+const { composer } = require("googleapis/build/src/apis/composer");
 const campaignDefinition = db.campaignDefinition;
 const socialPresence = db.socialPresence;
 const youtubeAnalytics = db.youtubeAnalytics;
@@ -20,8 +20,8 @@ const campaignSelectionChannel = db.campaignSelectionChannel;
 const socialMediaConnection = db.socialMediaConnection;
 const campaignContent = db.campaignContent;
 const campaignContentPost = db.campaignContentPost;
-const configs = require('../config/config.json');
-const moment = require('moment');
+const configs = require("../config/config.json");
+const moment = require("moment");
 
 exports.OldgetCampaginAnalytics = async (req, res, next) => {
   try {
@@ -33,50 +33,50 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
           [Op.ne]: null,
         },
       },
-      attributes: ['postId'],
+      attributes: ["postId"],
       include: [
         {
           model: db.campaignContent,
           required: true,
-          as: 'campaignContent',
-          attributes: ['campaignContentId'],
+          as: "campaignContent",
+          attributes: ["campaignContentId"],
           include: [
             {
               model: db.campaignSelectionChannel,
               required: true,
-              as: 'campaignSelectionChannel',
-              attributes: ['campaignSelectionId'],
+              as: "campaignSelectionChannel",
+              attributes: ["campaignSelectionId"],
               include: [
                 {
                   model: db.socialMediaConnection,
-                  as: 'socialMediaConnection',
+                  as: "socialMediaConnection",
                   attributes: [
-                    'name',
-                    'socialMediaType',
-                    'socialMediaHandle',
-                    'password',
+                    "name",
+                    "socialMediaType",
+                    "socialMediaHandle",
+                    "password",
                   ],
                   include: [
                     {
                       model: db.socialMediaPage,
-                      as: 'socialMediaPage',
-                      attributes: ['url', 'password'],
+                      as: "socialMediaPage",
+                      attributes: ["url", "password"],
                     },
                   ],
                 },
                 {
                   model: db.campaignDefinition,
 
-                  as: 'campaignDefinition',
+                  as: "campaignDefinition",
                   where: {
                     campaignDefinitionId: campaignDefinitionId,
                   },
                   attributes: [
-                    'name',
-                    'startAt',
-                    'endAt',
-                    'totalAudience',
-                    'status',
+                    "name",
+                    "startAt",
+                    "endAt",
+                    "totalAudience",
+                    "status",
                   ],
                 },
               ],
@@ -100,7 +100,7 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
       comment: 0,
     };
     let instagramResult = {
-      view_count: '0',
+      view_count: "0",
       like_count: 0,
       comments_count: 0,
     };
@@ -142,7 +142,7 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
         .filter((currentItem) => {
           return (
             currentItem.campaignContent.campaignSelectionChannel.socialMediaConnection.name.toLowerCase() ===
-            'facebook'
+            "facebook"
           );
         })
         .map((currentItem) => {
@@ -173,7 +173,7 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
         .filter((currentItem) => {
           return (
             currentItem.campaignContent.campaignSelectionChannel.socialMediaConnection.name.toLowerCase() ===
-            'instagram'
+            "instagram"
           );
         })
         .map((currentItem) => {
@@ -203,7 +203,7 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
         .filter((currentItem) => {
           return (
             currentItem.campaignContent.campaignSelectionChannel.socialMediaConnection.name.toLowerCase() ===
-            'youtube'
+            "youtube"
           );
         })
         .map((currentItem) => {
@@ -247,60 +247,60 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
         if (currentItem && currentItem[0] != undefined) {
           facebookResult.viewCount = this.mergeProperties(
             currentItem,
-            'viewCount'
+            "viewCount"
           );
-          facebookResult.wow = this.mergeProperties(currentItem, 'wow');
-          facebookResult.like = this.mergeProperties(currentItem, 'like');
-          facebookResult.comment = this.mergeProperties(currentItem, 'comment');
+          facebookResult.wow = this.mergeProperties(currentItem, "wow");
+          facebookResult.like = this.mergeProperties(currentItem, "like");
+          facebookResult.comment = this.mergeProperties(currentItem, "comment");
           youTubeResult.viewCount = this.mergeProperties(
             currentItem,
-            'viewCount'
+            "viewCount"
           );
           youTubeResult.likeCount = this.mergeProperties(
             currentItem,
-            'likeCount'
+            "likeCount"
           );
           youTubeResult.dislikeCount = this.mergeProperties(
             currentItem,
-            'dislikeCount'
+            "dislikeCount"
           );
           youTubeResult.favoriteCount = this.mergeProperties(
             currentItem,
-            'favoriteCount'
+            "favoriteCount"
           );
           youTubeResult.commentCount = this.mergeProperties(
             currentItem,
-            'commentCount'
+            "commentCount"
           );
           instagramResult.like_count = this.mergeProperties(
             currentItem,
-            'like_count'
+            "like_count"
           );
           instagramResult.view_count = this.mergeProperties(
             currentItem,
-            'view_count'
+            "view_count"
           );
           instagramResult.comments_count = this.mergeProperties(
             currentItem,
-            'comments_count'
+            "comments_count"
           );
         }
 
-        console.log('facebookResult');
+        console.log("facebookResult");
         console.log(facebookResult);
-        console.log('youTubeResult');
+        console.log("youTubeResult");
         console.log(youTubeResult);
-        console.log('instagramResult');
+        console.log("instagramResult");
         console.log(instagramResult);
         const reach = this.getReachCount(
           facebookResult,
           youTubeResult,
           instagramResult
         );
-        console.log('hji');
+        console.log("hji");
 
         res.send({
-          status: 'success',
+          status: "success",
           data: {
             campaign_name: campaignName,
             campaign_start_date: startDate,
@@ -324,7 +324,7 @@ exports.OldgetCampaginAnalytics = async (req, res, next) => {
       });
     } else {
       res.send({
-        status: 'success',
+        status: "success",
         data: {
           campaign_name: campaignName,
           campaign_start_date: startDate,
@@ -355,7 +355,7 @@ exports.getCampaginAnalytics = async (req, res, next) => {
       where: {
         campaignDefinitionId,
       },
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
     if (!foundItem) {
       const item = db.campaignDefinition.findOne({
@@ -366,18 +366,15 @@ exports.getCampaginAnalytics = async (req, res, next) => {
       const getAllSent = WaBroadcastLog.findAll({
         where: {
           wa_campaign: campaignDefinitionId,
-          sent: 1
+          sent: 1,
         },
-        attributes: ['sent'],
+        attributes: ["sent"],
       });
 
-      Promise.all([
-        item,
-        getAllSent
-      ])
+      Promise.all([item, getAllSent])
         .then((responses) => {
           res.send({
-            status: 'success',
+            status: "success",
             data: {
               campaign_name: responses[0].name,
               fbLeadsAmount: responses[0].fbLeadsAmount,
@@ -406,28 +403,28 @@ exports.getCampaginAnalytics = async (req, res, next) => {
                   comments_count: 0,
                 },
                 email: {
-                  'No of Email': 0,
+                  "No of Email": 0,
                 },
                 sms: {
-                  'No of SMS': 0,
+                  "No of SMS": 0,
                 },
                 whatsapp: {
-                  'No of Message send': responses[1].length,
+                  "No of Message send": responses[1].length,
                 },
               },
               reach: 0,
               engagement: 0,
-              analyticsid: '',
+              analyticsid: "",
             },
           });
         })
         .catch((err) => {
-          console.log('**********ERROR RESULT****************');
+          console.log("**********ERROR RESULT****************");
           console.log(err);
         });
     } else {
       res.send({
-        status: 'success',
+        status: "success",
         data: {
           campaign_name: foundItem.name,
           campaign_start_date: foundItem.startAt,
@@ -448,9 +445,9 @@ exports.getCampaginAnalytics = async (req, res, next) => {
 
 exports.getAnalyticsData = (campaignDefinitionId) => {
   return new Promise((resolve, reject) => {
-    console.log('campaignDefinitionId', campaignDefinitionId);
+    console.log("campaignDefinitionId", campaignDefinitionId);
     this.getData(campaignDefinitionId).then((response) => {
-      console.log('abc==============>');
+      console.log("abc==============>");
       console.log(response);
       resolve(response);
     });
@@ -467,50 +464,50 @@ exports.getData = async (campaignDefinitionId) => {
               [Op.ne]: null,
             },
           },
-          attributes: ['postId'],
+          attributes: ["postId"],
           include: [
             {
               model: db.campaignContent,
               required: true,
-              as: 'campaignContent',
-              attributes: ['campaignContentId'],
+              as: "campaignContent",
+              attributes: ["campaignContentId"],
               include: [
                 {
                   model: db.campaignSelectionChannel,
                   required: true,
-                  as: 'campaignSelectionChannel',
-                  attributes: ['campaignSelectionId'],
+                  as: "campaignSelectionChannel",
+                  attributes: ["campaignSelectionId"],
                   include: [
                     {
                       model: db.socialMediaConnection,
-                      as: 'socialMediaConnection',
+                      as: "socialMediaConnection",
                       attributes: [
-                        'name',
-                        'socialMediaType',
-                        'socialMediaHandle',
-                        'password',
+                        "name",
+                        "socialMediaType",
+                        "socialMediaHandle",
+                        "password",
                       ],
                       include: [
                         {
                           model: db.socialMediaPage,
-                          as: 'socialMediaPage',
-                          attributes: ['url', 'password'],
+                          as: "socialMediaPage",
+                          attributes: ["url", "password"],
                         },
                       ],
                     },
                     {
                       model: db.campaignDefinition,
 
-                      as: 'campaignDefinition',
+                      as: "campaignDefinition",
                       where: {
                         campaignDefinitionId: campaignDefinitionId,
                       },
                       attributes: [
-                        'name',
-                        'startAt',
-                        'endAt',
-                        'totalAudience',
-                        'status',
+                        "name",
+                        "startAt",
+                        "endAt",
+                        "totalAudience",
+                        "status",
                       ],
                     },
                   ],
@@ -534,25 +531,25 @@ exports.getData = async (campaignDefinitionId) => {
             comment: 0,
           };
           let instagramResult = {
-            view_count: '0',
+            view_count: "0",
             like_count: 0,
             comments_count: 0,
           };
 
           let emailResult = {
-            'No of Email': 0,
+            "No of Email": 0,
           };
           let smsResult = {
-            'No of SMS': 0,
+            "No of SMS": 0,
           };
           let whatsappResult = {
-            'No of Message send': 0,
+            "No of Message send": 0,
           };
 
           const filteredPost = foundItem.filter(
             (item) => item.campaignContent.campaignSelectionChannel
           );
-          console.log('filteredPost');
+          console.log("filteredPost");
           console.log(filteredPost);
           let startDate, endDate, totalAudience, status, campaignName;
           if (filteredPost.length === 0) {
@@ -587,7 +584,7 @@ exports.getData = async (campaignDefinitionId) => {
               .filter((currentItem) => {
                 return (
                   currentItem.campaignContent.campaignSelectionChannel.socialMediaConnection.name.toLowerCase() ===
-                  'facebook'
+                  "facebook"
                 );
               })
               .map((currentItem) => {
@@ -618,7 +615,7 @@ exports.getData = async (campaignDefinitionId) => {
               .filter((currentItem) => {
                 return (
                   currentItem.campaignContent.campaignSelectionChannel.socialMediaConnection.name.toLowerCase() ===
-                  'instagram'
+                  "instagram"
                 );
               })
               .map((currentItem) => {
@@ -648,7 +645,7 @@ exports.getData = async (campaignDefinitionId) => {
               .filter((currentItem) => {
                 return (
                   currentItem.campaignContent.campaignSelectionChannel.socialMediaConnection.name.toLowerCase() ===
-                  'youtube'
+                  "youtube"
                 );
               })
               .map((currentItem) => {
@@ -690,54 +687,54 @@ exports.getData = async (campaignDefinitionId) => {
 
             Promise.all(youTubePromise).then((currentItem) => {
               if (currentItem && currentItem[0] != undefined) {
-                facebookResult.wow = this.mergeProperties(currentItem, 'wow');
+                facebookResult.wow = this.mergeProperties(currentItem, "wow");
                 facebookResult.like = this.facebookmergeProperties(
                   currentItem[0].values,
-                  'like'
+                  "like"
                 );
                 facebookResult.comment = this.mergeProperties(
                   currentItem,
-                  'comment'
+                  "comment"
                 );
                 youTubeResult.viewCount = this.mergeProperties(
                   currentItem,
-                  'viewCount'
+                  "viewCount"
                 );
                 youTubeResult.likeCount = this.mergeProperties(
                   currentItem,
-                  'likeCount'
+                  "likeCount"
                 );
                 youTubeResult.dislikeCount = this.mergeProperties(
                   currentItem,
-                  'dislikeCount'
+                  "dislikeCount"
                 );
                 youTubeResult.favoriteCount = this.mergeProperties(
                   currentItem,
-                  'favoriteCount'
+                  "favoriteCount"
                 );
                 youTubeResult.commentCount = this.mergeProperties(
                   currentItem,
-                  'commentCount'
+                  "commentCount"
                 );
                 instagramResult.comments_count = this.mergeProperties(
                   currentItem,
-                  'comments_count'
+                  "comments_count"
                 );
                 instagramResult.like_count = this.mergeProperties(
                   currentItem,
-                  'like_count'
+                  "like_count"
                 );
                 instagramResult.view_count = this.mergeProperties(
                   currentItem,
-                  'view_count'
+                  "view_count"
                 );
               }
 
-              console.log('facebookResult');
+              console.log("facebookResult");
               console.log(facebookResult);
-              console.log('youTubeResult');
+              console.log("youTubeResult");
               console.log(youTubeResult);
-              console.log('instagramResult');
+              console.log("instagramResult");
               console.log(instagramResult);
               const reach = this.getReachCount(
                 facebookResult,
@@ -747,7 +744,7 @@ exports.getData = async (campaignDefinitionId) => {
                 smsResult,
                 whatsappResult
               );
-              console.log('hji');
+              console.log("hji");
 
               resolve({
                 campaignDefinitionId,
@@ -813,9 +810,9 @@ exports.getReachCount = (
     parseInt(facebook.viewCount) +
     parseInt(youtube.viewCount) +
     parseInt(instagram.view_count) +
-    email['No of Email'] +
-    sms['No of SMS'] +
-    whatsapp['No of Message send']
+    email["No of Email"] +
+    sms["No of SMS"] +
+    whatsapp["No of Message send"]
   );
 };
 
@@ -839,11 +836,11 @@ exports.getFacebookpostDetails = async (facebookData) => {
     let selectedPage = `${facebookData.pageId}_${facebookData.postId}`;
     let token = facebookData.password;
     var config = {
-      method: 'get',
+      method: "get",
       url:
-        'https://graph.facebook.com/v16.0/' +
+        "https://graph.facebook.com/v16.0/" +
         selectedPage +
-        '/insights?metric=post_reactions_by_type_total&access_token=' +
+        "/insights?metric=post_reactions_by_type_total&access_token=" +
         token,
     };
 
@@ -852,7 +849,7 @@ exports.getFacebookpostDetails = async (facebookData) => {
         resolve(response.data);
       })
       .catch((err) => {
-        console.log('done');
+        console.log("done");
         resolve({ error: err.message });
       });
   });
@@ -863,16 +860,16 @@ exports.getFacebookPageInsights = (facebookData, orgId) => {
     let selectedPage = `${facebookData.pageId}`;
     let token = facebookData.password;
     var config = {
-      method: 'get',
+      method: "get",
       url:
-        'https://graph.facebook.com/' +
+        "https://graph.facebook.com/" +
         selectedPage +
-        '/insights?metric=page_views_total,post_reactions_like_total,post_reactions_love_total,post_reactions_wow_total,post_reactions_haha_total,post_reactions_sorry_total,post_reactions_anger_total,page_impressions_unique,page_engaged_users,page_positive_feedback_by_type,page_daily_follows_unique,page_fans&name=mention&access_token=' +
+        "/insights?metric=page_views_total,post_reactions_like_total,post_reactions_love_total,post_reactions_wow_total,post_reactions_haha_total,post_reactions_sorry_total,post_reactions_anger_total,page_impressions_unique,page_engaged_users,page_positive_feedback_by_type,page_daily_follows_unique,page_fans&name=mention&access_token=" +
         token,
     };
     axios(config)
       .then((response) => {
-        response.data.type = 'facebook';
+        response.data.type = "facebook";
         response.data.orgId = orgId;
         resolve(response.data);
       })
@@ -886,15 +883,15 @@ exports.getOrganizationIdForLinkendin = (password) => {
   return new Promise((resolve, reject) => {
     let token = password;
     var config = {
-      method: 'get',
+      method: "get",
       url:
-        'https://api.linkedin.com/v2/organizationAcls?q=roleAssignee&oauth2_access_token=' +
+        "https://api.linkedin.com/v2/organizationAcls?q=roleAssignee&oauth2_access_token=" +
         token,
     };
 
     axios(config).then((response) => {
       const organizationInfo = response.data.elements.filter(
-        (item) => item.role === 'ADMINISTRATOR'
+        (item) => item.role === "ADMINISTRATOR"
       );
       resolve(organizationInfo);
     });
@@ -907,16 +904,16 @@ exports.getLinkendinInsights = (facebookData, orgId) => {
     this.getOrganizationIdForLinkendin(token).then((organizationInfo) => {
       const organizationId = organizationInfo[0].organization;
       var config = {
-        method: 'get',
+        method: "get",
         url:
-          'https://api.linkedin.com/v2/organizationPageStatistics?q=organization&organization=' +
+          "https://api.linkedin.com/v2/organizationPageStatistics?q=organization&organization=" +
           organizationId +
-          '&oauth2_access_token=' +
+          "&oauth2_access_token=" +
           token,
       };
       axios(config)
         .then((response) => {
-          response.data.type = 'linkedin';
+          response.data.type = "linkedin";
           response.data.orgId = orgId;
           resolve(response);
         })
@@ -934,18 +931,18 @@ exports.getYoutubeInsights = (facebookData, orgId) => {
       .getRefreshToken(facebookData.password)
       .then((refreshTokenInfo) => {
         var config = {
-          method: 'get',
+          method: "get",
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
             Authorization: `Bearer ${refreshTokenInfo.refreshResponse.access_token}`,
           },
           url:
-            'https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=' +
+            "https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=" +
             selectedPage,
         };
         axios(config)
           .then((response) => {
-            response.data.type = 'youtube';
+            response.data.type = "youtube";
             response.data.orgId = orgId;
             resolve(response);
           })
@@ -961,16 +958,16 @@ exports.getInstagramPageInsights = (instagramData, orgId) => {
     let selectedPage = `${instagramData.pageId}`;
     let token = instagramData.password;
     var config = {
-      method: 'get',
+      method: "get",
       url:
-        'https://graph.facebook.com/v16.0/' +
+        "https://graph.facebook.com/v16.0/" +
         selectedPage +
-        '/insights?metric=impressions,reach,profile_views&period=day&access_token=' +
+        "/insights?metric=impressions,reach,profile_views&period=day&access_token=" +
         token,
     };
     axios(config)
       .then((response) => {
-        response.data.type = 'instagram';
+        response.data.type = "instagram";
         response.data.orgId = orgId;
         resolve(response.data);
       })
@@ -986,13 +983,13 @@ exports.getInstagramDetails = async (instagramData) => {
     let selectedPage = `${instagramData.pageId}`;
     let token = instagramData.password;
     var config = {
-      method: 'get',
+      method: "get",
       url:
-        'https://graph.facebook.com/v16.0/' +
+        "https://graph.facebook.com/v16.0/" +
         selectedPage +
-        '?fields=business_discovery.username(' +
+        "?fields=business_discovery.username(" +
         instagramData.userName +
-        '){followers_count,media_count,media{comments_count,like_count}}&access_token=' +
+        "){followers_count,media_count,media{comments_count,like_count}}&access_token=" +
         token,
     };
     axios(config)
@@ -1025,7 +1022,7 @@ exports.getInstagramDetails = async (instagramData) => {
         });
       })
       .catch((err) => {
-        console.log('done');
+        console.log("done");
         resolve({ error: err.message });
       });
   });
@@ -1071,7 +1068,7 @@ exports.mergeProperties = (array, key) => {
 };
 
 exports.facebookmergeProperties = (array, key) => {
-  console.log('array************');
+  console.log("array************");
   console.log(array);
   console.log(key);
   let currentCount = 0;
@@ -1087,7 +1084,7 @@ exports.getCampaginDefinitionData = async (campaignDefinitionId) => {
   try {
     const campaignDefinitionDetails = await db.campaignDefinition.findOne({
       where: { campaignDefinitionId },
-      attributes: ['name', 'startAt', 'endAt', 'totalAudience', 'status'],
+      attributes: ["name", "startAt", "endAt", "totalAudience", "status"],
     });
     if (campaignDefinitionDetails) {
       return campaignDefinitionDetails;
@@ -1120,7 +1117,7 @@ exports.saveAnalytics = async (analyticss) => {
       Analytics.create(analyticsInfo)
         .then((data) => {
           resolve({
-            status: 'success',
+            status: "success",
           });
         })
         .catch((err) => {
@@ -1148,7 +1145,7 @@ exports.saveSubscriptionAnalytics = async (analyticss) => {
         .create(analyticsInfo)
         .then((data) => {
           resolve({
-            status: 'success',
+            status: "success",
           });
         })
         .catch((err) => {
@@ -1164,22 +1161,22 @@ exports.getInsightsFoOrganization = async (subscriptionInfo, currentOrgId) => {
   const facebookPost = this.getSocialMediaDataByTypeAndOrg(
     subscriptionInfo,
     currentOrgId,
-    'facebook'
+    "facebook"
   );
   const InstaPost = this.getSocialMediaDataByTypeAndOrg(
     subscriptionInfo,
     currentOrgId,
-    'instagarm'
+    "instagarm"
   );
   const LinkedinPost = this.getSocialMediaDataByTypeAndOrg(
     subscriptionInfo,
     currentOrgId,
-    'linkedin'
+    "linkedin"
   );
   const YoutubePost = this.getSocialMediaDataByTypeAndOrg(
     subscriptionInfo,
     currentOrgId,
-    'youtube'
+    "youtube"
   );
 
   return new Promise((resolve, reject) => {
@@ -1207,17 +1204,17 @@ exports.getSubscriptionDetails = () => {
     db.socialMediaConnection
       .findAll({
         attributes: [
-          'name',
-          'socialMediaType',
-          'socialMediaHandle',
-          'password',
-          'organizationOrgId',
+          "name",
+          "socialMediaType",
+          "socialMediaHandle",
+          "password",
+          "organizationOrgId",
         ],
         include: [
           {
             model: db.socialMediaPage,
-            as: 'socialMediaPage',
-            attributes: ['url', 'password'],
+            as: "socialMediaPage",
+            attributes: ["url", "password"],
           },
         ],
       })
@@ -1257,95 +1254,95 @@ exports.getSubscriptionAnalytics = async (req, res, next) => {
       where: {
         orgId,
       },
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
     if (foundItem) {
       const result = {
         facebook: this.formatFacebookSubscriptionDetails(
-          'Facebook',
+          "Facebook",
           JSON.parse(foundItem.facebookSubscription)
         ),
         instagram: this.formatFacebookSubscriptionDetails(
-          'Instagram',
+          "Instagram",
           JSON.parse(foundItem.instagramSubscription)
         ),
         youtube: this.formatKeySuscriptionDetails(
-          'Youtube',
+          "Youtube",
           JSON.parse(foundItem.youtubeSubscription)
         ),
         linkedin: this.formatKeySuscriptionDetails(
-          'Linkedin',
+          "Linkedin",
           JSON.parse(foundItem.linkendinSubscription)
         ),
       };
       res.send({
-        status: 'success',
+        status: "success",
         data: result,
       });
     } else {
       res.send({
-        status: 'success',
+        status: "success",
         data: {
           facebook: {
-            name: 'Facebook',
+            name: "Facebook",
             analytics: [
               {
                 count: 0,
-                title: 'Daily Total Reach',
+                title: "Daily Total Reach",
               },
               {
                 count: 0,
-                title: 'Daily Page Engaged Users',
+                title: "Daily Page Engaged Users",
               },
               {
                 count: {},
-                title: 'Daily Positive Feedback From Users',
+                title: "Daily Positive Feedback From Users",
               },
               {
                 count: 0,
-                title: 'Daily New Follows',
+                title: "Daily New Follows",
               },
               {
                 count: 0,
-                title: 'Lifetime Total Likes',
+                title: "Lifetime Total Likes",
               },
             ],
           },
           instagram: {
-            name: 'Instagram',
+            name: "Instagram",
             analytics: [
               {
                 count: 0,
-                title: 'Impressions',
+                title: "Impressions",
               },
               {
                 count: 0,
-                title: 'Reach',
+                title: "Reach",
               },
               {
                 count: 0,
-                title: 'Profile views',
+                title: "Profile views",
               },
             ],
           },
           youtube: {
-            name: 'Youtube',
+            name: "Youtube",
             analytics: [
               {
-                count: '0',
-                title: 'viewCount',
+                count: "0",
+                title: "viewCount",
               },
               {
-                count: '0',
-                title: 'subscriberCount',
+                count: "0",
+                title: "subscriberCount",
               },
               {
                 count: false,
-                title: 'hiddenSubscriberCount',
+                title: "hiddenSubscriberCount",
               },
               {
-                count: '0',
-                title: 'videoCount',
+                count: "0",
+                title: "videoCount",
               },
             ],
           },
@@ -1420,10 +1417,10 @@ exports.getInsights = async (socailMediaCredentailsInfo) => {
       org
     );
 
-    const facebook = this.getInsightsDataByType(insightsInfo, 'facebook');
-    const instagram = this.getInsightsDataByType(insightsInfo, 'instagram');
-    const linkendin = this.getInsightsDataByType(insightsInfo, 'linkedin');
-    const youtube = this.getInsightsDataByType(insightsInfo, 'youtube');
+    const facebook = this.getInsightsDataByType(insightsInfo, "facebook");
+    const instagram = this.getInsightsDataByType(insightsInfo, "instagram");
+    const linkendin = this.getInsightsDataByType(insightsInfo, "linkedin");
+    const youtube = this.getInsightsDataByType(insightsInfo, "youtube");
     let facebookRecord = [],
       instagramRecord = [],
       youtubeRecord = [],
@@ -1436,7 +1433,7 @@ exports.getInsights = async (socailMediaCredentailsInfo) => {
       facebook[0].data.length > 0
     ) {
       facebookRecord = facebook[0].data
-        .filter((item) => item.period === 'day')
+        .filter((item) => item.period === "day")
         .map((items) => {
           return {
             type: facebook[0].type,
@@ -1454,7 +1451,7 @@ exports.getInsights = async (socailMediaCredentailsInfo) => {
       instagram[0].data.length > 0
     ) {
       instagramRecord = instagram[0].data
-        .filter((item) => item.period === 'day')
+        .filter((item) => item.period === "day")
         .map((items) => {
           return {
             type: instagram[0].type,
@@ -1489,19 +1486,19 @@ exports.getInsights = async (socailMediaCredentailsInfo) => {
       youtube: JSON.stringify(youtubeRecord),
     });
   }
-  console.LOG('upadted the record in the subscripton table');
+  console.LOG("upadted the record in the subscripton table");
 };
 
 exports.getVideoDetail = (accesstoken, youtubeId) => {
   const getVideoData1 =
-    'https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=' +
+    "https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=" +
     youtubeId;
 
   var configdsata = {
-    method: 'get',
+    method: "get",
     url: getVideoData1,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Bearer ${accesstoken}`,
     },
   };
@@ -1511,14 +1508,14 @@ exports.getVideoDetail = (accesstoken, youtubeId) => {
 
 exports.getPlaylistVideoDetail = (accesstoken, youtubeId) => {
   const getVideoData =
-    'https://youtube.googleapis.com/youtube/v3/channelSections?part=snippet%2CcontentDetails&channelId=' +
+    "https://youtube.googleapis.com/youtube/v3/channelSections?part=snippet%2CcontentDetails&channelId=" +
     youtubeId +
-    '&key=AIzaSyCmPX-4KQ-wjqFqJCYGGRtuYwqjY8s_jt4';
+    "&key=AIzaSyCmPX-4KQ-wjqFqJCYGGRtuYwqjY8s_jt4";
   var configdsata = {
-    method: 'get',
+    method: "get",
     url: getVideoData,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Bearer ${accesstoken}`,
     },
   };
@@ -1528,12 +1525,12 @@ exports.getPlaylistVideoDetail = (accesstoken, youtubeId) => {
 
 exports.getPopularVideo = (accesstoken, youtubeId) => {
   const getVideoData =
-    'https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=US&key=AIzaSyCmPX-4KQ-wjqFqJCYGGRtuYwqjY8s_jt4';
+    "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=US&key=AIzaSyCmPX-4KQ-wjqFqJCYGGRtuYwqjY8s_jt4";
   var configdsata = {
-    method: 'get',
+    method: "get",
     url: getVideoData,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Bearer ${accesstoken}`,
     },
   };
@@ -1576,15 +1573,15 @@ exports.getYoutubeAnalytics = (req, res, next) => {
                 ).then((popularvideo) => {
                   const response = {
                     viewCount:
-                      result.data.items[0].statistics.subscriberCount || 'NA',
+                      result.data.items[0].statistics.subscriberCount || "NA",
                     Subscribers:
-                      result.data.items[0].statistics.viewCount || 'NA',
+                      result.data.items[0].statistics.viewCount || "NA",
                     hiddenSubscriberCount:
                       result.data.items[0].statistics.hiddenSubscriberCount ||
-                      'NA',
-                    'Video Published':
-                      result.data.items[0].statistics.viewCount || 'NA',
-                    playlist: resultPlaylist.data.items.length || 'NA',
+                      "NA",
+                    "Video Published":
+                      result.data.items[0].statistics.viewCount || "NA",
+                    playlist: resultPlaylist.data.items.length || "NA",
                     popularvideo: this.formatPopularvideo(popularvideo.data),
                   };
                   res.send({ success: true, data: response });
@@ -1605,16 +1602,16 @@ const getSocialPresenceData = (id, dayCount) => {
         where: {
           socalMediaConnectionId: id,
           createdAt: {
-            [Op.gte]: moment().subtract(dayCount, 'days').toDate(),
+            [Op.gte]: moment().subtract(dayCount, "days").toDate(),
           },
         },
         attributes: [
-          'socialName',
-          'totalPosts',
-          'totalFollowing',
-          'totalFollowers',
-          'socalMediaConnectionId',
-          'createdAt',
+          "socialName",
+          "totalPosts",
+          "totalFollowing",
+          "totalFollowers",
+          "socalMediaConnectionId",
+          "createdAt",
         ],
       })
       .then((socialData) => {
@@ -1651,29 +1648,29 @@ const getSocialPresenceData = (id, dayCount) => {
         //resolve({totalPosts:fistVal, fistValIncStatus: fistValIncStatus, totalFollowing: secondVal, secondValIncStatus: secondValIncStatus, totalFollowers: thirdval, thirdvalIncStatus: thirdvalIncStatus})
       })
       .catch((err) => {
-        console.log('err', err);
+        console.log("err", err);
       });
   });
 };
 
 exports.getSocialPresence = async (req, res, next) => {
   const { orgId } = req.body;
-  const dayCount = '7';
-  let results = '';
+  const dayCount = "7";
+  let results = "";
   try {
     const socialPlatforms = await db.socialMediaConnection.findAll({
       where: { organizationOrgId: orgId },
       attributes: [
-        'name',
-        'socialMediaType',
-        'organizationOrgId',
-        'status',
-        'isConfigured',
+        "name",
+        "socialMediaType",
+        "organizationOrgId",
+        "status",
+        "isConfigured",
       ],
       include: [
         {
           model: db.socialMediaPage,
-          as: 'socialMediaPage',
+          as: "socialMediaPage",
         },
       ],
     });
@@ -1690,23 +1687,23 @@ exports.getSocialPresence = async (req, res, next) => {
                       query?.socialMediaPage
                         ?.socialMediaConnectionSocalMediaConnectionId,
                     createdAt: {
-                      [Op.gte]: moment().subtract(dayCount, 'days').toDate(),
+                      [Op.gte]: moment().subtract(dayCount, "days").toDate(),
                     },
                   },
                   attributes: [
-                    'socialName',
-                    'totalPosts',
-                    'totalFollowing',
-                    'totalFollowers',
-                    'socalMediaConnectionId',
-                    'createdAt',
+                    "socialName",
+                    "totalPosts",
+                    "totalFollowing",
+                    "totalFollowers",
+                    "socalMediaConnectionId",
+                    "createdAt",
                   ],
                 })
                 .then((socialData) => {
                   resolve(socialData);
                 })
                 .catch((err) => {
-                  console.log('err', err);
+                  console.log("err", err);
                   reject(err);
                 });
             });
@@ -1715,7 +1712,7 @@ exports.getSocialPresence = async (req, res, next) => {
       );
     }
     res.json({
-      status: 'success',
+      status: "success",
       data: socialPlatforms,
       socialData: results,
     });
@@ -1727,26 +1724,26 @@ exports.getSocialPresence = async (req, res, next) => {
 exports.fetchSocialPresence = async (req, res, next) => {
   try {
     const user = await db.socialMediaConnection.findAll({
-      where: { status: 'Active', socialMediaType: 'ORGANIC' },
+      where: { status: "Active", socialMediaType: "ORGANIC" },
       attributes: [
-        'name',
-        'socialMediaType',
-        'organizationOrgId',
-        'status',
-        'isConfigured',
+        "name",
+        "socialMediaType",
+        "organizationOrgId",
+        "status",
+        "isConfigured",
       ],
       include: [
         {
           model: db.socialMediaPage,
-          as: 'socialMediaPage',
+          as: "socialMediaPage",
         },
       ],
     });
     if (user.length > 0) {
       for (let i in user) {
-        if (user[i].name == 'Instagram') {
+        if (user[i].name == "Instagram") {
           let config = {
-            method: 'get',
+            method: "get",
             maxBodyLength: Infinity,
             url: `https://graph.facebook.com/v16.0/${user[i].socialMediaPage.url}?fields=business_discovery.username(tseries.official){follows_count,followers_count,media_count}&access_token=${user[i].socialMediaPage.password}`,
             headers: {},
@@ -1775,9 +1772,9 @@ exports.fetchSocialPresence = async (req, res, next) => {
             .catch((error) => {
               console.log(error);
             });
-        } else if (user[i].name == 'Facebook') {
+        } else if (user[i].name == "Facebook") {
           let config = {
-            method: 'get',
+            method: "get",
             maxBodyLength: Infinity,
             url: `https://graph.facebook.com/v16.0/${user[i].socialMediaPage.url}?access_token=${user[i].socialMediaPage.password}&fields=fan_count,name,followers_count,new_like_count,published_posts`,
             headers: {},
@@ -1804,9 +1801,9 @@ exports.fetchSocialPresence = async (req, res, next) => {
             .catch((error) => {
               console.log(error);
             });
-        } else if (user[i].name == 'Youtube') {
+        } else if (user[i].name == "Youtube") {
           let config = {
-            method: 'get',
+            method: "get",
             maxBodyLength: Infinity,
             url: `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${user[i].socialMediaPage.url}&key=AIzaSyCmPX-4KQ-wjqFqJCYGGRtuYwqjY8s_jt4`,
             headers: {},
@@ -1838,7 +1835,7 @@ exports.fetchSocialPresence = async (req, res, next) => {
       }
     }
     res.send({
-      status: 'success',
+      status: "success",
     });
   } catch (err) {
     next(new AppError(err.message, 200));
@@ -1884,7 +1881,7 @@ exports.setYoutubeAnalytics = async (req, res, next) => {
 
     const addData = await youtubeAnalytics.create(youtubeAnalyticsData);
     res.send({
-      status: 'success',
+      status: "success",
       msg: addData,
     });
   } catch (err) {
@@ -1902,16 +1899,16 @@ exports.fetchYoutubeAnalytics = async (req, res, next) => {
         where: {
           channelId,
         },
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]],
       });
     } else {
       fetchAnalytics = await db.youtubeAnalytics.findAll({
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]],
       });
     }
 
     res.send({
-      status: 'success',
+      status: "success",
       data: fetchAnalytics,
     });
   } catch (err) {
@@ -1923,20 +1920,20 @@ exports.getConnections = (connectionType) => {
   return new Promise((resolve, reject) => {
     db.socialMediaConnection
       .findAll({
-        where: { name: connectionType, 'status': 'Active' },
+        where: { name: connectionType, status: "Active" },
         attributes: [
-          'name',
-          'socialMediaType',
-          'socialMediaHandle',
-          'password',
-          'organizationOrgId',
+          "name",
+          "socialMediaType",
+          "socialMediaHandle",
+          "password",
+          "organizationOrgId",
         ],
         include: [
           {
             model: db.socialMediaPage,
-            as: 'socialMediaPage',
-            attributes: ['url', 'password'],
-          }
+            as: "socialMediaPage",
+            attributes: ["url", "password"],
+          },
         ],
       })
       .then((connections) => {
@@ -1949,11 +1946,11 @@ exports.getReviews = async (socailMediaCredentailsInfo) => {
   for (const connection of socailMediaCredentailsInfo) {
     try {
       let config = {
-        method: 'get',
+        method: "get",
         maxBodyLength: Infinity,
         url: `https://maps.googleapis.com/maps/api/place/details/json?key=${
           connection.dataValues.password
-        }&placeid=${connection.dataValues.socialMediaHandle.split(':')[1]}`,
+        }&placeid=${connection.dataValues.socialMediaHandle.split(":")[1]}`,
         headers: {},
       };
 
@@ -1962,7 +1959,7 @@ exports.getReviews = async (socailMediaCredentailsInfo) => {
         for (const resp of response.data.result.reviews) {
           const getSocialInboxData = await SocialInbox.findOne({
             where: {
-              channelId: connection.dataValues.socialMediaHandle.split(':')[1],
+              channelId: connection.dataValues.socialMediaHandle.split(":")[1],
               orgId: connection.dataValues.organizationOrgId,
               postID: resp.time,
               sentTo: `${resp.author_name}:${resp.author_url}`,
@@ -1970,15 +1967,15 @@ exports.getReviews = async (socailMediaCredentailsInfo) => {
           });
           if (getSocialInboxData == null) {
             const socialInboxData = {
-              channelName: 'Google Reviews',
-              channelId: connection.dataValues.socialMediaHandle.split(':')[1],
+              channelName: "Google Reviews",
+              channelId: connection.dataValues.socialMediaHandle.split(":")[1],
               postID: resp.time,
-              messageType: 'INCOMING',
+              messageType: "INCOMING",
               message: resp.text,
               isRead: 0,
               sentTo: `${resp.author_name}:${resp.author_url}`,
               orgId: connection.dataValues.organizationOrgId,
-              createdAt: moment.unix(resp.time).format('YYYY-MM-DD HH:mm:ss'),
+              createdAt: moment.unix(resp.time).format("YYYY-MM-DD HH:mm:ss"),
             };
             await SocialInbox.create(socialInboxData);
           }
@@ -1993,344 +1990,393 @@ exports.getReviews = async (socailMediaCredentailsInfo) => {
   }
 };
 
-exports.getCommentsForSocialInbox = async (socailMediaCredentailsInfo, socialMediaName, duration = 'Yesterday') => {
-  var filterDateType = moment().subtract(1, 'day');
-  if (duration == 'Today') {
+exports.getCommentsForSocialInbox = async (
+  socailMediaCredentailsInfo,
+  socialMediaName,
+  duration = "Yesterday"
+) => {
+  var filterDateType = moment().subtract(1, "day");
+  if (duration == "Today") {
     filterDateType = moment();
   } else {
-    filterDateType = moment().subtract(1, 'day');
+    filterDateType = moment().subtract(1, "day");
   }
-
 
   // console.log('socailMediaCredentailsInfo', socailMediaCredentailsInfo);
   // console.log('socialMediaPage', socailMediaCredentailsInfo[0].socialMediaPage);
 
-  if (socialMediaName == 'Facebook') {
+  if (socialMediaName == "Facebook") {
     for (const connection of socailMediaCredentailsInfo) {
-      const postsResponse = await axios.get(`https://graph.facebook.com/v16.0/${connection.socialMediaPage.url}?fields=fan_count,followers_count,posts{likes.summary(true),comments.summary(true)}%20&access_token=${connection.socialMediaPage.password}&limit=20`);
-  
+      const postsResponse = await axios.get(
+        `https://graph.facebook.com/v16.0/${connection.socialMediaPage.url}?fields=fan_count,followers_count,posts{likes.summary(true),comments.summary(true)}%20&access_token=${connection.socialMediaPage.password}&limit=20`
+      );
+
       const posts = postsResponse.data.posts;
       // postsResponse.data.followers_count,   postsResponse.data.fan_count
       if (!posts || posts.data.length === 0) {
-        console.log('No posts found.');
+        console.log("No posts found.");
       }
       for (const post of posts.data) {
         // post.likes.summary
         // post.comments.summary
 
-          //try {
-              // const commentsResponse = await axios.get(`https://graph.facebook.com/v16.0/${post.id}/comments?access_token=${connection.socialMediaPage.password}&limit=20`);
-              // const comments = commentsResponse.data.data;
+        //try {
+        // const commentsResponse = await axios.get(`https://graph.facebook.com/v16.0/${post.id}/comments?access_token=${connection.socialMediaPage.password}&limit=20`);
+        // const comments = commentsResponse.data.data;
 
-              db.campaignContentPost
-              .findOne({
-                where: {
-                  postId: post.id.split('_')[1],
-                },
-                attributes: ['postId'],
+        db.campaignContentPost
+          .findOne({
+            where: {
+              postId: post.id.split("_")[1],
+            },
+            attributes: ["postId"],
+            include: [
+              {
+                model: db.campaignContent,
+                required: true,
+                as: "campaignContent",
+                attributes: ["campaignContentId"],
                 include: [
                   {
-                    model: db.campaignContent,
+                    model: db.campaignSelectionChannel,
                     required: true,
-                    as: 'campaignContent',
-                    attributes: ['campaignContentId'],
-                    include: [
-                      {
-                        model: db.campaignSelectionChannel,
-                        required: true,
-                        as: 'campaignSelectionChannel',
-                        attributes: ['campaignDefinitionCampaignDefinitionId']
-                      },
-                    ],
+                    as: "campaignSelectionChannel",
+                    attributes: ["campaignDefinitionCampaignDefinitionId"],
                   },
                 ],
-              })
-              .then((foundItem) => {
-                if (foundItem) {
-                  const getCampaignId = foundItem.dataValues.campaignContent.campaignSelectionChannel.campaignDefinitionCampaignDefinitionId;
-                  var analyticsDataToStore = {};
-                  analyticsDataToStore.name = 'Facebook';
-                  analyticsDataToStore.campaignId = getCampaignId;
-                  analyticsDataToStore.pageLikes = postsResponse.data.fan_count;
-                  analyticsDataToStore.pageFollows = postsResponse.data.followers_count;
-                  analyticsDataToStore.totalLikes = post.likes.summary.total_count;
-                  analyticsDataToStore.totalComments = post.comments.summary.total_count;
-                  analyticsDataToStore.totalVideos = 0;
-                  analyticsDataToStore.totalViews = 0;
-                  analyticsDataToStore.totalSubscribers = 0;
-                  analyticsDataToStore.instTotalLikes = 0;
-                  analyticsDataToStore.instTotalComments = 0;
-                  analyticsDataToStore.postIdsUsed = post.id.split('_')[1];
-                  analyticsController.addDataToSocialAnalytics(analyticsDataToStore);
+              },
+            ],
+          })
+          .then((foundItem) => {
+            if (foundItem) {
+              const getCampaignId =
+                foundItem.dataValues.campaignContent.campaignSelectionChannel
+                  .campaignDefinitionCampaignDefinitionId;
+              var analyticsDataToStore = {};
+              analyticsDataToStore.name = "Facebook";
+              analyticsDataToStore.campaignId = getCampaignId;
+              analyticsDataToStore.pageLikes = postsResponse.data.fan_count;
+              analyticsDataToStore.pageFollows =
+                postsResponse.data.followers_count;
+              analyticsDataToStore.totalLikes = post.likes.summary.total_count;
+              analyticsDataToStore.totalComments =
+                post.comments.summary.total_count;
+              analyticsDataToStore.totalVideos = 0;
+              analyticsDataToStore.totalViews = 0;
+              analyticsDataToStore.totalSubscribers = 0;
+              analyticsDataToStore.instTotalLikes = 0;
+              analyticsDataToStore.instTotalComments = 0;
+              analyticsDataToStore.postIdsUsed = post.id.split("_")[1];
+              analyticsController.addDataToSocialAnalytics(
+                analyticsDataToStore
+              );
+            }
+          });
+
+        const comments = post.comments.data;
+
+        if (!comments || comments.length === 0) {
+          console.log("No comments found.");
+        } else {
+          const filteredComments = comments.filter((comment) => {
+            return moment(comment.created_time).isSame(filterDateType, "day");
+          });
+
+          console.log("filteredComments,", filteredComments);
+
+          for (const filterComment of filteredComments) {
+            const getSocialInboxData = await SocialInbox.findOne({
+              where: {
+                channelId: connection.socialMediaPage.url,
+                orgId: connection.organizationOrgId,
+                postID: filterComment.id,
+              },
+            });
+            // filterComment.likes.summary.total_count
+            if (getSocialInboxData == null) {
+              const socialInboxData = {
+                channelName: "Facebook",
+                channelId: connection.socialMediaPage.url,
+                postID: filterComment.id,
+                messageType: "INCOMING",
+                message: filterComment.message,
+                isRead: 0,
+                sentTo: post.id,
+                orgId: connection.organizationOrgId,
+                createdAt: filterComment.created_time,
+              };
+              await SocialInbox.create(socialInboxData);
+            }
+          }
+        }
+        // } catch (commentsError) {
+        //     console.error(`Error fetching comments for post ${post.id}:`, commentsError.response ? commentsError.response.data : commentsError.message);
+        // }
+      }
+    }
+  } else if (socialMediaName == "Instagram") {
+    for (const connection of socailMediaCredentailsInfo) {
+      const postsResponse = await axios.get(
+        `https://graph.facebook.com/v16.0/${connection.socialMediaPage.url}/media?fields=id,like_count,comments_count,media_type,reactions{username,type},comments{username,text,created_time}&access_token=${connection.socialMediaPage.password}&limit=5`
+      );
+
+      const posts = postsResponse.data.data;
+      if (!posts || posts.length === 0) {
+        console.log("No posts found.");
+      }
+
+      for (const post of posts) {
+        // try {
+        // const commentsResponse = await axios.get(`https://graph.facebook.com/v16.0/${post.id}/comments?fields=id,text,like_count,timestamp&access_token=${connection.socialMediaPage.password}&limit=20`);
+
+        // const comments = commentsResponse.data.data;
+        //post.like_count post.comments_count
+        db.campaignContentPost
+          .findOne({
+            where: {
+              postId: post.id,
+            },
+            attributes: ["postId"],
+            include: [
+              {
+                model: db.campaignContent,
+                required: true,
+                as: "campaignContent",
+                attributes: ["campaignContentId"],
+                include: [
+                  {
+                    model: db.campaignSelectionChannel,
+                    required: true,
+                    as: "campaignSelectionChannel",
+                    attributes: ["campaignDefinitionCampaignDefinitionId"],
+                  },
+                ],
+              },
+            ],
+          })
+          .then((foundItem) => {
+            if (foundItem) {
+              const getCampaignId =
+                foundItem.dataValues.campaignContent.campaignSelectionChannel
+                  .campaignDefinitionCampaignDefinitionId;
+              var analyticsDataToStore = {};
+              analyticsDataToStore.name = "Instagram";
+              analyticsDataToStore.campaignId = getCampaignId;
+              analyticsDataToStore.pageLikes = 0;
+              analyticsDataToStore.pageFollows = 0;
+              analyticsDataToStore.totalLikes = 0;
+              analyticsDataToStore.totalComments = 0;
+              analyticsDataToStore.totalVideos = 0;
+              analyticsDataToStore.totalViews = 0;
+              analyticsDataToStore.totalSubscribers = 0;
+              analyticsDataToStore.instTotalLikes = post.like_count
+                ? post.like_count
+                : 0;
+              analyticsDataToStore.instTotalComments = post.comments_count
+                ? post.comments_count
+                : 0;
+              analyticsDataToStore.postIdsUsed = post.id;
+              analyticsController.addDataToSocialAnalytics(
+                analyticsDataToStore
+              );
+            }
+          });
+
+        const comments = post?.comments ? post.comments : [];
+        if (!comments || comments.length === 0) {
+          console.log("No comments found.");
+        } else {
+          const filteredComments = comments.data.filter((comment) => {
+            return moment(comment.timestamp).isSame(filterDateType, "day");
+          });
+
+          for (const filterComment of filteredComments) {
+            const getSocialInboxData = await SocialInbox.findOne({
+              where: {
+                channelId: connection.socialMediaPage.url,
+                orgId: connection.organizationOrgId,
+                postID: filterComment.id,
+              },
+            });
+            // filterComment.like_count
+            if (getSocialInboxData == null) {
+              const socialInboxData = {
+                channelName: "Instagram",
+                channelId: connection.socialMediaPage.url,
+                postID: filterComment.id,
+                messageType: "INCOMING",
+                message: filterComment.text,
+                isRead: 0,
+                sentTo: post.id,
+                orgId: connection.organizationOrgId,
+                createdAt: filterComment.timestamp,
+              };
+              await SocialInbox.create(socialInboxData);
+            }
+          }
+        }
+
+        // } catch (commentsError) {
+        //     console.error(`Error fetching comments for post ${post.id}:`, commentsError.response ? commentsError.response.data : commentsError.message);
+        // }
+      }
+    }
+  } else if (socialMediaName == "LinkedIn") {
+    for (const connection of socailMediaCredentailsInfo) {
+      const organizationId = "avanthi-nulu-53679a210"; //connection.socialMediaPage.url;
+      const organizationURN = "urn:li:organization:80078768"; // `urn:li:organization:${organizationId}`;
+      const accessToken =
+        "AQXBxeK_IL-ioas24tdxSFH4d2ZXjQ2QP3kGlwsEAhVvKX4XPduNPzmCWoJTccDpBsbWAFhHfivIG31FokZQ_duUAEp-S_WJh13e4HOs5nbWLiwx0Q9RE5b7h5sqkU18c9ic6NGY-CjGwpGpZfaFnfQ54dnEX-ykI97UeClWGxS4Yu7m1x3qi66w25uhjEuzGYYzGnjA0hIv41E5e4WmjpM7do3DaQ3s95yX7heYtN9-gJ9o6uMKPwPjemeqj-vCV3Tvx1rPLJit_dovvw9H9H2YHMh7ZqNoEZeI6YdXBt-CMKTrtudg-eefpgbeuoJvp7MA6ERImeacJzaPv5kCpgjssjmYAw";
+
+      try {
+        const postsResponse = await axios.get(
+          "https://api.linkedin.com/v2/shares",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            params: {
+              q: "owners",
+              owners: organizationURN,
+              count: 20,
+            },
+          }
+        );
+
+        if (postsResponse.data.elements) {
+          for (const post of postsResponse.data.elements) {
+            const postData = {
+              postId: post.id,
+              activityId: null,
+              text: post.text.text || "No text",
+              comments: [],
+            };
+            try {
+              const activityResponse = await axios.get(
+                `https://api.linkedin.com/v2/socialActions/urn:li:share:${post.id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                  },
                 }
-              });
-                
-              const comments = post.comments.data;              
-            
-              if (!comments || comments.length === 0) {
-                  console.log('No comments found.');
-              } else {
-                const filteredComments = comments.filter(comment => {
-                    return moment(comment.created_time).isSame(filterDateType, 'day');
+              );
+
+              postData.activityId = activityResponse.data.target;
+
+              // Fetch comments using the activity ID
+              const commentsResponse = await axios.get(
+                `https://api.linkedin.com/v2/socialActions/${postData.activityId}/comments`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              );
+
+              let comments = commentsResponse.data.elements || [];
+              if (comments) {
+                const filteredComments = comments.filter((comment) => {
+                  return moment(comment.created.time).isSame(
+                    filterDateType,
+                    "day"
+                  );
                 });
 
-                console.log('filteredComments,', filteredComments);
+                console.log("filteredComments", filteredComments);
 
                 for (const filterComment of filteredComments) {
                   const getSocialInboxData = await SocialInbox.findOne({
                     where: {
-                      channelId: connection.socialMediaPage.url,
+                      channelId: "80078768", //connection.socialMediaPage.url,
                       orgId: connection.organizationOrgId,
-                      postID: filterComment.id
+                      postID: filterComment.id,
                     },
                   });
-                  // filterComment.likes.summary.total_count
+
                   if (getSocialInboxData == null) {
                     const socialInboxData = {
-                      channelName: 'Facebook',
-                      channelId: connection.socialMediaPage.url,
+                      channelName: "LinkedIn",
+                      channelId: "80078768", //connection.socialMediaPage.url,
                       postID: filterComment.id,
-                      messageType: 'INCOMING',
-                      message: filterComment.message,
+                      messageType: "INCOMING",
+                      message: filterComment.message.text,
                       isRead: 0,
                       sentTo: post.id,
                       orgId: connection.organizationOrgId,
-                      createdAt: filterComment.created_time,
+                      createdAt: filterComment.created.time,
                     };
                     await SocialInbox.create(socialInboxData);
                   }
                 }
               }
-          // } catch (commentsError) {
-          //     console.error(`Error fetching comments for post ${post.id}:`, commentsError.response ? commentsError.response.data : commentsError.message);
-          // }
-      }
-    }
-  } else if (socialMediaName == 'Instagram') {
-    for (const connection of socailMediaCredentailsInfo) {
-      const postsResponse = await axios.get(`https://graph.facebook.com/v16.0/${connection.socialMediaPage.url}/media?fields=id,like_count,comments_count,media_type,reactions{username,type},comments{username,text,created_time}&access_token=${connection.socialMediaPage.password}&limit=5`);
-
-
-      const posts = postsResponse.data.data;
-      if (!posts || posts.length === 0) {
-        console.log('No posts found.');
-      }
-  
-      for (const post of posts) {
-          // try {
-            // const commentsResponse = await axios.get(`https://graph.facebook.com/v16.0/${post.id}/comments?fields=id,text,like_count,timestamp&access_token=${connection.socialMediaPage.password}&limit=20`);
-
-            // const comments = commentsResponse.data.data;
-            //post.like_count post.comments_count
-            db.campaignContentPost
-            .findOne({
-              where: {
-                postId: post.id,
-              },
-              attributes: ['postId'],
-              include: [
-                {
-                  model: db.campaignContent,
-                  required: true,
-                  as: 'campaignContent',
-                  attributes: ['campaignContentId'],
-                  include: [
-                    {
-                      model: db.campaignSelectionChannel,
-                      required: true,
-                      as: 'campaignSelectionChannel',
-                      attributes: ['campaignDefinitionCampaignDefinitionId']
-                    },
-                  ],
-                },
-              ],
-            })
-            .then((foundItem) => {
-              if (foundItem) {
-                const getCampaignId = foundItem.dataValues.campaignContent.campaignSelectionChannel.campaignDefinitionCampaignDefinitionId;
-                var analyticsDataToStore = {};
-                analyticsDataToStore.name = 'Instagram';
-                analyticsDataToStore.campaignId = getCampaignId;
-                analyticsDataToStore.pageLikes = 0;
-                analyticsDataToStore.pageFollows = 0;
-                analyticsDataToStore.totalLikes = 0;
-                analyticsDataToStore.totalComments = 0;
-                analyticsDataToStore.totalVideos = 0;
-                analyticsDataToStore.totalViews = 0;
-                analyticsDataToStore.totalSubscribers = 0;
-                analyticsDataToStore.instTotalLikes = post.like_count ? post.like_count : 0;
-                analyticsDataToStore.instTotalComments = post.comments_count ? post.comments_count : 0;
-                analyticsDataToStore.postIdsUsed = post.id;
-                analyticsController.addDataToSocialAnalytics(analyticsDataToStore);
-              }
-            });
-            
-            const comments = post?.comments ? post.comments : [];
-            if (!comments || comments.length === 0) {
-                console.log('No comments found.');
-            } else {
-              const filteredComments = comments.data.filter(comment => {
-                  return moment(comment.timestamp).isSame(filterDateType, 'day');
-              });
-
-              for (const filterComment of filteredComments) {
-                const getSocialInboxData = await SocialInbox.findOne({
-                  where: {
-                    channelId: connection.socialMediaPage.url,
-                    orgId: connection.organizationOrgId,
-                    postID: filterComment.id
-                  },
-                });
-                // filterComment.like_count
-                if (getSocialInboxData == null) {
-                  const socialInboxData = {
-                    channelName: 'Instagram',
-                    channelId: connection.socialMediaPage.url,
-                    postID: filterComment.id,
-                    messageType: 'INCOMING',
-                    message: filterComment.text,
-                    isRead: 0,
-                    sentTo: post.id,
-                    orgId: connection.organizationOrgId,
-                    createdAt: filterComment.timestamp,
-                  };
-                  await SocialInbox.create(socialInboxData);
-                }
-              }
-            }
-
-          // } catch (commentsError) {
-          //     console.error(`Error fetching comments for post ${post.id}:`, commentsError.response ? commentsError.response.data : commentsError.message);
-          // }
-      }
-    }
-  } else if (socialMediaName == 'LinkedIn') {
-    for (const connection of socailMediaCredentailsInfo) {
-      const organizationId = 'avanthi-nulu-53679a210'; //connection.socialMediaPage.url;
-        const organizationURN = 'urn:li:organization:80078768' ; // `urn:li:organization:${organizationId}`;
-        const accessToken = 'AQXBxeK_IL-ioas24tdxSFH4d2ZXjQ2QP3kGlwsEAhVvKX4XPduNPzmCWoJTccDpBsbWAFhHfivIG31FokZQ_duUAEp-S_WJh13e4HOs5nbWLiwx0Q9RE5b7h5sqkU18c9ic6NGY-CjGwpGpZfaFnfQ54dnEX-ykI97UeClWGxS4Yu7m1x3qi66w25uhjEuzGYYzGnjA0hIv41E5e4WmjpM7do3DaQ3s95yX7heYtN9-gJ9o6uMKPwPjemeqj-vCV3Tvx1rPLJit_dovvw9H9H2YHMh7ZqNoEZeI6YdXBt-CMKTrtudg-eefpgbeuoJvp7MA6ERImeacJzaPv5kCpgjssjmYAw';
-
-        try {
-            const postsResponse = await axios.get('https://api.linkedin.com/v2/shares', {
-              headers: {
-                  'Authorization': `Bearer ${accessToken}`
-              },
-              params: {
-                  q: 'owners',
-                  owners: organizationURN,
-                  count: 20
-              }
-          });
-
-          if(postsResponse.data.elements) {
-            for (const post of postsResponse.data.elements) {
-                const postData = {
-                    postId: post.id,
-                    activityId: null,
-                    text: post.text.text || 'No text',
-                    comments: []
-                };
-              try {
-                  const activityResponse = await axios.get(`https://api.linkedin.com/v2/socialActions/urn:li:share:${post.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-
-                postData.activityId = activityResponse.data.target;
-
-                // Fetch comments using the activity ID
-                const commentsResponse = await axios.get(`https://api.linkedin.com/v2/socialActions/${postData.activityId}/comments`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                });
-
-                let comments = commentsResponse.data.elements || [];
-                if (comments) {
-                  const filteredComments = comments.filter(comment => {
-                      return moment(comment.created.time).isSame(filterDateType, 'day');
-                  });
-
-                  console.log('filteredComments', filteredComments);
-    
-                  for (const filterComment of filteredComments) {
-                    const getSocialInboxData = await SocialInbox.findOne({
-                      where: {
-                        channelId: '80078768', //connection.socialMediaPage.url,
-                        orgId: connection.organizationOrgId,
-                        postID: filterComment.id
-                      },
-                    });
-    
-                    if (getSocialInboxData == null) {
-                      const socialInboxData = {
-                        channelName: 'LinkedIn',
-                        channelId: '80078768', //connection.socialMediaPage.url,
-                        postID: filterComment.id,
-                        messageType: 'INCOMING',
-                        message: filterComment.message.text,
-                        isRead: 0,
-                        sentTo: post.id,
-                        orgId: connection.organizationOrgId,
-                        createdAt: filterComment.created.time,
-                      };
-                      await SocialInbox.create(socialInboxData);
-                    }
-                  }
-                }
-              } catch (commErr) {
-                console.log('linkedin commErr', commErr);
-              }
+            } catch (commErr) {
+              console.log("linkedin commErr", commErr);
             }
           }
-        } catch (err) {
-          console.log('linkedin err', err);
         }
+      } catch (err) {
+        console.log("linkedin err", err);
+      }
     }
-  } else if (socialMediaName == 'Youtube') {
+  } else if (socialMediaName == "Youtube") {
     for (const connection of socailMediaCredentailsInfo) {
-      console.log('connection.socialMediaPage.url', connection.socialMediaPage.url);
+      console.log(
+        "connection.socialMediaPage.url",
+        connection.socialMediaPage.url
+      );
       try {
-          // get channel analytics
-          const channelAnalytics = await axios.get(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${connection.socialMediaPage.url}&key=${'AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0'}`);
+        // get channel analytics
+        const channelAnalytics = await axios.get(
+          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${
+            connection.socialMediaPage.url
+          }&key=${"AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0"}`
+        );
 
-          
-          
+        const playlists = await axios.get(
+          `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${
+            connection.socialMediaPage.url
+          }&key=${"AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0"}`
+        );
 
-
-          const playlists = await axios.get(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${connection.socialMediaPage.url}&key=${'AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0'}`);
-        
         // getting all playlist of a channel -> playlists
-        if(playlists.data.items) {
+        if (playlists.data.items) {
           for (const playlist of playlists.data.items) {
             try {
-                  const getAllVideosOfPlaylist = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlist.contentDetails.relatedPlaylists.uploads}&key=${'AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0'}&maxResults=20`);
+              const getAllVideosOfPlaylist = await axios.get(
+                `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${
+                  playlist.contentDetails.relatedPlaylists.uploads
+                }&key=${"AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0"}&maxResults=20`
+              );
 
-                
-                if (getAllVideosOfPlaylist.data.items) {
-                  for (const videoItem of getAllVideosOfPlaylist.data.items) {
-                    try {
-                      const getVideoComments = await axios.get(`https://www.googleapis.com/youtube/v3/commentThreads?textFormat=plainText&part=snippet&videoId=${videoItem.snippet.resourceId.videoId}&key=${'AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0'}&maxResults=20`);
+              if (getAllVideosOfPlaylist.data.items) {
+                for (const videoItem of getAllVideosOfPlaylist.data.items) {
+                  try {
+                    const getVideoComments = await axios.get(
+                      `https://www.googleapis.com/youtube/v3/commentThreads?textFormat=plainText&part=snippet&videoId=${
+                        videoItem.snippet.resourceId.videoId
+                      }&key=${"AIzaSyCsczrOWyH7WbVc3l_VbzgpYoBrjJ9GHm0"}&maxResults=20`
+                    );
 
-                      db.campaignContentPost
+                    db.campaignContentPost
                       .findOne({
                         where: {
                           postId: videoItem.snippet.resourceId.videoId,
                         },
-                        attributes: ['postId'],
+                        attributes: ["postId"],
                         include: [
                           {
                             model: db.campaignContent,
                             required: true,
-                            as: 'campaignContent',
-                            attributes: ['campaignContentId'],
+                            as: "campaignContent",
+                            attributes: ["campaignContentId"],
                             include: [
                               {
                                 model: db.campaignSelectionChannel,
                                 required: true,
-                                as: 'campaignSelectionChannel',
-                                attributes: ['campaignDefinitionCampaignDefinitionId']
+                                as: "campaignSelectionChannel",
+                                attributes: [
+                                  "campaignDefinitionCampaignDefinitionId",
+                                ],
                               },
                             ],
                           },
@@ -2339,67 +2385,82 @@ exports.getCommentsForSocialInbox = async (socailMediaCredentailsInfo, socialMed
                       .then((foundItem) => {
                         if (foundItem) {
                           if (channelAnalytics.data.items) {
-                            const getCampaignId = foundItem.dataValues.campaignContent.campaignSelectionChannel.campaignDefinitionCampaignDefinitionId;
+                            const getCampaignId =
+                              foundItem.dataValues.campaignContent
+                                .campaignSelectionChannel
+                                .campaignDefinitionCampaignDefinitionId;
                             var analyticsDataToStore = {};
-                            analyticsDataToStore.name = 'Youtube';
+                            analyticsDataToStore.name = "Youtube";
                             analyticsDataToStore.campaignId = getCampaignId;
                             analyticsDataToStore.pageLikes = 0;
                             analyticsDataToStore.pageFollows = 0;
                             analyticsDataToStore.totalLikes = 0;
-                            analyticsDataToStore.totalComments = getVideoComments.data.items.length;
-                            analyticsDataToStore.totalVideos = channelAnalytics.data.items[0].statistics.videoCount;
-                            analyticsDataToStore.totalViews = channelAnalytics.data.items[0].statistics.viewCount;
-                            analyticsDataToStore.totalSubscribers = channelAnalytics.data.items[0].statistics.subscriberCount;
-                            analyticsDataToStore.postIdsUsed = videoItem.snippet.resourceId.videoId;
+                            analyticsDataToStore.totalComments =
+                              getVideoComments.data.items.length;
+                            analyticsDataToStore.totalVideos =
+                              channelAnalytics.data.items[0].statistics.videoCount;
+                            analyticsDataToStore.totalViews =
+                              channelAnalytics.data.items[0].statistics.viewCount;
+                            analyticsDataToStore.totalSubscribers =
+                              channelAnalytics.data.items[0].statistics.subscriberCount;
+                            analyticsDataToStore.postIdsUsed =
+                              videoItem.snippet.resourceId.videoId;
                             analyticsDataToStore.instTotalLikes = 0;
                             analyticsDataToStore.instTotalComments = 0;
-                            analyticsController.addDataToSocialAnalytics(analyticsDataToStore);
-                          }                          
+                            analyticsController.addDataToSocialAnalytics(
+                              analyticsDataToStore
+                            );
+                          }
                         }
                       });
-                      
+
                     if (getVideoComments.data.items) {
                       // comment.snippet.topLevelComment.snippet.likeCount
-                      const filteredComments = getVideoComments.data.items.filter(comment => {
-                          return moment(comment.snippet.topLevelComment.snippet.publishedAt).isSame(filterDateType, 'day');
-                      });
+                      const filteredComments =
+                        getVideoComments.data.items.filter((comment) => {
+                          return moment(
+                            comment.snippet.topLevelComment.snippet.publishedAt
+                          ).isSame(filterDateType, "day");
+                        });
                       for (const cmmnt of filteredComments) {
-                        console.log('cmmnt', cmmnt);
+                        console.log("cmmnt", cmmnt);
                         const getSocialInboxData = await SocialInbox.findOne({
                           where: {
                             orgId: connection.organizationOrgId,
-                            postID: cmmnt.snippet.topLevelComment.id
+                            postID: cmmnt.snippet.topLevelComment.id,
                           },
                         });
-        
+
                         if (getSocialInboxData == null) {
                           const socialInboxData = {
-                            channelName: 'Youtube',
+                            channelName: "Youtube",
                             channelId: connection.socialMediaPage.url,
                             postID: cmmnt.snippet.topLevelComment.id,
-                            messageType: 'INCOMING',
-                            message: cmmnt.snippet.topLevelComment.snippet.textDisplay,
+                            messageType: "INCOMING",
+                            message:
+                              cmmnt.snippet.topLevelComment.snippet.textDisplay,
                             isRead: 0,
                             sentTo: cmmnt.snippet.videoId,
                             orgId: connection.organizationOrgId,
-                            createdAt: cmmnt.snippet.topLevelComment.snippet.publishedAt,
+                            createdAt:
+                              cmmnt.snippet.topLevelComment.snippet.publishedAt,
                           };
                           await SocialInbox.create(socialInboxData);
                         }
                       }
                     }
                   } catch (c_err) {
-                    console.log('comment fetch error', c_err.response.data);
+                    console.log("comment fetch error", c_err.response.data);
                   }
                 }
               }
             } catch (v_err) {
-              console.log('video fetch error', v_err.response.data)
+              console.log("video fetch error", v_err.response.data);
             }
           }
         }
-      } catch(err) {
-        console.log('get playlists error', err.response.data)
+      } catch (err) {
+        console.log("get playlists error", err.response.data);
       }
     }
   }
@@ -2407,50 +2468,62 @@ exports.getCommentsForSocialInbox = async (socailMediaCredentailsInfo, socialMed
 
 exports.manuallyRunCronForSocialMediaComments = async (req, res, next) => {
   const { connectionType, duration } = req.query;
-  if (connectionType == 'analytics') {
-   analyticsController.addUpdateAnalyticsForCampaigns();
+  if (connectionType == "analytics") {
+    analyticsController.addUpdateAnalyticsForCampaigns();
     res.send({
-      status: 'Analytics Started'
+      status: "Analytics Started",
     });
     return;
   }
-  analyticsController.getConnections(connectionType).then((allFbConnectionData) => {
-    return analyticsController.getCommentsForSocialInbox(allFbConnectionData, connectionType, duration);
-  });
+  analyticsController
+    .getConnections(connectionType)
+    .then((allFbConnectionData) => {
+      return analyticsController.getCommentsForSocialInbox(
+        allFbConnectionData,
+        connectionType,
+        duration
+      );
+    });
   res.send({
-    status: 'success'
-  })
+    status: "success",
+  });
 };
 
 exports.runCronManually = async (req, res, next) => {
-  const connectionType = 'Facebook';
-  const duration = 'Today';
-  analyticsController.getConnections(connectionType).then((allFbConnectionData) => {
-    return analyticsController.getCommentsForSocialInbox(allFbConnectionData, connectionType, duration);
-  });
+  const connectionType = "Facebook";
+  const duration = "Today";
+  analyticsController
+    .getConnections(connectionType)
+    .then((allFbConnectionData) => {
+      return analyticsController.getCommentsForSocialInbox(
+        allFbConnectionData,
+        connectionType,
+        duration
+      );
+    });
   res.send({
-    status: 'success',
-    message: 'Cron started.',
-  })
+    status: "success",
+    message: "Cron started.",
+  });
 };
 
 exports.addUpdateAnalyticsForCampaigns = () => {
   try {
-    db.socialAnalytics
-    .findAll()
-    .then(async (socialAnalyticsData) => {
+    db.socialAnalytics.findAll().then(async (socialAnalyticsData) => {
       var sortedAnalyticsData = [];
       socialAnalyticsData.forEach((anlt, index) => {
-        var foundIndex = sortedAnalyticsData.findIndex(x => x.campaignDefinitionId == anlt.campaignId);
+        var foundIndex = sortedAnalyticsData.findIndex(
+          (x) => x.campaignDefinitionId == anlt.campaignId
+        );
         if (foundIndex == -1) {
           sortedAnalyticsData.push({
             campaignDefinitionId: anlt.campaignId,
-            name: '',
-            startAt: '',
-            endAt: '',
+            name: "",
+            startAt: "",
+            endAt: "",
             totalAudience: 0,
-            status: '',
-            connections: '',
+            status: "",
+            connections: "",
             reach: 0,
             engagement: 0,
             pageLikes: parseInt(anlt.pageLikes),
@@ -2462,86 +2535,112 @@ exports.addUpdateAnalyticsForCampaigns = () => {
             totalSubscribers: parseInt(anlt.totalSubscribers),
             instTotalLikes: parseInt(anlt.like_count),
             instTotalComments: parseInt(anlt.comments_count),
-            whatsAppSent: 0
-          })
+            whatsAppSent: 0,
+          });
         } else {
-          sortedAnalyticsData[foundIndex]['pageLikes'] += parseInt(anlt.pageLikes);
-          sortedAnalyticsData[foundIndex]['pageFollows'] += parseInt(anlt.pageFollows);
-          sortedAnalyticsData[foundIndex]['totalLikes'] += parseInt(anlt.totalLikes);
-          sortedAnalyticsData[foundIndex]['totalComments'] += parseInt(anlt.totalComments);
-          sortedAnalyticsData[foundIndex]['totalVideos'] += parseInt(anlt.totalVideos);
-          sortedAnalyticsData[foundIndex]['totalViews'] += parseInt(anlt.totalViews);
-          sortedAnalyticsData[foundIndex]['totalSubscribers'] += parseInt(anlt.totalSubscribers);
-          sortedAnalyticsData[foundIndex]['instTotalLikes'] += parseInt(anlt.like_count);
-          sortedAnalyticsData[foundIndex]['instTotalComments'] += parseInt(anlt.comments_count);
+          sortedAnalyticsData[foundIndex]["pageLikes"] += parseInt(
+            anlt.pageLikes
+          );
+          sortedAnalyticsData[foundIndex]["pageFollows"] += parseInt(
+            anlt.pageFollows
+          );
+          sortedAnalyticsData[foundIndex]["totalLikes"] += parseInt(
+            anlt.totalLikes
+          );
+          sortedAnalyticsData[foundIndex]["totalComments"] += parseInt(
+            anlt.totalComments
+          );
+          sortedAnalyticsData[foundIndex]["totalVideos"] += parseInt(
+            anlt.totalVideos
+          );
+          sortedAnalyticsData[foundIndex]["totalViews"] += parseInt(
+            anlt.totalViews
+          );
+          sortedAnalyticsData[foundIndex]["totalSubscribers"] += parseInt(
+            anlt.totalSubscribers
+          );
+          sortedAnalyticsData[foundIndex]["instTotalLikes"] += parseInt(
+            anlt.like_count
+          );
+          sortedAnalyticsData[foundIndex]["instTotalComments"] += parseInt(
+            anlt.comments_count
+          );
         }
-      })
-      
-      for (let i = 0; i < sortedAnalyticsData.length; i++) { 
+      });
+
+      for (let i = 0; i < sortedAnalyticsData.length; i++) {
         const getAllSent = WaBroadcastLog.count({
           where: {
             wa_campaign: sortedAnalyticsData[i].campaignDefinitionId,
-            sent: 1
+            sent: 1,
           },
-          attributes: ['sent'],
+          attributes: ["sent"],
         });
         const campaginData = db.campaignDefinition.findOne({
           where: {
-            campaignDefinitionId: sortedAnalyticsData[i].campaignDefinitionId
+            campaignDefinitionId: sortedAnalyticsData[i].campaignDefinitionId,
             //,
             // status: 'LIVE'
           },
-          attributes: ['name', 'startAt', 'endAt', 'totalAudience', 'status']
+          attributes: ["name", "startAt", "endAt", "totalAudience", "status"],
         });
-  
-        await Promise.all([
-          getAllSent,
-          campaginData
-        ])
-          .then((responses) => {
-            if(responses[1]) {
-              var foundItem = sortedAnalyticsData.find(x => x.campaignDefinitionId == sortedAnalyticsData[i].campaignDefinitionId);
-              console.log('foundItem', foundItem);
-              let youTubeResult = {
-                viewCount: parseInt(foundItem.totalViews),
-                likeCount: 0,
-                dislikeCount: 0,
-                favoriteCount: parseInt(foundItem.totalSubscribers),
-                commentCount: parseInt(foundItem.totalComments),
-              };
-              let facebookResult = {
-                viewCount: parseInt(foundItem.totalComments),
-                like: parseInt(foundItem.totalLikes),
-                wow: 0,
-                comment: parseInt(foundItem.totalComments),
-              };
-              let instagramResult = {
-                view_count: parseInt(foundItem.instTotalComments) ? parseInt(foundItem.instTotalComments) : 0,
-                like_count: parseInt(foundItem.instTotalLikes) ? parseInt(foundItem.instTotalLikes) : 0,
-                comments_count: parseInt(foundItem.instTotalComments) ? parseInt(foundItem.instTotalComments) : 0,
-              };
-              let emailResult = {
-                'No of Email': 0,
-              };
-              let smsResult = {
-                'No of SMS': 0,
-              };
-              let whatsappResult = {
-                'No of Message send': responses[0],
-              };
-              var combineConnections = {
-                facebook: facebookResult,
-                youtube: youTubeResult,
-                instagram: instagramResult,
-                email: emailResult,
-                sms: smsResult,
-                whatsapp: whatsappResult,
-              };
-              db.analytics.findOne({
+
+        await Promise.all([getAllSent, campaginData]).then((responses) => {
+          if (responses[1]) {
+            var foundItem = sortedAnalyticsData.find(
+              (x) =>
+                x.campaignDefinitionId ==
+                sortedAnalyticsData[i].campaignDefinitionId
+            );
+            console.log("foundItem", foundItem);
+            let youTubeResult = {
+              viewCount: parseInt(foundItem.totalViews),
+              likeCount: 0,
+              dislikeCount: 0,
+              favoriteCount: parseInt(foundItem.totalSubscribers),
+              commentCount: parseInt(foundItem.totalComments),
+            };
+            let facebookResult = {
+              viewCount: parseInt(foundItem.totalComments),
+              like: parseInt(foundItem.totalLikes),
+              wow: 0,
+              comment: parseInt(foundItem.totalComments),
+            };
+            let instagramResult = {
+              view_count: parseInt(foundItem.instTotalComments)
+                ? parseInt(foundItem.instTotalComments)
+                : 0,
+              like_count: parseInt(foundItem.instTotalLikes)
+                ? parseInt(foundItem.instTotalLikes)
+                : 0,
+              comments_count: parseInt(foundItem.instTotalComments)
+                ? parseInt(foundItem.instTotalComments)
+                : 0,
+            };
+            let emailResult = {
+              "No of Email": 0,
+            };
+            let smsResult = {
+              "No of SMS": 0,
+            };
+            let whatsappResult = {
+              "No of Message send": responses[0],
+            };
+            var combineConnections = {
+              facebook: facebookResult,
+              youtube: youTubeResult,
+              instagram: instagramResult,
+              email: emailResult,
+              sms: smsResult,
+              whatsapp: whatsappResult,
+            };
+            db.analytics
+              .findOne({
                 where: {
                   campaignDefinitionId: foundItem.campaignDefinitionId,
-                }
-              }).then((res) => {
+                },
+              })
+              .then((res) => {
                 if (res) {
                   db.analytics.update(
                     {
@@ -2552,9 +2651,13 @@ exports.addUpdateAnalyticsForCampaigns = () => {
                       status: responses[1].status,
                       connections: JSON.stringify(combineConnections),
                       reach: 0,
-                      engagement: 0
+                      engagement: 0,
                     },
-                    { where: { campaignDefinitionId: foundItem.campaignDefinitionId } }
+                    {
+                      where: {
+                        campaignDefinitionId: foundItem.campaignDefinitionId,
+                      },
+                    }
                   );
                 } else {
                   const analyticsInfo = {
@@ -2570,13 +2673,13 @@ exports.addUpdateAnalyticsForCampaigns = () => {
                   };
                   Promise.resolve(Analytics.create(analyticsInfo));
                 }
-              });              
-            }
-          })
+              });
+          }
+        });
       }
     });
   } catch (err) {
-    console.log('err', err);
+    console.log("err", err);
   }
 };
 
@@ -2585,7 +2688,7 @@ exports.addDataToSocialAnalytics = async (data) => {
     where: {
       postIdsUsed: data.postIdsUsed,
     },
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
   if (!foundItem) {
     const analyticsInfo = {
@@ -2600,7 +2703,7 @@ exports.addDataToSocialAnalytics = async (data) => {
       totalSubscribers: data.totalSubscribers ? data.totalSubscribers : 0,
       instTotalLikes: data.instTotalLikes ? data.instTotalLikes : 0,
       instTotalComments: data.instTotalComments ? data.instTotalComments : 0,
-      postIdsUsed: data.postIdsUsed
+      postIdsUsed: data.postIdsUsed,
     };
     SocialAnalytics.create(analyticsInfo);
   } else {
@@ -2619,123 +2722,123 @@ exports.addDataToSocialAnalytics = async (data) => {
       },
       { where: { postIdsUsed: data.postIdsUsed } }
     );
-  }  
+  }
 };
 
 exports.analyticsReport = async (req, res, next) => {
-
-  if(!req.body.orgId || !req.body.month || !req.body.year) {
-    next(new AppError('No Record Found', 200));
+  if (!req.body.orgId || !req.body.month || !req.body.year) {
+    next(new AppError("No Record Found", 200));
   }
 
   const filterDate = moment().month(req.body.month).year(req.body.year);
-  const startOfMonth = moment(filterDate).startOf('month').toDate();
-  const endOfMonth   = moment(filterDate).endOf('month').toDate();
+  const startOfMonth = moment(filterDate).startOf("month").toDate();
+  const endOfMonth = moment(filterDate).endOf("month").toDate();
 
-  const getWhatsAppNo = await db.socialMediaConnection
-    .findOne({
-      where: {
-          organizationOrgId: req.body.orgId,
-          name: 'WhatsApp'
-        },
-        attributes: [
-          'socialMediaHandle'
-        ]
+  const getWhatsAppNo = await db.socialMediaConnection.findOne({
+    where: {
+      organizationOrgId: req.body.orgId,
+      name: "WhatsApp",
+    },
+    attributes: ["socialMediaHandle"],
   });
 
-  const orgWhatsAppNo = getWhatsAppNo !== null ? getWhatsAppNo?.socialMediaHandle.split(':')[1] : '';
+  const orgWhatsAppNo =
+    getWhatsAppNo !== null
+      ? getWhatsAppNo?.socialMediaHandle.split(":")[1]
+      : "";
 
-  const activeChannels = db.socialMediaConnection
-    .findAll({
-      where: {
-          organizationOrgId: req.body.orgId,
-          'status': 'Active',
-          createdAt: {
-            [Op.between]: [startOfMonth, endOfMonth],
-          },
-        },
-        attributes: [
-          'name',
-          'socialMediaType',
-          'organizationOrgId',
-          'status',
-          'isConfigured',
-        ],
-        include: [
-          {
-            model: db.socialMediaPage,
-            as: 'socialMediaPage',
-          },
-        ],
+  const activeChannels = db.socialMediaConnection.findAll({
+    where: {
+      organizationOrgId: req.body.orgId,
+      status: "Active",
+      createdAt: {
+        [Op.between]: [startOfMonth, endOfMonth],
+      },
+    },
+    attributes: [
+      "name",
+      "socialMediaType",
+      "organizationOrgId",
+      "status",
+      "isConfigured",
+    ],
+    include: [
+      {
+        model: db.socialMediaPage,
+        as: "socialMediaPage",
+      },
+    ],
   });
 
-  const directMessagingEffectiveness = db.waBroadcastLog
-    .findAll({
-      where: {
-        fromNumber: 331416323390162, //orgWhatsAppNo,
-          // createdAt: {
-          //   [Op.between]: [startOfMonth, endOfMonth],
-          // },
-        },
-        attributes: [
-          [db.Sequelize.fn("sum", db.Sequelize.col("sent")), "total_sent"],
-          [db.Sequelize.fn("sum", db.Sequelize.col("delivered")), "total_delivered"],
-          [db.Sequelize.fn("sum", db.Sequelize.col("read")), "total_read"],
-          [db.Sequelize.fn("sum", db.Sequelize.col("replied")), "total_replied"]
-        ],
-        group: ["fromNumber"],
+  const directMessagingEffectiveness = db.waBroadcastLog.findAll({
+    where: {
+      fromNumber: 331416323390162, //orgWhatsAppNo,
+      // createdAt: {
+      //   [Op.between]: [startOfMonth, endOfMonth],
+      // },
+    },
+    attributes: [
+      [db.Sequelize.fn("sum", db.Sequelize.col("sent")), "total_sent"],
+      [
+        db.Sequelize.fn("sum", db.Sequelize.col("delivered")),
+        "total_delivered",
+      ],
+      [db.Sequelize.fn("sum", db.Sequelize.col("read")), "total_read"],
+      [db.Sequelize.fn("sum", db.Sequelize.col("replied")), "total_replied"],
+    ],
+    group: ["fromNumber"],
   });
 
-  const leadScoreSocialInbox = db.socialInbox
-    .findAll({
-      where: {
-        orgId: req.body.orgId,
-          createdAt: {
-            [Op.between]: [startOfMonth, endOfMonth],
-          },
-        },
-        attributes: [
-          [db.Sequelize.fn("count", db.Sequelize.col("socialInboxID")), "total_response"]
-        ],
-        group: ["orgId"],
+  const leadScoreSocialInbox = db.socialInbox.findAll({
+    where: {
+      orgId: req.body.orgId,
+      createdAt: {
+        [Op.between]: [startOfMonth, endOfMonth],
+      },
+    },
+    attributes: [
+      [
+        db.Sequelize.fn("count", db.Sequelize.col("socialInboxID")),
+        "total_response",
+      ],
+    ],
+    group: ["orgId"],
   });
 
   const postsOnline = await campaignDefinition.findAll({
     where: {
       organizationOrgId: req.body.orgId,
-      status: ['OPEN', 'ACTIVE', 'COMPLETED', 'DONE'],
+      status: ["OPEN", "ACTIVE", "COMPLETED", "DONE"],
       createdAt: {
         [Op.between]: [startOfMonth, endOfMonth],
       },
     },
-    attributes: ['campaignDefinitionId'],
+    attributes: ["campaignDefinitionId"],
     include: [
       {
         model: campaignViewer,
-        as: 'CampaignViewer',
-        attributes: [
-          'state'
-        ],
+        as: "CampaignViewer",
+        attributes: ["state"],
       },
       {
         model: campaignSelectionChannel,
-        as: 'campaignSelectionChannels',
-        attributes: ['campaignSelectionId'],
+        as: "campaignSelectionChannels",
+        attributes: ["campaignSelectionId"],
         include: [
           {
             model: socialMediaConnection,
-            as: 'socialMediaConnection',
-            attributes: ['name'],
+            as: "socialMediaConnection",
+            attributes: ["name"],
           },
           {
             model: campaignContent,
-            as: 'campaignContents',
-            attributes: ['descritption'],
+            as: "campaignContents",
+            attributes: ["descritption"],
             include: [
               {
                 model: campaignContentPost,
-                as: 'campaignContentPosts',
-                attributes: ['postAt'],
+                as: "campaignContentPosts",
+                attributes: ["postAt"],
               },
             ],
           },
@@ -2743,12 +2846,12 @@ exports.analyticsReport = async (req, res, next) => {
       },
     ],
   });
-  
+
   Promise.all([
     activeChannels,
     directMessagingEffectiveness,
     leadScoreSocialInbox,
-    postsOnline
+    postsOnline,
   ])
     .then(async (responses) => {
       // const dayCount = '30';
@@ -2795,46 +2898,60 @@ exports.analyticsReport = async (req, res, next) => {
       responses[3].map((posts) => {
         posts.campaignSelectionChannels.map((channel) => {
           if (channel.socialMediaConnection !== null) {
-            const checkIfExists = socialMediaPosts.findIndex( pst => pst.name === channel.socialMediaConnection.name );
+            const checkIfExists = socialMediaPosts.findIndex(
+              (pst) => pst.name === channel.socialMediaConnection.name
+            );
             if (checkIfExists == -1) {
               socialMediaPosts.push({
                 name: channel.socialMediaConnection.name,
-                posts: channel.campaignContents[0]?.campaignContentPosts.length
-              })
+                posts: channel.campaignContents[0]?.campaignContentPosts.length,
+              });
             } else {
-              socialMediaPosts[checkIfExists].posts = socialMediaPosts[checkIfExists].posts + channel.campaignContents[0].campaignContentPosts?.length;
+              socialMediaPosts[checkIfExists].posts =
+                socialMediaPosts[checkIfExists].posts +
+                channel.campaignContents[0].campaignContentPosts?.length;
             }
           }
-        })
+        });
       });
 
       res.send({
-        status: 'success',
+        status: "success",
         data: {
-          reach: '53k',
-          engagement: '48%',
+          reach: "53k",
+          engagement: "48%",
           whatsAppSpend: 560,
           facebookSpend: 780,
           totalSubscribers: 111332,
           newSubscribers: 92398,
-          subscriptionGrowthRate: '80%',
+          subscriptionGrowthRate: "80%",
           campaignSpread: {
-            social: 70, referral: 13, paid: 17
+            social: 70,
+            referral: 13,
+            paid: 17,
           },
           channelContributionToTotalSubscribers: {
-            channel1: 25, channel2: 9, channel3: 16, channel4: 20, channel5: 30
+            channel1: 25,
+            channel2: 9,
+            channel3: 16,
+            channel4: 20,
+            channel5: 30,
           },
           topPerformingChannels: {
-            channel1: '80k', channel2: '40k', channel3: '20k', channel4: '10k', channel5: '1k'
+            channel1: "80k",
+            channel2: "40k",
+            channel3: "20k",
+            channel4: "10k",
+            channel5: "1k",
           },
-          activeChannels: responses[0].map(connection => connection.name),
+          activeChannels: responses[0].map((connection) => connection.name),
           socialEngagements: {
             facebook: {
               isConnected: true,
               views: 98,
               likes: 12,
               comments: 12,
-              wow: 10
+              wow: 10,
             },
             youtube: {
               isConnected: true,
@@ -2842,116 +2959,121 @@ exports.analyticsReport = async (req, res, next) => {
               likes: 12,
               comments: 12,
               favorites: 10,
-              dislikes: 8
+              dislikes: 8,
             },
             instagram: {
               isConnected: true,
               views: 98,
               likes: 12,
-              comments: 12
+              comments: 12,
             },
             email: {
               isConnected: true,
-              noOfEmails: 76
+              noOfEmails: 76,
             },
             sms: {
               isConnected: true,
-              noOfSms: 10
+              noOfSms: 10,
             },
             whatsApp: {
               isConnected: true,
-              noOfWhatsApp: 55
-            }
+              noOfWhatsApp: 55,
+            },
           },
           directMessagingEffectiveness: responses[1],
           leadScoreSocialInbox: {
             totalResponses: responses[2],
             qualifiedLeads: 0,
             repliedBack: 0,
-            closed: 0
+            closed: 0,
           },
           postsOnline: socialMediaPosts,
           reachSocialIndexByChannel: {
-            fbComments: 22, instaComment: 25, linkedinComments: 11, googleReviews: 10, whatsAppReplied: 25, youtubeComments: 9, xTweets: 20
+            fbComments: 22,
+            instaComment: 25,
+            linkedinComments: 11,
+            googleReviews: 10,
+            whatsAppReplied: 25,
+            youtubeComments: 9,
+            xTweets: 20,
           },
           reviews: {
             overAll: 5,
             totalReviews: 432,
             topReviews: [
               {
-                text: 'Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.',
-                name: 'Hellen Jummy'
+                text: "Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.",
+                name: "Hellen Jummy",
               },
               {
-                text: 'Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.',
-                name: 'Hellen Jummy'
+                text: "Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.",
+                name: "Hellen Jummy",
               },
               {
-                text: 'Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.',
-                name: 'Hellen Jummy'
+                text: "Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.",
+                name: "Hellen Jummy",
               },
               {
-                text: 'Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.',
-                name: 'Hellen Jummy'
+                text: "Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.",
+                name: "Hellen Jummy",
               },
               {
-                text: 'Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.',
-                name: 'Hellen Jummy'
-              }
-            ]
-          }
+                text: "Non risus viverra enim, quis. Eget vitae arcu vivamus sit tellus, viverra turpis lorem. Varius a turpis urna id porttitor.",
+                name: "Hellen Jummy",
+              },
+            ],
+          },
         },
       });
     })
     .catch((err) => {
-      console.log('**********ERROR RESULT****************');
+      console.log("**********ERROR RESULT****************");
       console.log(err);
     });
   return false;
 };
 
-
 exports.dealerAnalyReport = async (req, res, next) => {
   if (!req.body.orgId || !req.body.month || !req.body.year) {
-    next(new AppError('No Record Found', 200));
+    next(new AppError("No Record Found", 200));
   }
 
   const filterDate = moment().month(req.body.month).year(req.body.year);
-  const startOfMonth = moment(filterDate).startOf('month').toDate();
-  const endOfMonth = moment(filterDate).endOf('month').toDate();
+  const startOfMonth = moment(filterDate).startOf("month").toDate();
+  const endOfMonth = moment(filterDate).endOf("month").toDate();
 
   const getWhatsAppNo = await db.socialMediaConnection.findOne({
     where: {
       organizationOrgId: req.body.orgId,
-      name: 'WhatsApp',
+      name: "WhatsApp",
     },
-    attributes: ['socialMediaHandle'],
+    attributes: ["socialMediaHandle"],
   });
 
   const orgWhatsAppNo =
     getWhatsAppNo !== null
-      ? getWhatsAppNo?.socialMediaHandle.split(':')[1]
-      : '';
+      ? getWhatsAppNo?.socialMediaHandle.split(":")[1]
+      : "";
 
   const activeChannels = db.socialMediaConnection.findAll({
     where: {
       organizationOrgId: req.body.orgId,
-      status: 'Active',
+      status: "Active",
       createdAt: {
         [Op.between]: [startOfMonth, endOfMonth],
       },
     },
     attributes: [
-      'name',
-      'socialMediaType',
-      'organizationOrgId',
-      'status',
-      'isConfigured',
+      "name",
+      "socialMediaType",
+      "organizationOrgId",
+      "status",
+      "isConfigured",
     ],
     include: [
       {
         model: db.socialMediaPage,
-        as: 'socialMediaPage',
+        as: "socialMediaPage",
       },
     ],
   });
@@ -2964,15 +3086,15 @@ exports.dealerAnalyReport = async (req, res, next) => {
       // },
     },
     attributes: [
-      [db.Sequelize.fn('sum', db.Sequelize.col('sent')), 'total_sent'],
+      [db.Sequelize.fn("sum", db.Sequelize.col("sent")), "total_sent"],
       [
-        db.Sequelize.fn('sum', db.Sequelize.col('delivered')),
-        'total_delivered',
+        db.Sequelize.fn("sum", db.Sequelize.col("delivered")),
+        "total_delivered",
       ],
-      [db.Sequelize.fn('sum', db.Sequelize.col('read')), 'total_read'],
-      [db.Sequelize.fn('sum', db.Sequelize.col('replied')), 'total_replied'],
+      [db.Sequelize.fn("sum", db.Sequelize.col("read")), "total_read"],
+      [db.Sequelize.fn("sum", db.Sequelize.col("replied")), "total_replied"],
     ],
-    group: ['fromNumber'],
+    group: ["fromNumber"],
   });
 
   const leadScoreSocialInbox = db.socialInbox.findAll({
@@ -2984,47 +3106,47 @@ exports.dealerAnalyReport = async (req, res, next) => {
     },
     attributes: [
       [
-        db.Sequelize.fn('count', db.Sequelize.col('socialInboxID')),
-        'total_response',
+        db.Sequelize.fn("count", db.Sequelize.col("socialInboxID")),
+        "total_response",
       ],
     ],
-    group: ['orgId'],
+    group: ["orgId"],
   });
 
   const postsOnline = await campaignDefinition.findAll({
     where: {
       organizationOrgId: req.body.orgId,
-      status: ['OPEN', 'ACTIVE', 'COMPLETED', 'DONE'],
+      status: ["OPEN", "ACTIVE", "COMPLETED", "DONE"],
       createdAt: {
         [Op.between]: [startOfMonth, endOfMonth],
       },
     },
-    attributes: ['campaignDefinitionId'],
+    attributes: ["campaignDefinitionId"],
     include: [
       {
         model: campaignViewer,
-        as: 'CampaignViewer',
-        attributes: ['state'],
+        as: "CampaignViewer",
+        attributes: ["state"],
       },
       {
         model: campaignSelectionChannel,
-        as: 'campaignSelectionChannels',
-        attributes: ['campaignSelectionId'],
+        as: "campaignSelectionChannels",
+        attributes: ["campaignSelectionId"],
         include: [
           {
             model: socialMediaConnection,
-            as: 'socialMediaConnection',
-            attributes: ['name'],
+            as: "socialMediaConnection",
+            attributes: ["name"],
           },
           {
             model: campaignContent,
-            as: 'campaignContents',
-            attributes: ['descritption'],
+            as: "campaignContents",
+            attributes: ["descritption"],
             include: [
               {
                 model: campaignContentPost,
-                as: 'campaignContentPosts',
-                attributes: ['postAt'],
+                as: "campaignContentPosts",
+                attributes: ["postAt"],
               },
             ],
           },
@@ -3062,7 +3184,7 @@ exports.dealerAnalyReport = async (req, res, next) => {
       });
 
       res.send({
-        status: 'success',
+        status: "success",
         data: {
           TotalCampaigns: 1000,
           CampaignsActiveDealer: 14,
@@ -3072,14 +3194,14 @@ exports.dealerAnalyReport = async (req, res, next) => {
           Newsubscribers: 1000,
           TotalReach: 61400,
           TotalEngagement: 40000,
-          EngagementRate: '50%',
-          ConversionRate: '13%',
+          EngagementRate: "50%",
+          ConversionRate: "13%",
           spendAnalysis: {
             WhatsappSpends: 560,
             FacebookSpends: 780,
           },
           subscriptionGrowthRate: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+            labels: ["Jan", "Feb", "Mar", "Apr"],
             data: [5, 10, 15, 18],
           },
           ActiveChannels: {
@@ -3101,7 +3223,7 @@ exports.dealerAnalyReport = async (req, res, next) => {
             facebookspend: 60,
           },
           ChannelPerformance: {
-            labels: ['FacebookAds', 'WhatsApp', 'Instagram', 'email', 'SEO'],
+            labels: ["FacebookAds", "WhatsApp", "Instagram", "email", "SEO"],
             data: [91, 75, 50, 78, 13],
           },
           SentimentAnalysis: {
@@ -3114,61 +3236,61 @@ exports.dealerAnalyReport = async (req, res, next) => {
           },
           dealers: [
             {
-              dealer: 'Dealer A',
-              status: 'Active',
-              location: 'Hyderabad',
+              dealer: "Dealer A",
+              status: "Active",
+              location: "Hyderabad",
               total_views: 10000,
               total_spends: 760,
               active_campaigns: 10,
               new_subscribers: 1000,
-              engagement_rate: '50%',
+              engagement_rate: "50%",
             },
             {
-              dealer: 'Dealer B',
-              status: 'Active',
-              location: 'Hyderabad',
+              dealer: "Dealer B",
+              status: "Active",
+              location: "Hyderabad",
               total_views: 10000,
               total_spends: 760,
               active_campaigns: 10,
               new_subscribers: 1000,
-              engagement_rate: '50%',
+              engagement_rate: "50%",
             },
             {
-              dealer: 'Dealer C',
-              status: 'Active',
-              location: 'Hyderabad',
+              dealer: "Dealer C",
+              status: "Active",
+              location: "Hyderabad",
               total_views: 10000,
               total_spends: 760,
               active_campaigns: 10,
               new_subscribers: 1000,
-              engagement_rate: '50%',
+              engagement_rate: "50%",
             },
             {
-              dealer: 'Dealer D',
-              status: 'Active',
-              location: 'Hyderabad',
+              dealer: "Dealer D",
+              status: "Active",
+              location: "Hyderabad",
               total_views: 10000,
               total_spends: 760,
               active_campaigns: 10,
               new_subscribers: 1000,
-              engagement_rate: '50%',
+              engagement_rate: "50%",
             },
             {
-              dealer: 'Dealer E',
-              status: 'Active',
-              location: 'Hyderabad',
+              dealer: "Dealer E",
+              status: "Active",
+              location: "Hyderabad",
               total_views: 10000,
               total_spends: 760,
               active_campaigns: 10,
               new_subscribers: 1000,
-              engagement_rate: '50%',
+              engagement_rate: "50%",
             },
           ],
         },
       });
     })
     .catch((err) => {
-      console.log('**********ERROR RESULT****************');
+      console.log("**********ERROR RESULT****************");
       console.log(err);
     });
   return false;

@@ -6,9 +6,9 @@
  * @desc [Routing for Team Information]
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const analyticsController = require('../controllers/analyticsController');
+const analyticsController = require("../controllers/analyticsController");
 
 /**
  * @swagger
@@ -165,7 +165,7 @@ const analyticsController = require('../controllers/analyticsController');
  *         description: Internal server error
  */
 router
-  .route('/api/v1/getCampaginAnalytics')
+  .route("/api/v1/getCampaginAnalytics")
   .post(analyticsController.getCampaginAnalytics);
 
 /**
@@ -263,7 +263,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/getSubscriptionAnalytics')
+  .route("/api/v1/getSubscriptionAnalytics")
   .post(analyticsController.getSubscriptionAnalytics);
 
 /**
@@ -350,7 +350,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/getYoutubeAnalytics')
+  .route("/api/v1/getYoutubeAnalytics")
   .post(analyticsController.getYoutubeAnalytics);
 
 /**
@@ -446,7 +446,7 @@ router
  *         description: Internal server error
  */
 router
-  .route('/api/v1/getSocialPresence')
+  .route("/api/v1/getSocialPresence")
   .post(analyticsController.getSocialPresence);
 
 /**
@@ -472,8 +472,8 @@ router
  *         description: Internal server error
  *       400:
  *         description: Invalid request data or no active social media connections found
- */router
-  .route('/api/v1/fetchSocialPresence')
+ */ router
+  .route("/api/v1/fetchSocialPresence")
   .get(analyticsController.fetchSocialPresence);
 
 /**
@@ -603,7 +603,7 @@ router
  *         description: Internal server error.
  */
 router
-  .route('/api/v1/setYoutubeAnalytics')
+  .route("/api/v1/setYoutubeAnalytics")
   .post(analyticsController.setYoutubeAnalytics);
 
 /**
@@ -669,7 +669,7 @@ router
  *         description: Internal server error.
  */
 router
-  .route('/api/v1/fetchYoutubeAnalytics')
+  .route("/api/v1/fetchYoutubeAnalytics")
   .post(analyticsController.fetchYoutubeAnalytics);
 
 /**
@@ -709,7 +709,7 @@ router
  *         description: Internal server error.
  */
 router
-  .route('/api/v1/manually-run-social-media-cron-for-comments')
+  .route("/api/v1/manually-run-social-media-cron-for-comments")
   .get(analyticsController.manuallyRunCronForSocialMediaComments);
 
 /**
@@ -739,7 +739,7 @@ router
  *         description: Internal server error.
  */
 router
-  .route('/api/v1/run-cron-manually')
+  .route("/api/v1/run-cron-manually")
   .post(analyticsController.runCronManually);
 
 /**
@@ -789,11 +789,12 @@ router
  *         description: Internal Server Error.
  */
 router
-  .route('/api/v1/analytics-report')
+  .route("/api/v1/analytics-report")
   .post(analyticsController.analyticsReport);
 
-
 router
-  .route('/api/v1/delear-analy-report')
+  .route("/api/v1/dealer-analyticsReport")
   .post(analyticsController.dealerAnalyReport);
+
+
 module.exports = router;
