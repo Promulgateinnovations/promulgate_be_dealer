@@ -241,6 +241,7 @@ exports.updateAgencyEmpDetails = async (req, res, next) => {
       updatedItem.userName = req.body.userName || foundItem.userName;
       updatedItem.password = req.body.password || foundItem.password;
       updatedItem.userStatus = req.body.userStatus || foundItem.userStatus;
+      updatedItem.email = req.body.email || foundItem.email;
       const updateRecord = await User.update(updatedItem, {
         where: { userId },
       });
