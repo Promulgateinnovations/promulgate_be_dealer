@@ -65,7 +65,7 @@ exports.getInvoiceDetailsByOEM = async (req, res, next) => {
 
     // First, find the Budget ID using oem_id
     const budget = await Budget.findOne({ where: { oem_id } });
-    if (!budget) return next(new AppError('Budget not found', 404));
+    if (!budget) return next(new AppError('Budget not found', 200));
 
     const invoice = await InvoiceDetails.findOne({
       where: { budget_id: budget.budget_id },

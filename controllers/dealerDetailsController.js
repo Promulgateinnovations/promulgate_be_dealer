@@ -185,8 +185,8 @@ exports.getDealersByOEMID = async (req, res, next) => {
     });
 
     if (!dealers || dealers.length === 0) {
-      return res.status(404).json({
-        status: 'fail',
+      return res.status(200).json({
+        status: 'success',
         message: `No dealers found for OEM ID: ${oem_id}`,
       });
     }

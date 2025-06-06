@@ -31,13 +31,9 @@ module.exports = (sequelize, Sequelize) => {
       values: ['ACTIVE', 'INACTIVE'],
       defaultValue: 'ACTIVE',
     },
-    descriptionTags: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
     standardPageTags: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },  
   });
 
