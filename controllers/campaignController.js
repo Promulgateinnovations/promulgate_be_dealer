@@ -1,7 +1,7 @@
 const db = require('../models');
 const AppError = require('../utils/appError');
 
-const Sequelize = require('sequelize');
+const sequelize = require('sequelize');
 
 const Organization = db.organization;
 const campaignDefinition = db.campaignDefinition;
@@ -190,7 +190,7 @@ exports.getCampaignDetails = async (req, res, next) => {
         },
       ],
       order: [
-        [db.Sequelize.col('postAt'), 'ASC']
+        [sequelize.col('postAt'), 'ASC']
       ],
     });
     res.send({
