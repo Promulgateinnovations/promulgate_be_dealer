@@ -17,7 +17,7 @@ const router = express.Router();
  * /api/v1/getOrgDetails:
  *   post:
  *     summary: Checks the request body for required fields.
- *     description: "This endpoint checks if the request body contains at least one of the following fields: `name`, `aliasName`, `orgUrl`, or `orgId`. If none are present, it returns an error message."
+ *     description: "This endpoint checks if the request body contains at least one of the following fields: `name`, `aliasName`, `orgUrl`, or `outletId`. If none are present, it returns an error message."
  *     requestBody:
  *       required: true
  *       content:
@@ -37,7 +37,7 @@ const router = express.Router();
  *                 type: string
  *                 description: The organization's website URL.
  *                 example: "https://www.example.com"
- *               orgId:
+ *               outletId:
  *                 type: integer
  *                 description: The unique identifier of the organization.
  *                 example: 123
@@ -76,8 +76,8 @@ const router = express.Router();
  * @swagger
  * /api/v1/getOrgDetails:
  *   post:
- *     summary: Retrieves an organization based on `orgId`, `name`, `aliasName`, or `orgUrl`.
- *     description: "This endpoint allows you to search for an organization by providing one of the following parameters in the request body: `orgId`, `name`, `aliasName`, or `orgUrl`".
+ *     summary: Retrieves an organization based on `outletId`, `name`, `aliasName`, or `orgUrl`.
+ *     description: "This endpoint allows you to search for an organization by providing one of the following parameters in the request body: `outletId`, `name`, `aliasName`, or `orgUrl`".
  *     requestBody:
  *       required: true
  *       content:
@@ -85,7 +85,7 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               orgId:
+ *               outletId:
  *                 type: integer
  *                 description: The unique identifier of the organization.
  *                 example: 123
@@ -116,7 +116,7 @@ const router = express.Router();
  *                   type: object
  *                   description: The organization details.
  *                   properties:
- *                     orgId:
+ *                     outletId:
  *                       type: integer
  *                       example: 123
  *                     name:
@@ -129,7 +129,7 @@ const router = express.Router();
  *                       type: string
  *                       example: 'https://example.org'
  *       400:
- *         description: Bad request if none of the required fields (`orgId`, `name`, `aliasName`, or `orgUrl`) are provided.
+ *         description: Bad request if none of the required fields (`outletId`, `name`, `aliasName`, or `orgUrl`) are provided.
  *         content:
  *           application/json:
  *             schema:
@@ -180,7 +180,7 @@ router
  * /api/v1/getNewConnectionDetails:
  *   post:
  *     summary: Fetches the details of a social media connection for an organization.
- *     description: This endpoint retrieves the details of a social media connection (such as WhatsApp, Facebook) associated with an organization using the provided `orgId` and social media platform name (`from`).
+ *     description: This endpoint retrieves the details of a social media connection (such as WhatsApp, Facebook) associated with an organization using the provided `outletId` and social media platform name (`from`).
  *     requestBody:
  *       required: true
  *       content:
@@ -188,7 +188,7 @@ router
  *           schema:
  *             type: object
  *             properties:
- *               orgId:
+ *               outletId:
  *                 type: integer
  *                 description: The ID of the organization for which the social media connection is being fetched.
  *                 example: 1
@@ -435,7 +435,7 @@ router
  *                 data:
  *                   type: object
  *                   properties:
- *                     orgId:
+ *                     outletId:
  *                       type: integer
  *                       example: 10
  *       400:
@@ -477,7 +477,7 @@ router
  * /api/v1/updateOrgDetails:
  *   post:
  *     summary: Updates the details of an organization.
- *     description: This endpoint allows you to update the details of an existing organization. You need to provide the `orgId` along with the fields to be updated.
+ *     description: This endpoint allows you to update the details of an existing organization. You need to provide the `outletId` along with the fields to be updated.
  *     requestBody:
  *       required: true
  *       content:
@@ -485,7 +485,7 @@ router
  *           schema:
  *             type: object
  *             properties:
- *               orgId:
+ *               outletId:
  *                 type: integer
  *                 description: The unique identifier of the organization.
  *                 example: 123
@@ -524,7 +524,7 @@ router
  *                   type: string
  *                   example: 'Organization Updated Successfully'
  *       400:
- *         description: Bad request if `orgId` is missing or the update operation fails.
+ *         description: Bad request if `outletId` is missing or the update operation fails.
  *         content:
  *           application/json:
  *             schema:
@@ -575,7 +575,7 @@ router
  *                 type: string
  *                 description: The WhatsApp business account ID.
  *                 example: "business_account_id"
- *               orgId:
+ *               outletId:
  *                 type: integer
  *                 description: The ID of the organization to which the WhatsApp account is associated.
  *                 example: 10
@@ -649,7 +649,7 @@ router
  *                 type: string
  *                 description: The unique Google Place ID for the location.
  *                 example: 'ChIJN1t_tDeuEmsRUsoyG83frY4'
- *               orgId:
+ *               outletId:
  *                 type: integer
  *                 description: The ID of the organization for which the Google Reviews connection is being created.
  *                 example: 123
@@ -816,7 +816,7 @@ router
  *                 data:
  *                   type: object
  *                   properties:
- *                     orgId:
+ *                     outletId:
  *                       type: integer
  *                       description: The ID of the organization the user belongs to, or null if the user has no organization.
  *                       example: null
