@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Organization = sequelize.define('organization', {
-    outletId : {
+    OrgId : {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
       unique: true,
