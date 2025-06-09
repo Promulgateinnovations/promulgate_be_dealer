@@ -18,7 +18,7 @@ exports.checkGetBody = (req, res, next) => {
     !req.body.name &&
     !req.body.aliasName &&
     !req.body.orgUrl &&
-    !req.body.OrgId
+    !req.body.orgId
   ) {
     next(new AppError('Missing OrgName or AliasName1 or Url', 200));
   }
@@ -65,7 +65,7 @@ exports.createOrgDetails = async (req, res, next) => {
       // res.send({
       //   status: 'success',
       //   data: {
-      //     OrgId: data.OrgId,
+      //     orgId: data.orgId,
       //   }
       // })
       const condition = { where: { userId: req.body.userId } };
@@ -73,7 +73,7 @@ exports.createOrgDetails = async (req, res, next) => {
         const teamData = {
           userUserId: foundItem.userId,
           agencyAgencyId: req.body.agencyId,
-          organizationOrgId: data.OrgId,
+          organizationOrgId: data.orgId,
           roleRoleId: 1,
         };
 
@@ -84,7 +84,7 @@ exports.createOrgDetails = async (req, res, next) => {
             res.send({
               status: 'success',
               data: {
-                OrgId: data.OrgId,
+                orgId: data.orgId,
               },
             });
           })
@@ -127,7 +127,7 @@ exports.createWhatsappDetails = async (req, res, next) => {
     tokenExpiry: moment().endOf('year'),
     status: 'ACTIVE',
     isConfigured: 1,
-    organizationOrgId: req.body.OrgId,
+    organizationOrgId: req.body.orgId,
   });
   if (socialMediaConnections) {
     const socialMediapages = await db.socialMediaPage.create({
@@ -154,9 +154,9 @@ exports.createWhatsappDetails = async (req, res, next) => {
 };
 
 exports.getNewConnectionDetails = async (req, res, next) => {
-  const { OrgId, from } = req.body;
+  const { orgId, from } = req.body;
   SocialMediaConnection.findOne({
-    where: { organizationOrgId: OrgId, name: from },
+    where: { organizationOrgId: orgId, name: from },
   })
     .then((data) => {
       if (data) {
@@ -228,7 +228,7 @@ exports.createNewConnectionDetails = async (req, res, next) => {
       tokenExpiry: moment().endOf('year'),
       status: 'ACTIVE',
       isConfigured: 1,
-      organizationOrgId: req.body.OrgId,
+      organizationOrgId: req.body.orgId,
     });
     if (socialMediaConnections) {
       const socialMediapages = await db.socialMediaPage.create({
@@ -306,8 +306,8 @@ exports.updateNewConnectionDetails = async (req, res, next) => {
  */
 
 exports.findById = (req, res, next) => {
-  const { OrgId } = req.body;
-  Organization.findByPk(OrgId)
+  const { orgId } = req.body;
+  Organization.findByPk(orgId)
     .then((data) => {
       if (data) {
         res.send({
@@ -332,7 +332,7 @@ exports.findById = (req, res, next) => {
 
 
 exports.findOneByAnyColumn = (req, res, next) => {
-  const { OrgId, aliasName, name, orgUrl } = req.body;
+  const { orgId, aliasName, name, orgUrl } = req.body;
   let condition = '';
 
   switch (Object.keys(req.body)[0]) {
@@ -342,8 +342,8 @@ exports.findOneByAnyColumn = (req, res, next) => {
     case 'AliasName':
       condition = aliasName ? { aliasName: aliasName } : null;
       break;
-    case 'OrgId':
-      condition = OrgId ? { OrgId: OrgId } : null;
+    case 'orgId':
+      condition = orgId ? { orgId: orgId } : null;
       break;
     case 'OrgUrl':
       condition = orgUrl ? { orgUrl: orgUrl } : null;
@@ -384,16 +384,16 @@ exports.findOneByAnyColumn = (req, res, next) => {
 
 
 exports.updateOrgDetails = async (req, res, next) => {
-  const { OrgId } = req.body;
+  const { orgId } = req.body;
   try {
-    const foundItem = await db.organization.findOne({ where: { OrgId } });
+    const foundItem = await db.organization.findOne({ where: { orgId } });
     if (!foundItem) {
       next(new AppError('No Record Found', 200));
     } else {
       try {
         const updateRecord = await db.organization.update(req.body, {
           returning: true,
-          where: { OrgId },
+          where: { orgId },
         });
         res.send({
           status: 'success',
@@ -428,7 +428,7 @@ exports.login = async (req, res, next) => {
           res.send({
             status: 'success',
             data: {
-              OrgId: null,
+              orgId: null,
               userId: userData.userId,
               roleId: userData.roleRoleId || null,
             },
@@ -445,7 +445,7 @@ exports.login = async (req, res, next) => {
       res.send({
         status: 'success',
         data: {
-          OrgId: foundItem.organizationOrgId,
+          orgId: foundItem.organizationOrgId,
           userId: foundItem.userId,
           roleId: foundItem.roleRoleId,
         },
@@ -462,7 +462,7 @@ exports.getOrganizationLists = (req, res) => {
     where: {
       agencyAgencyId: agencyId,
     },
-    attributes: ['name', 'OrgId'],
+    attributes: ['name', 'orgId'],
     include: [
       {
         model: db.team,
@@ -489,7 +489,7 @@ exports.getOrganizationListsbyAgyID = (req, res) => {
     where: {
       agencyAgencyId: agencyId,
     },
-    attributes: ['OrgId','name','orgStatus']
+    attributes: ['orgId','name','orgStatus']
     
   }).then((organizationList) => {
     res.send({
