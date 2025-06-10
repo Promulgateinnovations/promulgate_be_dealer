@@ -30,9 +30,8 @@ module.exports = (sequelize, Sequelize) => {
       values: ['NEW', 'ACTIVE', 'INACTIVE'],
     },
     oemId: {
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
-      allowNull: false,
+      type: Sequelize.UUID
+      
     },
   });
 
