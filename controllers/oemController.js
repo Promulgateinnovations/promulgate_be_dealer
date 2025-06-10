@@ -82,7 +82,7 @@ exports.updateOEMStatus = async (req, res, next) => {
     // Update all users linked to this OEM
     const userUpdateCount = await users.update(
       { userStatus: status },
-      { where: { 	organizationOrgId: oem_id } }
+      { where: { 	oemId: oem_id } }
     );
 
     res.status(200).json({
