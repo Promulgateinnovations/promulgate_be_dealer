@@ -120,6 +120,7 @@ exports.login = async (req, res, next) => {
           userId: foundItem.userId,
           orgId: foundItem.organizationOrgId,
           status: foundItem.userStatus,
+          oem_id: foundItem.oemId,
           role: [],
         },
       });
