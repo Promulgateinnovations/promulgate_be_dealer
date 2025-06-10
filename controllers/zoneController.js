@@ -56,7 +56,7 @@ exports.deleteZone = async (req, res, next) => {
     next(new AppError(err.message, 500));
   }
 };
-
+ 
 
 // GET all dealers by OEM ID, Zone ID, and Region ID
 
@@ -67,7 +67,7 @@ exports.getZonesByOEM = async (req, res, next) => {
     // Fetch all zones for the given OEM
     const zones = await Zone.findAll({
       where: { oem_id },
-      attributes: ['zone_id', 'zone_name', 'zone_code', 'oem_id']
+      attributes: ['zone_id', 'zone_name', 'zone_code', 'oem_id','zoneDescription', 'admin_email', 'admin_name', 'admin_phone', 'zone_status'],
     });
 
     if (!zones || zones.length === 0) {

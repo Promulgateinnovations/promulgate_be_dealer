@@ -182,6 +182,16 @@ exports.getDealersByOEMID = async (req, res, next) => {
 
     const dealers = await DealerDetails.findAll({
       where: { oem_id },
+      include: [
+        {
+          model: Zone,
+          attributes: ['zone_name'],
+        },
+        {
+          model: Region,
+          attributes: ['region_name'],
+        },
+      ],
     });
 
     if (!dealers || dealers.length === 0) {
