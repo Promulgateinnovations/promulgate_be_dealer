@@ -48,6 +48,7 @@ module.exports = (sequelize, Sequelize) => {
       values: ['ACTIVE', 'INACTIVE'],
       defaultValue: 'ACTIVE',
     },
+    dealer_addr: Sequelize.STRING,
   });
 
   return DealerDetails;

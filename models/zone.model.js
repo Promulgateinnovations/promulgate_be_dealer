@@ -44,6 +44,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.ENUM,
         values: ['ACTIVE', 'INACTIVE'],
         defaultValue: 'ACTIVE',
+      },
+      zone_addr:{
+        type: Sequelize.STRING(255),
+        allowNull: true,
       }
     });
   

@@ -44,7 +44,16 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.ENUM,
         values: ['ACTIVE', 'INACTIVE'],
         defaultValue: 'ACTIVE',
-      }  
+      },
+      region_desp: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      }, 
+      region_addr: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      }
+
     });
   
     return Region;
