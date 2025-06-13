@@ -67,7 +67,7 @@ exports.getZonesByOEM = async (req, res, next) => {
     // Fetch all zones for the given OEM
     const zones = await Zone.findAll({
       where: { oem_id },
-      attributes: ['zone_id', 'zone_name', 'zone_code', 'oem_id','zoneDescription', 'admin_email', 'admin_name', 'admin_phone', 'zone_status'],
+      attributes: ['zone_id', 'zone_name', 'zone_code', 'oem_id','zoneDescription', 'admin_email', 'admin_name', 'admin_phone', 'zone_status','zone_addr'],
     });
 
     if (!zones || zones.length === 0) {
