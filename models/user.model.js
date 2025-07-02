@@ -33,6 +33,18 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.UUID
       
     },
+    regionId: {
+      type: Sequelize.UUID
+      
+    },
+    zoneId: {
+      type: Sequelize.UUID
+      
+    },
+    userType: {
+       type: Sequelize.STRING
+      
+    },
   });
 
   return User;
