@@ -128,6 +128,22 @@ router.put('/api/v1/users/:userId', controller.updateUser);
  */
 router.delete('/api/v1/users/:userId', controller.deleteUser);
 
-router.get('/api/v1/users/:email', controller.getUserByEmail);
+/**
+ * @swagger
+ * /api/v1/userbyemail/{email}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ */
+router.get('/api/v1/userbyemail/:email', controller.getUserByEmail);
 
 module.exports = router;
