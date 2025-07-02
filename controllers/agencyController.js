@@ -121,10 +121,10 @@ exports.login = async (req, res, next) => {
           orgId: foundItem.organizationOrgId,
           status: foundItem.userStatus,
           oem_id: foundItem.oemId,
-          user_type: foundItem.userType,
           zone_id: foundItem.zoneId,
           region_id: foundItem.regionId,
-          role: [],
+          userType: foundItem.userType,
+          role: []
         },
       });
     }
