@@ -35,6 +35,39 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
+
+// Get a single user by ID
+exports.getUserById = async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.email);
+    if (!user) return next(new AppError('User not found', 404));
+
+    res.status(200).json({ status: 'success', data: user });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
+
+// Get a single user by email
+exports.getUserByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return next(new AppError('User not found', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: user,
+    });
+  } catch (err) {
+    next(new AppError(err.message, 500));
+  }
+};
+
 // Update a user by ID
 exports.updateUser = async (req, res, next) => {
   try {

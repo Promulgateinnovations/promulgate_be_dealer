@@ -128,4 +128,6 @@ router.put('/api/v1/users/:userId', controller.updateUser);
  */
 router.delete('/api/v1/users/:userId', controller.deleteUser);
 
+router.get('/api/v1/users/:email', controller.getUserByEmail);
+
 module.exports = router;
