@@ -57,6 +57,13 @@ exports.createOrgDetails = async (req, res, next) => {
     orgSmPolicy: req.body.orgSmPolicy,
     orgStatus: req.body.orgStatus,
     agencyAgencyId: req.body.agencyId,
+    parent_company_name: req.body.parent_company_name,
+    outlet_address: req.body.outlet_address,
+    outlet_code: req.body.outlet_code,
+    franchise_type: req.body.franchise_type,
+    billing_responsibility: req.body.billing_responsibility,
+    marketing_budget_allocation: req.body.marketing_budget_allocation,
+    region_served: req.body.region_served
   };
 
   // Save Organization in the database

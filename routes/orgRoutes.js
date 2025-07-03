@@ -324,61 +324,7 @@ router
   .route("/api/v1/updateWhatsappDetails")
   .post(organizationController.updateWhatsappDetails);
 
-/**
- * @swagger
- * /api/v1/saveOrgDetails:
- *   post:
- *     summary: Checks the request body for required fields.
- *     description: This endpoint checks if the request body contains the fields `name`, `aliasName`, and `orgUrl`. If any of these are missing, it returns an error message.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the organization.
- *                 example: "My Organization"
- *               aliasName:
- *                 type: string
- *                 description: An alias for the organization.
- *                 example: "MyOrg"
- *               orgUrl:
- *                 type: string
- *                 description: The organization's website URL.
- *                 example: "https://www.example.com"
- *     responses:
- *       200:
- *         description: The request body is valid.
- *       400:
- *         description: Missing required fields in the request body.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: 'error'
- *                 message:
- *                   type: string
- *                   example: 'Missing OrgName or AliasName or Url'
- *       500:
- *         description: Internal server error while processing the request.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: 'error'
- *                 message:
- *                   type: string
- *                   example: 'An error occurred.'
- */
+
 
 /**
  * @swagger

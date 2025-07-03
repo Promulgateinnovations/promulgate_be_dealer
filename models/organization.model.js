@@ -26,6 +26,28 @@ module.exports = (sequelize, Sequelize) => {
     orgSmPolicy: {
       type: Sequelize.STRING(1234),
     },
+    outlet_address: {
+      type: Sequelize.STRING(1234),
+    },
+    parent_company_name: {
+      type: Sequelize.STRING(1234),
+    },
+    outlet_code: {
+      type: Sequelize.STRING(1234),
+    },
+    franchise_type: {
+      type: Sequelize.STRING(1234),
+    },
+    billing_responsibility: {
+      type: Sequelize.STRING(1234),
+    },
+    marketing_budget_allocation: {
+      type: Sequelize.STRING(1234),
+    },
+    region_served: {
+      type: Sequelize.STRING(1234),
+    },
+
   });
 
   return Organization;
