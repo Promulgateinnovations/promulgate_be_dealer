@@ -33,31 +33,31 @@ module.exports = (sequelize, Sequelize) => {
         defaultValue: false,
       },
       "outlet_focus": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       },
       "oem_brand_affiliation": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       }, 
       "primary_outlet_type": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       }, 
       "customer_segments": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       },
       "marketing_channels_used": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       }, 
       "advertising_budget_allocation": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       }, 
       "lead_capture_mechanism": {
-         type: Sequelize.VARCHAR5(50),
+         type: Sequelize.STRING(50),
          allowNull: true,
       }
     });
