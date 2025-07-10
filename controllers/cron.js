@@ -10,6 +10,9 @@ const LeadContact = db.leadContact;
 const axios = require('axios');
 
 exports.cronJobs = () => {
+  db.sequelize.authenticate()
+  .then(() => console.log('DB connection OK'))
+  .catch(err => console.error('DB connection failed:', err));
   cron.schedule('*/1 * * * *', () => {
     // analyticsController.getConnections('Facebook').then((allFbConnectionData) => {
     //   return analyticsController.getCommentsForSocialInbox(allFbConnectionData, 'Facebook', 'Today');
