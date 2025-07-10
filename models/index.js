@@ -6,10 +6,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   dialectOptions: {
-    //socketPath: '/cloudsql/promulgate-386418:us-central1:promulgate',
-    options: {
-      useUTC: false, // for reading from database
-    },
+    useUTC: false
   },
   operatorsAliases: false,
   port: 3306,
