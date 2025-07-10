@@ -144,6 +144,7 @@
          var utcMoment = moment.utc();
          var utcDate = new Date(utcMoment.format());
          const toDate = moment(utcDate).add(1, 'minutes').toDate()
+         console.log("***********************************  toDate", toDate)
          const fromDate = moment(utcDate).toDate()
         // const toDate = moment(utcDate).add(1, 'minutes').toDate()
         // const fromDate = moment(utcDate).subtract(10, 'minutes').toDate()
