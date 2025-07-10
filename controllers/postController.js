@@ -149,12 +149,12 @@
         // const fromDate = moment(utcDate).subtract(10, 'minutes').toDate()
          db.campaignContentPost.findAll({
              where: {
-                 postAt: {
-                     [Op.gt]: fromDate,
-                     [Op.lte]: toDate,
-                    // [Op.gt]: fromDate,
-                    // [Op.lte]: toDate,
-                 },
+                //  postAt: {
+                //      [Op.gt]: fromDate,
+                //      [Op.lte]: toDate,
+                     // [Op.gt]: fromDate,
+                     // [Op.lte]: toDate,
+                //  },
                  postStatus: "WAITING",
                  postId: null
              },
