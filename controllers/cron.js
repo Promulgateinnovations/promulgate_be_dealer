@@ -163,7 +163,8 @@ exports.cronJobs = () => {
             })
             .catch((er) => {});
         });
-        console.log('promises', promises);
+        
+        console.log('this is bhaskar promises', promises);
         // await WhatsappContentPost.update(
         //   {
         //     postId: pId,
