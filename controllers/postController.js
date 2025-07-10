@@ -12,7 +12,7 @@
  const AppError = require('../utils/appError');
  const moment = require("moment")
  const Sequelize = require('sequelize');
-const { Op } = require('sequelize');
+ const { Op } = require('sequelize');
  const axios = require("axios")
  const FormData = require('form-data');
  const { campaignContentPost, asset } = require('../models');
@@ -140,7 +140,7 @@ const { Op } = require('sequelize');
  }
 
  exports.getCurrentPostDetails = async () => {
-     return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
          var utcMoment = moment.utc();
          var utcDate = new Date(utcMoment.format());
          const toDate = moment(utcDate).add(1, 'minutes').toDate()
@@ -150,7 +150,7 @@ const { Op } = require('sequelize');
          db.campaignContentPost.findAll({
              where: {
                  postAt: {
-                    //  [Op.gt]: fromDate,
+                     [Op.gt]: fromDate,
                      [Op.lte]: toDate,
                     // [Op.gt]: fromDate,
                     // [Op.lte]: toDate,
@@ -158,7 +158,7 @@ const { Op } = require('sequelize');
                  postStatus: "WAITING",
                  postId: null
              },
-             attributes: ['campaignContentPostID', 'postAt', 'postStatus'],
+             attributes: ['campaignContentPostID', 'postAt', 'postStatus' ],
              include: [
                  {
                      model: db.campaignContent,

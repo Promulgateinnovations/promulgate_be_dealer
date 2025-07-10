@@ -699,6 +699,7 @@ exports.getCurrentPostDetails = async () => {
       .findAll({
         where: {
           postAt: {
+            [Op.gt]: fromDate,
             [Op.lte]: toDate,
           },
           postStatus: {
