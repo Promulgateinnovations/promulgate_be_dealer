@@ -192,7 +192,7 @@ exports.updateWhatsappDetails = async (req, res, next) => {
       try {
         const updateRecord = await db.socialMediaConnection.update(
           {
-            socialMediaHandle: `${req.body.phone_number_id}:${req.body.Whatsapp_busines_account_id}`,
+            socialMediaHandle: `${req.body.phone_number_id}:${req.body.Whatsapp_busines_account_id}`:${req.body.status},
           },
           {
             returning: true,
@@ -201,7 +201,7 @@ exports.updateWhatsappDetails = async (req, res, next) => {
         );
         const updateSocialMediaPageData = await db.socialMediaPage.update(
           {
-            url: `${req.body.phone_number_id}:${req.body.Whatsapp_busines_account_id}`,
+            url: `${req.body.phone_number_id}:${req.body.Whatsapp_busines_account_id}:${req.body.status}`,
           },
           {
             returning: true,
@@ -496,7 +496,7 @@ exports.getOrganizationListsbyAgyID = (req, res) => {
     where: {
       agencyAgencyId: agencyId,
     },
-    attributes: ['orgId','name','orgStatus']
+    attributes: ['agencyAgencyId','orgId','name','orgStatus']
     
   }).then((organizationList) => {
     res.send({

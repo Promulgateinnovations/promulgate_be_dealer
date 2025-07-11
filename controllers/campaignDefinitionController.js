@@ -141,7 +141,8 @@ exports.getSocailMediaConnectioByName = async (name) => {
          'totalAudience',
          'campaignTypes',
          'captiveMembers',
-         'tags'
+         'tags',
+         'organizationOrgId',
        ],
      });
      if (campaignDefinitionDetails) {
