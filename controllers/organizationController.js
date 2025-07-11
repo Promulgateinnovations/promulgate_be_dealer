@@ -192,7 +192,7 @@ exports.updateWhatsappDetails = async (req, res, next) => {
       try {
         const updateRecord = await db.socialMediaConnection.update(
           {
-            socialMediaHandle: `${req.body.phone_number_id}:${req.body.Whatsapp_busines_account_id}`:${req.body.status},
+            socialMediaHandle: `${req.body.phone_number_id}:${req.body.Whatsapp_busines_account_id}:${req.body.status}`,
           },
           {
             returning: true,
