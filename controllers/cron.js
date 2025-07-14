@@ -18,11 +18,11 @@ exports.cronJobs = () => {
     //   return analyticsController.getCommentsForSocialInbox(allFbConnectionData, 'Facebook', 'Today');
     // });
     // analyticsController.addUpdateAnalyticsForCampaigns();
-    //console.log('running a task every two minutes');
+    console.log('running a task every two minutes');
     postController
       .getCurrentPostDetails()
       .then((postDetails) => {
-        //console.log(' Scheduler is active now ' + new Date());
+        console.log(' Scheduler is active now ' + new Date());
 
         let promises = [];
         postDetails.data.forEach((postDetail) => {
@@ -120,7 +120,7 @@ exports.cronJobs = () => {
         //console.log(err);
       });
 
-    //console.log('running a task every two minutes Whatsapp broadcast');
+    console.log('running a task every two minutes Whatsapp broadcast');
     leadsController
       .getCurrentPostDetails()
       .then((postDetails) => {
@@ -164,7 +164,7 @@ exports.cronJobs = () => {
             .catch((er) => {});
         });
         
-        //console.log('this is bhaskar promises', promises);
+        console.log('this is bhaskar promises', promises);
         // await WhatsappContentPost.update(
         //   {
         //     postId: pId,
@@ -174,7 +174,7 @@ exports.cronJobs = () => {
         // );
         chunkPromises(promises, 25)
           .then((results) => {
-            //console.log('chunked result promises', results);
+            console.log('chunked result promises', results);
           });
 
         // Promise.all(promises).then((response) => {
@@ -182,7 +182,7 @@ exports.cronJobs = () => {
         // });
       })
       .catch((err) => {
-        //console.log(' Error while Scheduler is active now ' + new Date());
+        console.log(' Error while Scheduler is active now ' + new Date());
         console.log(err);
       });
   });
