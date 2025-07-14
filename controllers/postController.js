@@ -452,6 +452,7 @@
     
      return new Promise((resolve, reject) => {
          const refresh_token = JSON.parse(pageToken).refresh_token
+         console.log("refresh_token", refresh_token);
          var data = qs.stringify({
              'client_id': configs.YOUTUBE_CLIENTID,
              'client_secret': configs.YOUTUBE_CLIENT_SECRET,
@@ -470,9 +471,11 @@
          axios(config)
              .then(function (response) {
                  resolve({ successs: true, refreshResponse: response.data })
+                 console.log("response.data", response.data);
              })
              .catch(function (error) {
                  resolve({ successs: false, refreshResponse: error.message })
+                console.log("error", error);
              });
  
      })
