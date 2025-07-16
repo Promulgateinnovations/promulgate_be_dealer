@@ -451,7 +451,7 @@
  exports.getRefreshToken = (pageToken) => {
     
      return new Promise((resolve, reject) => {
-         const refresh_token = JSON.parse(pageToken).refresh_token
+         const refresh_token = JSON.parse(pageToken).access_token
          console.log("refresh_token", refresh_token);
          var data = qs.stringify({
              'client_id': configs.YOUTUBE_CLIENTID,
