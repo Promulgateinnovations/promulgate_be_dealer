@@ -480,6 +480,12 @@
  }
 
  exports.postYoutubeVideos = (message, url, accessToken, campaignContentPostID,tags,publishVideoAs) => {
+
+    console.log("*************************postYoutubeVideos called*********************");
+    console.log("message", message);
+    console.log("url", url);
+    console.log("accessToken", accessToken);        
+    console.log("campaignContentPostID", campaignContentPostID);
      const self = this;
      let tagsForVideo = '';
      if(tags != null && tags != '') {
@@ -592,7 +598,7 @@
                  console.log(Err.message)
              })
          }else {
-            
+            console.log("***************Google drive else *****************")
             imageDownloader.googleDownload(accessToken, url).then((res) =>{
                 imageDownloader.downloader(res.webContentLink, `./assets/${campaignContentPostID}`).then((imageResponse) => {
                     const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`)
