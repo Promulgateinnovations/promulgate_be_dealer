@@ -26,8 +26,7 @@ let oauth = Youtube.authenticate({
 // const { LocalFileData, constructFileFromLocalFileData } = require("get-file-object-from-local-path")
 
 exports.downloader = (url, image_path) =>
-  console.log("*********downloader url", url);
-  console.log("*******************image path", image_path);
+  
   axios({
     url,
     responseType: 'stream',
@@ -56,26 +55,32 @@ exports.downloader = (url, image_path) =>
 //   console.log(err)
 // })
 
-exports.downloaderss = () =>
+exports.downloader = (url, image_path) =>
+  axios({
+    url,
+    responseType: 'stream',
+  }).then(
+    response =>
       new Promise((resolve, reject) => {
+        // 💬 Log the incoming URL and path
+        console.log('[Downloader] 🔗 Downloading from URL:', url);
+        console.log('[Downloader] 📁 Will save to:', image_path);
 
-        var fileId = '1xgbU5UH1eg8RM1qqOFFazCWXmrHY0OMc';
-        var dest = fs.createWriteStream('/tmp/photo.mp4');
-        drive.files.get({
-          fileId: fileId,
-          alt: 'media'
-        })
-            .on('end', function () {
-              console.log('Done');
-            })
-            .on('error', function (err) {
-              console.log('Error during download', err);
-              reject({ fileExtension: null });
+        let fileExtension = response.headers['content-type'].split("/")[1];
+        console.log('[Downloader] 🧩 Detected file extension:', fileExtension);
 
-            })
-          .pipe(dest)          
+        response.data
+          .pipe(fs.createWriteStream(`${image_path}.${fileExtension}`))
+          .on('finish', () => {
+            console.log('[Downloader] ✅ File written successfully to', `${image_path}.${fileExtension}`);
+            resolve({ fileExtension });
+          })
+          .on('error', (e) => {
+            console.error('[Downloader] ❌ Stream error:', e.message);
+            reject({ fileExtension: null });
+          });
       })
-
+  );
 // this.downloaderss().then((res) => {
 //   console.log(res)
 // }).catch((err) => {
