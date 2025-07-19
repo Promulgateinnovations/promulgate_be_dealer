@@ -26,11 +26,13 @@ let oauth = Youtube.authenticate({
 // const { LocalFileData, constructFileFromLocalFileData } = require("get-file-object-from-local-path")
 
 exports.downloader = (url, image_path) =>
-  console.log("****************************downloader called", url, image_path);
+  console.log("*********downloader url", url);
+  console.log("*******************image path", image_path);
   axios({
     url,
     responseType: 'stream',
   }).then(
+   
     response =>
       new Promise((resolve, reject) => {
         let fileExtension = response.headers['content-type'].split("/")[1]
