@@ -811,87 +811,124 @@
  
  }
  
- exports.addLinkendinPost = (personId, message, url, accessToken, campaignContentPostID, name, assetCredentials,tags) => {
-     const self = this
-     return new Promise((resolve) => {
-         if (url) {
-             if(url.indexOf("drive.google.com") > -1) {
+ exports.addLinkendinPost = (personId, message, url, accessToken, campaignContentPostID, name, assetCredentials, tags) => {
+  const self = this;
 
-                this.getRefreshToken(assetCredentials).then((updateToken) => {
-                    if (updateToken.successs) {
-                        imageDownloader.googleDownload(updateToken.refreshResponse, url).then((res) =>{
-                            imageDownloader.downloader(res.webContentLink, `./assets/${campaignContentPostID}`).then((imageResponse) => {
-                                const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`)
-                                try {
-                                    self.registerUpload(personId, accessToken).then((linkedinPost) => {
-                
-                                        self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
-                
-                                            self.postimageWithText(personId, linkedinPost.asset, message, accessToken,tags).then((line) => {
-                
-                                                self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
-                                                    resolve(respnse)
-                                                })
-                                            })
-                                        })
-                                    })
-                                } catch (err) 
-                                    {
-                                        console.log(error.message)
-                                    self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
-                                        resolve("Failed to post the data")
-                                    })
-                                    resolve(error)
-                                }
-                            })
-                        })
-                    }
-                })
-             }
-             else {
-                imageDownloader.downloader(url, `./assets/${campaignContentPostID}`).then((imageResponse) => {
-                    const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`)
-                    try {
-                        self.registerUpload(personId, accessToken).then((linkedinPost) => {
-    
-                            self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
-    
-                                self.postimageWithText(personId, linkedinPost.asset, message, accessToken,tags).then((line) => {
-    
-                                    self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
-                                        resolve(respnse)
-                                    })
-                                })
-                            })
-                        })
-                    } catch (err) {
-                        console.log(error.message)
-                        self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
-                            resolve("Failed to post the data")
-                        })
-                        resolve(error)
-                    }
-                })
-             }
-             
-         } else {
-             try {
-                 self.postData(personId, message, accessToken).then((linkedinPost) => {
-                     self.updateCampaignContentPost(campaignContentPostID, linkedinPost.data, "SUCCESS").then((respnse) => {
-                         resolve(respnse)
-                     })
-                 })
-             } catch (err) {
-                 self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
-                     resolve("Failed to post the data")
-                 })
-             }
-         }
- 
-     })
- 
- }
+  console.log('[LinkedIn] 📥 Starting post for campaignContentPostID:', campaignContentPostID);
+  console.log('[LinkedIn] 🔍 Params → personId:', personId, '| name:', name);
+  console.log('[LinkedIn] 📝 Message:', message);
+  console.log('[LinkedIn] 🔗 URL:', url);
+  console.log('[LinkedIn] 🛡️ AccessToken:', accessToken ? 'Provided' : 'Missing');
+  console.log('[LinkedIn] 🎯 Tags:', tags);
 
+  return new Promise((resolve) => {
+    if (url) {
+      if (url.indexOf("drive.google.com") > -1) {
+        console.log('[LinkedIn] 🧭 Detected Google Drive URL');
+
+        this.getRefreshToken(assetCredentials).then((updateToken) => {
+          console.log('[LinkedIn] 🔁 getRefreshToken response:', updateToken);
+
+          if (updateToken.successs) {
+            imageDownloader.googleDownload(updateToken.refreshResponse, url).then((res) => {
+              console.log('[LinkedIn] 📡 googleDownload result:', res);
+
+              imageDownloader.downloader(res.webContentLink, `./assets/${campaignContentPostID}`).then((imageResponse) => {
+                console.log('[LinkedIn] 🖼️ Image downloaded →', imageResponse);
+
+                const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`);
+                console.log('[LinkedIn] 📁 Image saved at:', imagePath);
+
+                try {
+                  self.registerUpload(personId, accessToken).then((linkedinPost) => {
+                    console.log('[LinkedIn] 📝 registerUpload response:', linkedinPost);
+
+                    self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
+                      console.log('[LinkedIn] 📤 postUploadImage response:', linkedImage);
+
+                      self.postimageWithText(personId, linkedinPost.asset, message, accessToken, tags).then((line) => {
+                        console.log('[LinkedIn] 📝 postimageWithText response:', line);
+
+                        self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
+                          console.log('[LinkedIn] ✅ Campaign content updated successfully:', respnse);
+                          resolve(respnse);
+                        });
+                      });
+                    });
+                  });
+                } catch (err) {
+                  console.error('[LinkedIn] ❌ Exception caught during upload chain:', err.message);
+                  self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+                    console.error('[LinkedIn] ❌ Campaign marked FAILED');
+                    resolve("Failed to post the data");
+                  });
+                  resolve(err);
+                }
+              });
+            });
+          } else {
+            console.warn('[LinkedIn] ⚠️ Token refresh failed. Skipping image download.');
+          }
+        });
+      } else {
+        console.log('[LinkedIn] 📡 Non-Google URL detected. Proceeding with direct download:', url);
+
+        imageDownloader.downloader(url, `./assets/${campaignContentPostID}`).then((imageResponse) => {
+          console.log('[LinkedIn] 🖼️ Direct download result:', imageResponse);
+
+          const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`);
+          console.log('[LinkedIn] 📁 Image path resolved:', imagePath);
+
+          try {
+            self.registerUpload(personId, accessToken).then((linkedinPost) => {
+              console.log('[LinkedIn] 📝 registerUpload response:', linkedinPost);
+
+              self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
+                console.log('[LinkedIn] 📤 postUploadImage response:', linkedImage);
+
+                self.postimageWithText(personId, linkedinPost.asset, message, accessToken, tags).then((line) => {
+                  console.log('[LinkedIn] 📝 postimageWithText response:', line);
+
+                  self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
+                    console.log('[LinkedIn] ✅ Campaign content updated successfully:', respnse);
+                    resolve(respnse);
+                  });
+                });
+              });
+            });
+          } catch (err) {
+            console.error('[LinkedIn] ❌ Upload chain failed:', err.message);
+            self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+              console.error('[LinkedIn] ❌ Campaign marked FAILED');
+              resolve("Failed to post the data");
+            });
+            resolve(err);
+          }
+        });
+      }
+    } else {
+      console.log('[LinkedIn] 📝 No image URL provided — posting plain message');
+
+      try {
+        self.postData(personId, message, accessToken).then((linkedinPost) => {
+          console.log('[LinkedIn] 📝 postData response:', linkedinPost);
+
+          self.updateCampaignContentPost(campaignContentPostID, linkedinPost.data, "SUCCESS").then((respnse) => {
+            console.log('[LinkedIn] ✅ Campaign updated with plain post:', respnse);
+            resolve(respnse);
+          });
+        });
+      } catch (err) {
+        console.error('[LinkedIn] ❌ Error in plain post flow:', err.message);
+        self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+          console.error('[LinkedIn] ❌ Campaign marked FAILED');
+          resolve("Failed to post the data");
+        });
+      }
+    }
+  });
+}
+    
  exports.addLinkendinPost1 = (personId, message, url, accessToken, campaignContentPostID, name) => {
      const self = this
      return new Promise((resolve) => {
