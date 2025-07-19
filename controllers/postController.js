@@ -599,6 +599,7 @@
              })
          }else {
             console.log("***************Google drive else *****************")
+            console.log("**************url*************************", url)
             imageDownloader.googleDownload(accessToken, url).then((res) =>{
                 imageDownloader.downloader(res.webContentLink, `./assets/${campaignContentPostID}`).then((imageResponse) => {
                     const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`)
