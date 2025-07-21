@@ -435,18 +435,57 @@
  
  }
 
- exports.addyoutubePost = (selectedPage, message, url, accessToken, campaignContentPostID, name, pageToken, assetCredentials,tags,publishVideoAs) => {
-     return new Promise((resolve) => {
-         this.getRefreshToken(pageToken).then((updateToken) => {
-             if (updateToken.successs) {
-                 // resolve(this.postYoutubeVideos(message, url, updateToken.refreshResponse.access_token, campaignContentPostID))
-                 resolve(this.postYoutubeVideos(message, url, updateToken.refreshResponse, campaignContentPostID,tags,publishVideoAs))
-             } else {
-                 resolve({ success: false, message: updateToken.refreshResponse })
-             }
-         })
-     })
- }
+exports.addyoutubePost = (
+  selectedPage,
+  message,
+  url,
+  accessToken,
+  campaignContentPostID,
+  name,
+  pageToken,
+  assetCredentials,
+  tags,
+  publishVideoAs
+) => {
+  console.log('[YouTube] 📥 Received request to post video');
+  console.log('[YouTube] 🔍 Campaign ID:', campaignContentPostID);
+  console.log('[YouTube] 📝 Message:', message);
+  console.log('[YouTube] 🔗 URL:', url);
+  console.log('[YouTube] 🧾 Selected Page:', selectedPage);
+  console.log('[YouTube] 👤 Page Token:', pageToken);
+  console.log('[YouTube] 🎯 Tags:', tags);
+  console.log('[YouTube] 🧭 Publish Type:', publishVideoAs);
+  console.log('[YouTube] 🛡️ AccessToken:', accessToken ? 'Present' : 'Missing');
+
+  return new Promise((resolve) => {
+    console.log('[YouTube] 🔄 Attempting to refresh token...');
+
+    this.getRefreshToken(pageToken).then((updateToken) => {
+      console.log('[YouTube] 🔁 Token refresh response:', updateToken);
+
+      if (updateToken.successs) {
+        console.log('[YouTube] ✅ Token refresh successful — proceeding to post video');
+        // Optional: log access token if needed
+        console.log('[YouTube] 🛡️ Refreshed Access Token:', updateToken.refreshResponse.access_token || '[Embedded in response]');
+
+        resolve(
+          this.postYoutubeVideos(
+            message,
+            url,
+            updateToken.refreshResponse,
+            campaignContentPostID,
+            tags,
+            publishVideoAs
+          )
+        );
+      } else {
+        console.warn('[YouTube] ❌ Token refresh failed — cannot post video');
+        console.warn('[YouTube] 🔍 Reason:', updateToken.refreshResponse);
+        resolve({ success: false, message: updateToken.refreshResponse });
+      }
+    });
+  });
+};
 
  exports.getRefreshToken = (pageToken) => {
     
