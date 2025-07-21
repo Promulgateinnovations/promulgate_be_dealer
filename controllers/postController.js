@@ -879,22 +879,49 @@ exports.addyoutubePost = (
                 console.log('[LinkedIn] 📁 Image saved at:', imagePath);
 
                 try {
-                  self.registerUpload(personId, accessToken).then((linkedinPost) => {
-                    console.log('[LinkedIn] 📝 registerUpload response:', linkedinPost);
+            self.registerUpload(personId, accessToken).then((linkedinPost) => {
+                    if (
+                        linkedinPost &&
+                        linkedinPost.uploadUrl &&
+                        linkedinPost.uploadUrl.uploadUrl &&
+                        linkedinPost.asset
+                    ) {
+                        // Proceed only if the upload registration was successful
+                        const imagePath = path.join(
+                        __dirname,
+                        '../',
+                        `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`
+                        );
+                        self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
+                        console.log('[LinkedIn] 📤 Image upload successful:', linkedImage);
 
-                    self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
-                      console.log('[LinkedIn] 📤 postUploadImage response:', linkedImage);
+                        self.postimageWithText(personId, linkedinPost.asset, message, accessToken, tags).then((line) => {
+                            console.log('[LinkedIn] 📝 Text + image post successful:', line);
 
-                      self.postimageWithText(personId, linkedinPost.asset, message, accessToken, tags).then((line) => {
-                        console.log('[LinkedIn] 📝 postimageWithText response:', line);
-
-                        self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
-                          console.log('[LinkedIn] ✅ Campaign content updated successfully:', respnse);
-                          resolve(respnse);
+                            self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
+                            console.log('[LinkedIn] ✅ Campaign record updated:', respnse);
+                            resolve(respnse);
+                            });
+                        }).catch((err) => {
+                            console.error('[LinkedIn] ❌ Failed to post image with text:', err.message || err);
+                            self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+                            resolve("Failed to post the data");
+                            });
                         });
-                      });
+                        }).catch((err) => {
+                        console.error('[LinkedIn] ❌ Failed to upload image:', err.message || err);
+                        self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+                            resolve("Failed to post the data");
+                        });
+                        });
+                    } else {
+                        console.error('[LinkedIn] ❌ registerUpload failed:', linkedinPost?.errorMessage || linkedinPost);
+                        self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+                        resolve("Failed to post the data");
+                        });
+                    }
                     });
-                  });
+
                 } catch (err) {
                   console.error('[LinkedIn] ❌ Exception caught during upload chain:', err.message);
                   self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
@@ -1092,8 +1119,12 @@ exports.addyoutubePost = (
                  resolve({ uploadUrl: response.data.value.uploadMechanism[data1], asset: response.data.value.asset });
              })
              .catch(function (error) {
-                 resolve(error);
-             });
+                resolve({
+                    success: false,
+                    errorMessage: error.message,
+                    errorResponse: error.response?.data || null
+                });
+            });
  
      });
  };
