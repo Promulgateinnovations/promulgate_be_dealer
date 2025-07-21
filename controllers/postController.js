@@ -879,48 +879,48 @@ exports.addyoutubePost = (
                 console.log('[LinkedIn] 📁 Image saved at:', imagePath);
 
                 try {
-            self.registerUpload(personId, accessToken).then((linkedinPost) => {
-                    if (
-                        linkedinPost &&
-                        linkedinPost.uploadUrl &&
-                        linkedinPost.uploadUrl.uploadUrl &&
-                        linkedinPost.asset
-                    ) {
-                        // Proceed only if the upload registration was successful
-                        const imagePath = path.join(
-                        __dirname,
-                        '../',
-                        `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`
-                        );
-                        self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
-                        console.log('[LinkedIn] 📤 Image upload successful:', linkedImage);
+                self.registerUpload(personId, accessToken).then((linkedinPost) => {
+                        if (
+                            linkedinPost &&
+                            linkedinPost.uploadUrl &&
+                            linkedinPost.uploadUrl.uploadUrl &&
+                            linkedinPost.asset
+                        ) {
+                            // Proceed only if the upload registration was successful
+                            const imagePath = path.join(
+                            __dirname,
+                            '../',
+                            `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`
+                            );
+                            self.postUploadImage(linkedinPost.uploadUrl.uploadUrl, imagePath, accessToken).then((linkedImage) => {
+                            console.log('[LinkedIn] 📤 Image upload successful:', linkedImage);
 
-                        self.postimageWithText(personId, linkedinPost.asset, message, accessToken, tags).then((line) => {
-                            console.log('[LinkedIn] 📝 Text + image post successful:', line);
+                            self.postimageWithText(personId, linkedinPost.asset, message, accessToken, tags).then((line) => {
+                                console.log('[LinkedIn] 📝 Text + image post successful:', line);
 
-                            self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
-                            console.log('[LinkedIn] ✅ Campaign record updated:', respnse);
-                            resolve(respnse);
+                                self.updateCampaignContentPost(campaignContentPostID, line.id, "SUCCESS").then((respnse) => {
+                                console.log('[LinkedIn] ✅ Campaign record updated:', respnse);
+                                resolve(respnse);
+                                });
+                            }).catch((err) => {
+                                console.error('[LinkedIn] ❌ Failed to post image with text:', err.message || err);
+                                self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+                                resolve("Failed to post the data");
+                                });
                             });
-                        }).catch((err) => {
-                            console.error('[LinkedIn] ❌ Failed to post image with text:', err.message || err);
+                            }).catch((err) => {
+                            console.error('[LinkedIn] ❌ Failed to upload image:', err.message || err);
+                            self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+                                resolve("Failed to post the data");
+                            });
+                            });
+                        } else {
+                            console.error('[LinkedIn] ❌ registerUpload failed:', linkedinPost?.errorMessage || linkedinPost);
                             self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
                             resolve("Failed to post the data");
                             });
+                        }
                         });
-                        }).catch((err) => {
-                        console.error('[LinkedIn] ❌ Failed to upload image:', err.message || err);
-                        self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
-                            resolve("Failed to post the data");
-                        });
-                        });
-                    } else {
-                        console.error('[LinkedIn] ❌ registerUpload failed:', linkedinPost?.errorMessage || linkedinPost);
-                        self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
-                        resolve("Failed to post the data");
-                        });
-                    }
-                    });
 
                 } catch (err) {
                   console.error('[LinkedIn] ❌ Exception caught during upload chain:', err.message);
