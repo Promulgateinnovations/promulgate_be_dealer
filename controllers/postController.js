@@ -765,6 +765,7 @@ exports.addyoutubePost = (
 
       } else {
         console.log('[Instagram] 🖼️ Detected image upload');
+        console.log('[Instagram] 🧩 fileExtension:', fileExtension);
         formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${fileExtension}`);
 
       }
