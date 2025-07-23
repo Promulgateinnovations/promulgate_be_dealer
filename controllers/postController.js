@@ -765,7 +765,8 @@ exports.addyoutubePost = (
 
       } else {
         console.log('[Instagram] 🖼️ Detected image upload');
-        formData.append('image_url', fs.createReadStream(imagePath));
+        formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${fileExtension}`);
+
       }
 
       const config = {
@@ -817,9 +818,10 @@ exports.addyoutubePost = (
     const handleDownloadFlow = (downloadUrl) => {
         
       imageDownloader.downloader(downloadUrl, `/var/www/html/assets/${campaignContentPostID}`).then((imageResponse) => {
+        const fileExtension = imageResponse.fileExtension;
         const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
-        console.log('[Instagram] 📁 Image path resolved:', imagePath);
-        postMedia(imagePath, imageResponse.fileExtension);
+        postMedia(imagePath, fileExtension);
+        
       });
     };
 
