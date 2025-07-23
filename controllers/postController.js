@@ -816,7 +816,7 @@ exports.addyoutubePost = (
 
     const handleDownloadFlow = (downloadUrl) => {
         
-      imageDownloader.downloader(res.webContentLink, `/var/www/html/assets/${campaignContentPostID}`).then((imageResponse) => {
+      imageDownloader.downloader(downloadUrl, `/var/www/html/assets/${campaignContentPostID}`).then((imageResponse) => {
         const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
         console.log('[Instagram] 📁 Image path resolved:', imagePath);
         postMedia(imagePath, imageResponse.fileExtension);
