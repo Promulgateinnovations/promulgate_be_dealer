@@ -785,7 +785,9 @@ exports.addyoutubePost = (
           self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
             console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
             self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", publishResp, '').then((respnse) => {
-              const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
+              //const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
+              const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
+
               if (fs.existsSync(imagePath)) {
                 try {
                   fs.unlinkSync(imagePath);
@@ -813,8 +815,9 @@ exports.addyoutubePost = (
     };
 
     const handleDownloadFlow = (downloadUrl) => {
-      imageDownloader.downloader(downloadUrl, `./assets/${campaignContentPostID}`).then((imageResponse) => {
-        const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`);
+        
+      imageDownloader.downloader(res.webContentLink, `/var/www/html/assets/${campaignContentPostID}`).then((imageResponse) => {
+        const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
         console.log('[Instagram] 📁 Image path resolved:', imagePath);
         postMedia(imagePath, imageResponse.fileExtension);
       });
