@@ -743,116 +743,101 @@ exports.addyoutubePost = (
 
  exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignContentPostID, name, assetCredentials, tags) => {
   const self = this;
-  console.log('[Instagram] 📨 Starting post process for:', campaignContentPostID);
+  console.log('[Instagram] 📨 Starting post for:', campaignContentPostID);
   console.log('[Instagram] 📌 Selected Page:', selectedPage);
   console.log('[Instagram] 🔗 URL:', url);
   console.log('[Instagram] 📝 Message:', message);
-  console.log('[Instagram] 🛡️ Access Token Present:', !!accessToken);
   console.log('[Instagram] 🎯 Tags:', tags);
+  console.log('[Instagram] 🔐 Access token present:', !!accessToken);
 
   return new Promise((resolve) => {
-    if (url && url.includes("drive.google.com")) {
-      console.log('[Instagram] 🧭 Detected Google Drive URL');
+    let type = 'media';
+    const msgWithTags = tags ? `${message} ${tags.trim().split(',').join(' ')}` : message;
 
-      this.getRefreshToken(assetCredentials).then((updateToken) => {
-        console.log('[Instagram] 🔁 getRefreshToken response:', updateToken);
+    const postMedia = (imagePath, fileExtension) => {
+      const formData = new FormData();
+      formData.append('access_token', accessToken);
+      formData.append('caption', msgWithTags);
 
-        if (updateToken.successs) {
-          imageDownloader.googleDownload(updateToken.refreshResponse, url).then((res) => {
-            console.log('[Instagram] 📡 googleDownload result:', res);
+      if (fileExtension === 'mp4') {
+        console.log('[Instagram] 🎥 Detected video upload');
+        formData.append('video_url', fs.createReadStream(imagePath));
+      } else {
+        console.log('[Instagram] 🖼️ Detected image upload');
+        formData.append('image_url', fs.createReadStream(imagePath));
+      }
 
-            imageDownloader.downloader(res.webContentLink, `./assets/${campaignContentPostID}`).then((imageResponse) => {
-              console.log('[Instagram] 🖼️ Image downloaded:', imageResponse);
-
-              const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`);
-              console.log('[Instagram] 📁 Image path resolved:', imagePath);
-
-              const fileId = url.substring(url.indexOf("d/") + 2, url.lastIndexOf("/view"));
-              const uri = `https://drive.google.com/uc?export=view&id=${fileId}`;
-              console.log('[Instagram] 🔗 Drive Direct URI:', uri);
-
-              const msgWithTags = tags ? `${message} ${tags.trim().split(',').join(' ')}` : message;
-              const config = {
-                method: 'post',
-                url: `https://graph.facebook.com/${selectedPage}/media?image_url=${encodeURIComponent(imagePath)}&caption=${encodeURIComponent(msgWithTags)}&access_token=${accessToken}`,
-                headers: {},
-                data: ''
-              };
-              console.log('[Instagram] 📦 Axios Config:', config);
-
-              axios(config)
-                .then(function (response) {
-                  console.log('[Instagram] ✅ Media upload response:', response.data);
-
-                  self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
-                    console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
-
-                    self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", response, '').then((respnse) => {
-                      console.log('[Instagram] 📝 Campaign update response:', respnse);
-                      resolve(respnse);
-                    });
-                  }).catch((err) => {
-                    console.error('[Instagram] ❌ publishInstagaram error:', err.message || err);
-                    self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", err, err?.message).then((respnse) => {
-                      resolve("Failed to post the data");
-                    });
-                    resolve(err);
-                  });
-                })
-                .catch(function (error) {
-                  console.error('[Instagram] ❌ Axios error:', error.message);
-                  console.log('[Instagram] ❌ Axios response:', error.response?.data);
-                  self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", error.response, error?.response?.data?.error?.message || '').then((respnse) => {
-                    resolve("Failed to post the data");
-                  });
-                  resolve(error.message);
-                });
-            });
-          });
-        } else {
-          console.warn('[Instagram] ⚠️ Token refresh failed');
-          resolve("Failed to refresh token");
-        }
-      });
-    } else {
-      console.log('[Instagram] 📡 Non-Google URL detected:', url);
-
-      const msgWithTags = tags ? `${message} ${tags.trim().split(',').join(' ')}` : message;
       const config = {
         method: 'post',
-        url: `https://graph.facebook.com/${selectedPage}/media?image_url=${url}&caption=${encodeURIComponent(msgWithTags)}&access_token=${accessToken}`,
-        headers: {},
-        data: ''
+        url: `https://graph.facebook.com/${selectedPage}/media`,
+        headers: {
+          ...formData.getHeaders(),
+        },
+        data: formData,
       };
-      console.log('[Instagram] 📦 Axios Config:', config);
+
+      console.log('[Instagram] 📦 Axios config for media post:', config);
 
       axios(config)
-        .then(function (response) {
+        .then((response) => {
           console.log('[Instagram] ✅ Media upload response:', response.data);
-
           self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
             console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
-
-            self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS").then((respnse) => {
-              console.log('[Instagram] 📝 Campaign update response:', respnse);
+            self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", publishResp, '').then((respnse) => {
+              const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
+              if (fs.existsSync(imagePath)) {
+                try {
+                  fs.unlinkSync(imagePath);
+                  console.log('[Instagram] 🧹 Deleted temp file:', imagePath);
+                } catch (err) {
+                  console.warn('[Instagram] ⚠️ Failed to delete file:', err.message);
+                }
+              }
               resolve(respnse);
             });
           }).catch((err) => {
-            console.error('[Instagram] ❌ publishInstagaram error:', err.message || err);
-            self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+            console.error('[Instagram] ❌ publishInstagaram failed:', err.message || err);
+            self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", err, err?.message).then((respnse) => {
               resolve("Failed to post the data");
             });
-            resolve(err.message);
           });
         })
-        .catch(function (error) {
-          console.error('[Instagram] ❌ Axios error:', error.message);
-          console.log('[Instagram] ❌ Axios response:', error.response?.data);
-          self.updateCampaignContentPost(campaignContentPostID, null, "FAILED").then((respnse) => {
+        .catch((error) => {
+          console.error('[Instagram] ❌ Media post failed:', error.message);
+          console.log('[Instagram] ❌ Error response:', error.response?.data);
+          self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", error.response, error?.response?.data?.error?.message || '').then((respnse) => {
             resolve("Failed to post the data");
           });
-          resolve(error.message);
         });
+    };
+
+    const handleDownloadFlow = (downloadUrl) => {
+      imageDownloader.downloader(downloadUrl, `./assets/${campaignContentPostID}`).then((imageResponse) => {
+        const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${imageResponse.fileExtension}`);
+        console.log('[Instagram] 📁 Image path resolved:', imagePath);
+        postMedia(imagePath, imageResponse.fileExtension);
+      });
+    };
+
+    if (url && url.includes('drive.google.com')) {
+      console.log('[Instagram] 🧭 Detected Google Drive URL');
+      this.getRefreshToken(assetCredentials).then((updateToken) => {
+        console.log('[Instagram] 🔁 getRefreshToken response:', updateToken);
+        if (updateToken.successs) {
+          imageDownloader.googleDownload(updateToken.refreshResponse, url).then((res) => {
+            console.log('[Instagram] 📡 googleDownload result:', res);
+            handleDownloadFlow(res.webContentLink);
+          });
+        } else {
+          console.warn('[Instagram] ⚠️ Token refresh failed');
+          self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", null, 'Refresh token failed').then((respnse) => {
+            resolve("Failed to post the data");
+          });
+        }
+      });
+    } else {
+      console.log('[Instagram] 📡 Non-Google URL detected. Proceeding with direct download');
+      handleDownloadFlow(url);
     }
   });
 };
