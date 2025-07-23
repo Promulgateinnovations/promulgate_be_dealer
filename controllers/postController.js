@@ -741,123 +741,124 @@ exports.addyoutubePost = (
      })
  }
 
- exports.addInstagaramPost = async (
-  selectedPage,
-  message,
-  url,
-  accessToken,
-  campaignContentPostID,
-  name,
-  assetCredentials,
-  tags
-) => {
+exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignContentPostID, name, assetCredentials, tags) => {
   const self = this;
   console.log('[Instagram] 📨 Starting post for:', campaignContentPostID);
   console.log('[Instagram] 📌 Selected Page:', selectedPage);
   console.log('[Instagram] 🔗 URL:', url);
+  console.log('[Instagram] 📝 Message:', message);
+  console.log('[Instagram] 🎯 Tags:', tags);
+  console.log('[Instagram] 🔐 Access token present:', !!accessToken);
 
-  const msgWithTags = tags ? `${message} ${tags.trim().split(',').join(' ')}` : message;
-  const assetFolder = '/var/www/html/assets';
+  return new Promise((resolve) => {
+    let type = 'media';
+    const msgWithTags = tags ? `${message} ${tags.trim().split(',').join(' ')}` : message;
 
-  // 🔧 Ensure assets directory exists
-  if (!fs.existsSync(assetFolder)) {
-    fs.mkdirSync(assetFolder, { recursive: true });
-    console.log('[Instagram] 📂 Created missing assets directory');
-  }
+    const postMedia = (imagePath, fileExtension) => {
+      const formData = new FormData();
+      formData.append('access_token', accessToken);
+      formData.append('caption', msgWithTags);
+      const normalizedExt = String(fileExtension).trim().toLowerCase();
 
-  try {
-    let finalDownloadUrl = url;
-
-    // 🧭 If Google Drive URL, get refreshed token and webContentLink
-    if (url.includes('drive.google.com')) {
-      const tokenResp = await self.getRefreshToken(assetCredentials);
-      if (!tokenResp.successs) {
-        console.warn('[Instagram] ❌ Failed to refresh token');
-        await self.updateCampaignContentPost(campaignContentPostID, null, 'FAILED', null, 'Token refresh failed');
-        return 'Failed to post the data';
-      }
-      const driveInfo = await imageDownloader.googleDownload(tokenResp.refreshResponse, url);
-      finalDownloadUrl = driveInfo.webContentLink;
-      console.log('[Instagram] 📡 Resolved Google Drive download URL:', finalDownloadUrl);
-    }
-
-    // 📥 Download file and save locally
-    const imageResponse = await imageDownloader.downloader(finalDownloadUrl, `${assetFolder}/${campaignContentPostID}`);
-    const fileExtension = String(imageResponse.fileExtension).trim().toLowerCase();
-    const localFilePath = `${assetFolder}/${campaignContentPostID}.${fileExtension}`;
-    const publicMediaUrl = `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${fileExtension}`;
-
-    console.log('[Instagram] 🖼️ File extension:', fileExtension);
-    console.log('[Instagram] 📁 Local path:', localFilePath);
-    console.log('[Instagram] 🔗 Public URL:', publicMediaUrl);
-
-    // 🧠 Upload to Instagram
-    const formData = new FormData();
-    formData.append('access_token', accessToken);
-    formData.append('caption', msgWithTags);
-
-    if (fileExtension === 'mp4') {
-      formData.append('video_url', publicMediaUrl);
-      formData.append('media_type', 'REELS');
-      formData.append('share_to_feed', 'true');
+        if (normalizedExt === 'mp4') {
+        console.log('[Instagram] 🎥 Confirmed video extension');
+        formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
+        formData.append('media_type', 'REELS'); // Not required but helps clarify intent
+        formData.append('share_to_feed', 'true');    
     } else {
-      formData.append('image_url', publicMediaUrl);
-    }
+        console.log('[Instagram] 🖼️ Detected image upload');
+        formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
+        }
 
-    const uploadConfig = {
-      method: 'post',
-      url: `https://graph.facebook.com/${selectedPage}/media`,
-      headers: formData.getHeaders(),
-      data: formData
+      const config = {
+        method: 'post',
+        url: `https://graph.facebook.com/${selectedPage}/media`,
+        headers: {
+          ...formData.getHeaders(),
+        },
+        data: formData,
+      };
+
+      console.log('[Instagram] 📦 Axios config for media post:', config);
+
+      axios(config)
+        .then((response) => {
+          console.log('[Instagram] ✅ Media upload response:', response.data);
+          //await waitForMediaReady(creationId, accessToken);
+          const publishResp = await self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
+            console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
+            self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", publishResp, '').then((respnse) => {
+              //const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
+              const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
+
+              if (fs.existsSync(imagePath)) {
+                try {
+                  fs.unlinkSync(imagePath);
+                  console.log('[Instagram] 🧹 Deleted temp file:', imagePath);
+                } catch (err) {
+                  console.warn('[Instagram] ⚠️ Failed to delete file:', err.message);
+                }
+              }
+              resolve(respnse);
+            });
+          }).catch((err) => {
+            console.error('[Instagram] ❌ publishInstagaram failed:', err.message || err);
+            self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", err, err?.message).then((respnse) => {
+              resolve("Failed to post the data");
+            });
+          });
+        })
+        .catch((error) => {
+          console.error('[Instagram] ❌ Media post failed:', error.message);
+            if (error.response) {
+                console.log('[Instagram] ❌ Full error response:', {
+                status: error.response.status,
+                headers: error.response.headers,
+                data: error.response.data,
+                });
+            } else {
+                console.log('[Instagram] ❌ No response received:', error);
+            }
+          self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", error.response, error?.response?.data?.error?.message || '').then((respnse) => {
+            resolve("Failed to post the data");
+          });
+        });
     };
 
-    const uploadResp = await axios(uploadConfig);
-    const creationId = uploadResp.data.id;
-    console.log('[Instagram] ✅ Media uploaded. Creation ID:', creationId);
-
-    // ⏳ Poll until media is ready
-    const waitForMediaReady = async (creationId, accessToken, maxRetries = 10) => {
-      const statusUrl = `https://graph.facebook.com/${creationId}?fields=status_code&access_token=${accessToken}`;
-      for (let i = 0; i < maxRetries; i++) {
-        const resp = await axios.get(statusUrl);
-        const status = resp.data.status_code;
-        console.log(`[Instagram] ⏳ Media status [${i + 1}/${maxRetries}]:`, status);
-        if (status === 'FINISHED') return true;
-        await new Promise(r => setTimeout(r, 5000));
-      }
-      throw new Error('Media not ready after polling');
+    const handleDownloadFlow = (downloadUrl) => {
+        
+      imageDownloader.downloader(downloadUrl, `/var/www/html/assets/${campaignContentPostID}`).then((imageResponse) => {
+        const fileExtension = imageResponse.fileExtension;
+        const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
+        postMedia(imagePath, fileExtension);
+        
+      });
     };
 
-    await waitForMediaReady(creationId, accessToken);
-
-    // 🚀 Publish the media
-    const publishResp = await self.publishInstagaram(creationId, accessToken, selectedPage);
-    console.log('[Instagram] ✅ publishInstagaram response:', publishResp.data);
-
-    // ✅ Campaign DB update
-    await self.updateCampaignContentPost(campaignContentPostID, creationId, 'SUCCESS', publishResp, '');
-
-    // 🧹 File cleanup
-    if (fs.existsSync(localFilePath)) {
-      try {
-        fs.unlinkSync(localFilePath);
-        console.log('[Instagram] 🧹 Deleted temp file:', localFilePath);
-      } catch (err) {
-        console.warn('[Instagram] ⚠️ Cleanup failed:', err.message);
-      }
+    if (url && url.includes('drive.google.com')) {
+      console.log('[Instagram] 🧭 Detected Google Drive URL');
+      this.getRefreshToken(assetCredentials).then((updateToken) => {
+        console.log('[Instagram] 🔁 getRefreshToken response:', updateToken);
+        if (updateToken.successs) {
+          imageDownloader.googleDownload(updateToken.refreshResponse, url).then((res) => {
+            console.log('[Instagram] 📡 googleDownload result:', res);
+            handleDownloadFlow(res.webContentLink);
+          });
+        } else {
+          console.warn('[Instagram] ⚠️ Token refresh failed');
+          self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", null, 'Refresh token failed').then((respnse) => {
+            resolve("Failed to post the data");
+          });
+        }
+      });
+    } else {
+      console.log('[Instagram] 📡 Non-Google URL detected. Proceeding with direct download');
+      handleDownloadFlow(url);
     }
-
-    return publishResp;
-
-  } catch (error) {
-    console.error('[Instagram] ❌ Fatal error in post flow:', error.message);
-    await self.updateCampaignContentPost(campaignContentPostID, null, 'FAILED', null, error.message);
-    return 'Failed to post the data';
-  }
+  });
 };
 
-
-const waitForMediaReady = async (creationId, accessToken, maxRetries = 10) => {
+const async waitForMediaReady = async (creationId, accessToken, maxRetries = 10) => {
   for (let i = 0; i < maxRetries; i++) {
     const statusUrl = `https://graph.facebook.com/${creationId}?fields=status_code&access_token=${accessToken}`;
     const response = await axios.get(statusUrl);
