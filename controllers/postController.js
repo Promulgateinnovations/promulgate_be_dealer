@@ -761,7 +761,8 @@ exports.addyoutubePost = (
 
       if (fileExtension === 'mp4') {
         console.log('[Instagram] 🎥 Detected video upload');
-        formData.append('video_url', fs.createReadStream(imagePath));
+        formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${fileExtension}`);
+
       } else {
         console.log('[Instagram] 🖼️ Detected image upload');
         formData.append('image_url', fs.createReadStream(imagePath));
