@@ -785,7 +785,7 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
         .then((response) => {
           console.log('[Instagram] ✅ Media upload response:', response.data);
           //await waitForMediaReady(creationId, accessToken);
-          const publishResp = await self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
+          self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
             console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
             self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", publishResp, '').then((respnse) => {
               //const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
@@ -858,7 +858,7 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
   });
 };
 
-const async waitForMediaReady = async (creationId, accessToken, maxRetries = 10) => {
+const  waitForMediaReady = async (creationId, accessToken, maxRetries = 10) => {
   for (let i = 0; i < maxRetries; i++) {
     const statusUrl = `https://graph.facebook.com/${creationId}?fields=status_code&access_token=${accessToken}`;
     const response = await axios.get(statusUrl);
@@ -872,13 +872,13 @@ const async waitForMediaReady = async (creationId, accessToken, maxRetries = 10)
   throw new Error('Media container not ready after polling');
 };
 
-exports.publishInstagaram = (creationId, accessToken, selectedPage) => {
+ exports.publishInstagaram = (creationId, accessToken, selectedPage) => {
   console.log('[Instagram] 🚀 Starting publishInstagaram');
   console.log('[Instagram] 🎯 selectedPage:', selectedPage);
   console.log('[Instagram] 📸 creationId:', creationId);
   console.log('[Instagram] 🔐 accessToken present:', !!accessToken);
 
-  return new Promise((resolve, reject) => {
+  return  new Promise((resolve, reject) => {
     const url = `https://graph.facebook.com/${selectedPage}/media_publish?creation_id=${creationId}&access_token=${accessToken}`;
     const config = {
       method: 'post',
