@@ -758,17 +758,16 @@ exports.addyoutubePost = (
       const formData = new FormData();
       formData.append('access_token', accessToken);
       formData.append('caption', msgWithTags);
+      const normalizedExt = String(fileExtension).trim().toLowerCase();
 
-      if (fileExtension === 'mp4') {
-        console.log('[Instagram] 🎥 Detected video upload');
-        formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${fileExtension}`);
-
-      } else {
+        if (normalizedExt === 'mp4') {
+        console.log('[Instagram] 🎥 Confirmed video extension');
+        formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
+        formData.append('media_type', 'VIDEO'); // Not required but helps clarify intent
+        } else {
         console.log('[Instagram] 🖼️ Detected image upload');
-        console.log('[Instagram] 🧩 fileExtension:', fileExtension);
-        formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${fileExtension}`);
-
-      }
+        formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
+        }
 
       const config = {
         method: 'post',
