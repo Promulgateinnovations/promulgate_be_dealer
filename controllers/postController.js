@@ -774,7 +774,7 @@ exports.addyoutubePost = (
               const msgWithTags = tags ? `${message} ${tags.trim().split(',').join(' ')}` : message;
               const config = {
                 method: 'post',
-                url: `https://graph.facebook.com/${selectedPage}/media?image_url=${encodeURIComponent(uri)}&caption=${encodeURIComponent(msgWithTags)}&access_token=${accessToken}`,
+                url: `https://graph.facebook.com/${selectedPage}/media?image_url=${encodeURIComponent(imagePath)}&caption=${encodeURIComponent(msgWithTags)}&access_token=${accessToken}`,
                 headers: {},
                 data: ''
               };
