@@ -763,8 +763,9 @@ exports.addyoutubePost = (
         if (normalizedExt === 'mp4') {
         console.log('[Instagram] 🎥 Confirmed video extension');
         formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
-        formData.append('media_type', 'VIDEO'); // Not required but helps clarify intent
-        } else {
+        formData.append('media_type', 'REELS'); // Not required but helps clarify intent
+        formData.append('share_to_feed', 'true');    
+    } else {
         console.log('[Instagram] 🖼️ Detected image upload');
         formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
         }
