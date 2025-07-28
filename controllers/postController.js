@@ -788,8 +788,8 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
           self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
             console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
             self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", publishResp, '').then((respnse) => {
-              //const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
-              const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
+              const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
+              //const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
 
               if (fs.existsSync(imagePath)) {
                 try {
