@@ -741,7 +741,7 @@ exports.addyoutubePost = (
      })
  }
 
-exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignContentPostID, name, assetCredentials, tags) => {
+ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignContentPostID, name, assetCredentials, tags) => {
   const self = this;
   console.log('[Instagram] 📨 Starting post for:', campaignContentPostID);
   console.log('[Instagram] 📌 Selected Page:', selectedPage);
@@ -762,14 +762,12 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
 
         if (normalizedExt === 'mp4') {
         console.log('[Instagram] 🎥 Confirmed video extension');
-        //formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
-        formData.append('video_url', imagePath);
+        formData.append('video_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
         formData.append('media_type', 'REELS'); // Not required but helps clarify intent
         formData.append('share_to_feed', 'true');    
     } else {
         console.log('[Instagram] 🖼️ Detected image upload');
-        //formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
-        formData.append('image_url', imagePath);
+        formData.append('image_url', `https://dealers.promulgateinnovations.com/assets/${campaignContentPostID}.${normalizedExt}`);
         }
 
       const config = {
@@ -786,12 +784,11 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
       axios(config)
         .then((response) => {
           console.log('[Instagram] ✅ Media upload response:', response.data);
-          //await waitForMediaReady(creationId, accessToken);
           self.publishInstagaram(response.data.id, accessToken, selectedPage).then((publishResp) => {
             console.log('[Instagram] 🚀 publishInstagaram response:', publishResp.data);
             self.updateCampaignContentPost(campaignContentPostID, response.data.id, "SUCCESS", publishResp, '').then((respnse) => {
-              const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
-              //const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
+              //const imagePath = path.join(__dirname, '../', `/assets/${campaignContentPostID}.${fileExtension}`);
+              const imagePath = path.join('/var/www/html/assets', `${campaignContentPostID}.${fileExtension}`);
 
               if (fs.existsSync(imagePath)) {
                 try {
@@ -812,15 +809,7 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
         })
         .catch((error) => {
           console.error('[Instagram] ❌ Media post failed:', error.message);
-            if (error.response) {
-                console.log('[Instagram] ❌ Full error response:', {
-                status: error.response.status,
-                headers: error.response.headers,
-                data: error.response.data,
-                });
-            } else {
-                console.log('[Instagram] ❌ No response received:', error);
-            }
+          console.log('[Instagram] ❌ Error response:', error.response?.data);
           self.updateCampaignContentPost(campaignContentPostID, null, "FAILED", error.response, error?.response?.data?.error?.message || '').then((respnse) => {
             resolve("Failed to post the data");
           });
@@ -860,27 +849,14 @@ exports.addInstagaramPost = (selectedPage, message, url, accessToken, campaignCo
   });
 };
 
-const  waitForMediaReady = async (creationId, accessToken, maxRetries = 10) => {
-  for (let i = 0; i < maxRetries; i++) {
-    const statusUrl = `https://graph.facebook.com/${creationId}?fields=status_code&access_token=${accessToken}`;
-    const response = await axios.get(statusUrl);
-    const status = response.data.status_code;
 
-    console.log(`[Instagram] ⏳ Media status: ${status}`);
-
-    if (status === 'FINISHED') return true;
-    await new Promise(res => setTimeout(res, 5000)); // wait 5s
-  }
-  throw new Error('Media container not ready after polling');
-};
-
- exports.publishInstagaram = (creationId, accessToken, selectedPage) => {
+exports.publishInstagaram = (creationId, accessToken, selectedPage) => {
   console.log('[Instagram] 🚀 Starting publishInstagaram');
   console.log('[Instagram] 🎯 selectedPage:', selectedPage);
   console.log('[Instagram] 📸 creationId:', creationId);
   console.log('[Instagram] 🔐 accessToken present:', !!accessToken);
 
-  return  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://graph.facebook.com/${selectedPage}/media_publish?creation_id=${creationId}&access_token=${accessToken}`;
     const config = {
       method: 'post',
